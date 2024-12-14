@@ -1,0 +1,32 @@
+version: '3.8'
+
+services:
+  mysql:
+    image: mysql:8.0
+    container_name: spring-lotto
+    environment:
+      MYSQL_ROOT_PASSWORD: 4321
+      MYSQL_DATABASE: lotto
+      MYSQL_USER: lotto
+      MYSQL_PASSWORD: 4321
+      TZ: Asia/Seoul
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+      - ./my.cnf:/etc/mysql/my.cnf
+    command: >
+      --general_log=1 
+      --general_log_file=/var/lib/mysql/general.log 
+      --slow_query_log=1 
+      --slow_query_log_file=/var/lib/mysql/slow.log 
+      --long_query_time=1
+    restart: always
+    healthcheck:
+      test: ["CMD-SHELL", "mysqladmin ping -h localhost -u root -p4321 || exit 1"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+
+volumes:
+  mysql_data:
