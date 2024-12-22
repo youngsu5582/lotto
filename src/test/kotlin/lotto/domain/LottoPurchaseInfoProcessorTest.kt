@@ -1,10 +1,10 @@
 package lotto.domain
 
 import config.ImplementationTest
-import lotto.domain.lotto.LottoPurchaseProcessor
-import lotto.domain.lotto.vo.Currency
-import lotto.domain.lotto.vo.PurchaseRequest
-import lotto.domain.lotto.vo.PurchaseType
+import lotto.domain.implementation.LottoPurchaseProcessor
+import lotto.domain.vo.Currency
+import lotto.domain.vo.PurchaseRequest
+import lotto.domain.vo.PurchaseType
 import org.springframework.beans.factory.annotation.Autowired
 import java.math.BigDecimal
 import kotlin.test.Test

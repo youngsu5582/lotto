@@ -1,8 +1,8 @@
 package lotto.fixture
 
-import lotto.domain.lotto.IssueStatus
-import lotto.domain.lotto.IssuedLotto
-import lotto.domain.lotto.Lotto
+import lotto.domain.entity.IssueStatus
+import lotto.domain.entity.IssuedLotto
+import lotto.domain.entity.Lotto
 
 class IssuedLottoBuilder {
     private var issueStatus: IssueStatus = IssueStatus.AUTO

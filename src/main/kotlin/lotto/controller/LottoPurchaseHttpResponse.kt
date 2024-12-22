@@ -1,6 +1,6 @@
 package lotto.controller
 
-import lotto.domain.lotto.LottoBill
+import lotto.domain.entity.LottoBill
 
 data class LottoPurchaseHttpResponse(
     private val lottoResponse: lotto.controller.LottoResponse

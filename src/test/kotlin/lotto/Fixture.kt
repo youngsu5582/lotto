@@ -1,7 +1,7 @@
 package lotto
 
-import lotto.domain.lotto.LottoRoundInfo
-import lotto.domain.lotto.LottoStatus
+import lotto.domain.entity.LottoRoundInfo
+import lotto.domain.entity.LottoStatus
 import java.time.LocalDateTime
 
 class Fixture {

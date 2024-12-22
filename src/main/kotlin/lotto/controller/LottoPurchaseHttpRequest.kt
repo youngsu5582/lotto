@@ -1,9 +1,9 @@
 package lotto.controller
 
-import lotto.domain.lotto.vo.Currency
-import lotto.domain.lotto.vo.LottoNumbers
-import lotto.domain.lotto.vo.PurchaseRequest
-import lotto.domain.lotto.vo.PurchaseType
+import lotto.domain.vo.Currency
+import lotto.domain.vo.LottoNumbers
+import lotto.domain.vo.PurchaseRequest
+import lotto.domain.vo.PurchaseType
 import java.math.BigDecimal
 
 data class LottoPurchaseHttpRequest(

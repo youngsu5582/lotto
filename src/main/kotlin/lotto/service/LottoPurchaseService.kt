@@ -1,8 +1,13 @@
-package lotto.domain.lotto
+package lotto.service
 
 import common.business.BusinessService
-import lotto.domain.lotto.vo.LottoNumbers
-import lotto.domain.lotto.vo.PurchaseRequest
+import lotto.domain.implementation.LottoPaperGenerator
+import lotto.domain.implementation.LottoPaperRequest
+import lotto.domain.implementation.LottoPublisher
+import lotto.domain.implementation.LottoPurchaseProcessor
+import lotto.domain.entity.LottoBill
+import lotto.domain.vo.LottoNumbers
+import lotto.domain.vo.PurchaseRequest
 
 @BusinessService
 class LottoPurchaseService(

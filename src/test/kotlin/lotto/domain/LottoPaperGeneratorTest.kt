@@ -1,11 +1,13 @@
 package lotto.domain
 
 import config.FixtureLottoNumberGenerator
-import lotto.domain.lotto.IssueStatus
-import lotto.domain.lotto.LottoNumberGenerator
-import lotto.domain.lotto.LottoPaperGenerator
-import lotto.domain.lotto.LottoPaperRequest
-import lotto.domain.lotto.vo.LottoNumbers
+import config.ImplementationTest
+import config.LottoRepositoryImpl
+import lotto.domain.entity.IssueStatus
+import lotto.domain.implementation.LottoNumberGenerator
+import lotto.domain.implementation.LottoPaperGenerator
+import lotto.domain.implementation.LottoPaperRequest
+import lotto.domain.vo.LottoNumbers
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.assertThrows
 import org.junit.jupiter.params.ParameterizedTest
@@ -13,7 +15,11 @@ import org.junit.jupiter.params.provider.ValueSource
 import java.math.BigDecimal
 import kotlin.test.Test
 
+@ImplementationTest
 class LottoPaperGeneratorTest {
+
+    private var lottoRepository: LottoRepositoryImpl = LottoRepositoryImpl()
+
     @Test
     fun `금액에 맞게 자동으로 숫자를 생성한다1`() {
         val generator = LottoPaperGenerator(
@@ -21,7 +27,8 @@ class LottoPaperGeneratorTest {
                 listOf(
                     listOf(1, 14, 17, 19, 21, 34)
                 )
-            )
+            ),
+            lottoRepository = lottoRepository,
         )
         val response = generator.generateWithAuto(
             lottoPaperRequest = LottoPaperRequest(BigDecimal(1000))
@@ -38,7 +45,8 @@ class LottoPaperGeneratorTest {
                 listOf(
                     listOf(1, 14, 17, 19, 21, 34), listOf(23, 27, 39, 40, 41, 43)
                 )
-            )
+            ),
+            lottoRepository = lottoRepository,
         )
 
         val response = generator.generateWithAuto(
@@ -60,7 +68,8 @@ class LottoPaperGeneratorTest {
                 listOf(
                     listOf(1, 14, 17, 19, 21, 34)
                 )
-            )
+            ),
+            lottoRepository = lottoRepository,
         )
         assertThrows<IllegalArgumentException> {
             generator.generateWithAuto(
@@ -72,7 +81,8 @@ class LottoPaperGeneratorTest {
     @Test
     fun `금액에 맞게 수동으로 생성한다`() {
         val generator = LottoPaperGenerator(
-            lottoNumberGenerator = lottoNumberGenerator()
+            lottoNumberGenerator = lottoNumberGenerator(),
+            lottoRepository = lottoRepository,
         )
 
         val response = generator.generateWithNumbers(
@@ -92,7 +102,8 @@ class LottoPaperGeneratorTest {
     @ValueSource(ints = [1000, 3000])
     fun `금액보다 더 많거나,적은 요청 시 예외를 발생한다`(value: Int) {
         val generator = LottoPaperGenerator(
-            lottoNumberGenerator = lottoNumberGenerator()
+            lottoNumberGenerator = lottoNumberGenerator(),
+            lottoRepository = lottoRepository,
         )
 
         assertThrows<IllegalArgumentException> {

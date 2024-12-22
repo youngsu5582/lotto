@@ -1,4 +1,4 @@
-package lotto.domain.lotto
+package lotto.domain.converter
 
 import jakarta.persistence.AttributeConverter
 import jakarta.persistence.Converter

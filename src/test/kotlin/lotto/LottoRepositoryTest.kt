@@ -1,14 +1,14 @@
 package lotto
 
-import lotto.domain.Lotto
+import config.RepositoryTest
+import lotto.domain.entity.Lotto
 import lotto.domain.repository.LottoRepository
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.BeforeEach
 import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest
 import kotlin.test.Test
 
-@DataJpaTest
+@RepositoryTest
 class LottoRepositoryTest {
     @Autowired
     private lateinit var lottoRepository: LottoRepository

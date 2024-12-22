@@ -1,7 +1,8 @@
-package lotto.domain.lotto.vo
+package lotto.domain.vo
 
-import lotto.domain.lotto.IssueStatus
-import lotto.domain.lotto.IssuedLotto
+import lotto.domain.entity.IssueStatus
+import lotto.domain.entity.IssuedLotto
+import lotto.domain.entity.Lotto
 
 data class LottoPaper(
     private val lottoes: List<IssuedLotto>
@@ -16,15 +17,15 @@ data class LottoPaper(
         }
     }
 
-    fun toStringListWithComma(): List<String> {
-        return lottoes.stream().map { it.toStringWithComma() }.toList()
-    }
-
     fun toIntList(): List<List<Int>> {
         return lottoes.stream().map { it.toIntList() }.toList()
     }
 
     fun getIssuedStatues(): List<IssueStatus> {
         return lottoes.stream().map { it.getIssueStatus() }.toList()
+    }
+
+    fun getLottoes(): List<Lotto> {
+        return lottoes.stream().map { it.getLotto() }.toList()
     }
 }

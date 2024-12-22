@@ -1,4 +1,4 @@
-package lotto.domain.lotto.vo
+package lotto.domain.vo
 
 import java.math.BigDecimal
 

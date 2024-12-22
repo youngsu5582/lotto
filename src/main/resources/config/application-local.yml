@@ -4,8 +4,6 @@ spring:
   config:
     activate:
       on-profile: local
-  mvc:
-    static-path-pattern: /static/**
   jpa:
     hibernate:
       ddl-auto: create-drop

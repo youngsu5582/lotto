@@ -1,7 +1,9 @@
-package lotto.domain.lotto
+package lotto.domain.implementation
 
 import common.business.Implementation
-import lotto.domain.lotto.vo.PurchaseRequest
+import common.business.Transaction
+import common.business.Write
+import lotto.domain.vo.PurchaseRequest
 import purchase.domain.Purchase
 import purchase.domain.PurchaseInfo
 import purchase.domain.PurchaseProvider
@@ -16,7 +18,9 @@ class LottoPurchaseProcessor(
     private val tossPaymentClient: TossPaymentClient,
     private val purchaseRepository: PurchaseRepository,
     private val purchaseInfoRepository: PurchaseInfoRepository,
-    ) {
+) {
+    @Transaction
+    @Write
     fun purchase(purchaseRequest: PurchaseRequest): Purchase {
         val response = sendPurchase(purchaseRequest)
         val purchase = savePurchase(response, PurchaseProvider.TOSS)

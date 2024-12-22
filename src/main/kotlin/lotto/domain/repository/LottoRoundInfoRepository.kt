@@ -1,6 +1,6 @@
-package lotto.domain.lotto.repository
+package lotto.domain.repository
 
-import lotto.domain.lotto.LottoRoundInfo
+import lotto.domain.entity.LottoRoundInfo
 import org.springframework.data.jpa.repository.Query
 import org.springframework.data.repository.CrudRepository
 import java.time.LocalDateTime

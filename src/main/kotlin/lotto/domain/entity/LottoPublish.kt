@@ -1,6 +1,7 @@
-package lotto.domain.lotto
+package lotto.domain.entity
 
 import jakarta.persistence.*
+import lotto.domain.converter.IssueStatusListConverter
 import java.time.LocalDateTime
 
 @Entity

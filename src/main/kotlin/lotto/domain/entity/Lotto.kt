@@ -1,6 +1,7 @@
-package lotto.domain
+package lotto.domain.entity
 
 import jakarta.persistence.*
+import lotto.domain.converter.LottoNumbersConverter
 
 @Entity
 @Table(
@@ -40,9 +41,11 @@ class Lotto(
 
     constructor(numbers: List<Int>) : this(null, numbers.sorted())
 
-    fun toStringWithComma(): String {
-        return numbers.joinToString(separator = ",")
+    fun toIntList(): List<Int> {
+        return numbers
     }
+
+    fun getId(): Long? = id
 
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
