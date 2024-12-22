@@ -1,20 +1,24 @@
 package lotto.domain
 
+import config.ImplementationTest
 import config.MockingClock
 import lotto.Fixture
-import lotto.domain.repository.LottoRoundInfoRepository
-import lotto.domain.repository.LottoPublishRepository
-import lotto.domain.repository.LottoRepository
-import lotto.domain.vo.LottoPaper
+import lotto.domain.lotto.LottoPublisher
+import lotto.domain.lotto.LottoStatus
+import lotto.domain.lotto.repository.LottoPublishRepository
+import lotto.domain.lotto.repository.LottoRepository
+import lotto.domain.lotto.repository.LottoRoundInfoRepository
+import lotto.domain.lotto.vo.LottoPaper
+import lotto.fixture.IssuedLottoBuilder
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.assertThrows
 import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.boot.test.context.SpringBootTest
 import java.time.LocalDateTime
 import kotlin.test.Test
 
-@SpringBootTest
+@ImplementationTest
 class LottoPublisherTest {
+
     @Autowired
     private lateinit var lottoRepository: LottoRepository
 
@@ -40,7 +44,7 @@ class LottoPublisherTest {
     }
 
     @Test
-    fun `현재 해당하는 회차가 없으면 예외를 발생한다`() {
+    fun `현재 해당하는 회차가 없으면 예외를 발생한다 - 시작일 이전`() {
         prepareLottoInfo(1, startDate, endDate)
         clock.setInstant(startDate.minusNanos(1))
 
@@ -50,9 +54,8 @@ class LottoPublisherTest {
     }
 
     @Test
-    fun `현재 해당하는 회차가 없으면 예외를 발생한다2`() {
-        prepareLottoInfo(1, startDate, endDate)
-        clock.setInstant(endDate.plusNanos(1))
+    fun `현재 해당하는 회차가 없으면 예외를 발생한다 - 종료일 이후`() {
+        clock.setInstant(endDate.plusSeconds(1))
 
         assertThrows<NoSuchElementException> {
             publishLottoPaper()
@@ -89,8 +92,12 @@ class LottoPublisherTest {
         lottoPublisher.publish(
             LottoPaper(
                 listOf(
-                    Lotto(listOf(1, 3, 5, 7, 9, 11)),
-                    Lotto(listOf(1, 3, 5, 11, 13, 15))
+                    IssuedLottoBuilder()
+                        .withNumbers(listOf(1, 3, 5, 7, 9, 11))
+                        .build(),
+                    IssuedLottoBuilder()
+                        .withNumbers(listOf(1, 3, 5, 11, 13, 15))
+                        .build(),
                 )
             )
         )

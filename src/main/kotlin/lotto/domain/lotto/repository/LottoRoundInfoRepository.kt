@@ -1,15 +1,15 @@
-package lotto.domain.repository
+package lotto.domain.lotto.repository
 
-import lotto.domain.LottoRoundInfo
+import lotto.domain.lotto.LottoRoundInfo
 import org.springframework.data.jpa.repository.Query
 import org.springframework.data.repository.CrudRepository
 import java.time.LocalDateTime
 
 interface LottoRoundInfoRepository : CrudRepository<LottoRoundInfo, Long> {
     @Query(
-        "SELECT l FROM LottoRoundInfo l WHERE :dateTime BETWEEN l.startDate AND l.endDate ORDER BY l.startDate DESC LIMIT 1"
+        "SELECT l FROM LottoRoundInfo l WHERE :dateTime BETWEEN l.startDate AND l.drawDate ORDER BY l.startDate DESC LIMIT 1"
     )
-    fun findTopByIssueDateLessThanEqualAndEndDateGreaterThanEqual(
+    fun findTopByIssueDateLessThanEqualAndDrawDateGreaterThanEqual(
         dateTime: LocalDateTime
     ): LottoRoundInfo?
 }

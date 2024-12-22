@@ -1,33 +1,33 @@
 package lotto
 
-import lotto.domain.LottoRoundInfo
-import lotto.domain.repository.LottoRoundInfoRepository
+import config.RepositoryTest
+import lotto.domain.lotto.LottoRoundInfo
+import lotto.domain.lotto.repository.LottoRoundInfoRepository
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.BeforeEach
 import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest
 import java.time.LocalDateTime
 import kotlin.test.Test
 
-@DataJpaTest
+@RepositoryTest
 class LottoRoundInfoRepositoryTest {
     @Autowired
     private lateinit var lottoRoundInfoRepository: LottoRoundInfoRepository
 
     private val issueTime = LocalDateTime.now()
     private val endTime = issueTime.plusHours(12)
+    private val drawTime = issueTime.plusDays(1)
     private lateinit var lottoRoundInfo: LottoRoundInfo
 
     @BeforeEach
     fun setUp() {
-        lottoRoundInfoRepository.deleteAll()
         lottoRoundInfo = lottoRoundInfoRepository.save(
             LottoRoundInfo(
                 null,
                 round = 1,
                 startDate = issueTime,
                 endDate = endTime,
-                drawDate = issueTime.plusDays(1),
+                drawDate = drawTime,
                 paymentDeadline = issueTime.plusYears(1),
             )
         )
@@ -35,7 +35,7 @@ class LottoRoundInfoRepositoryTest {
 
     @Test
     fun `발행 시간보다 크거나 같으면 정보를 가져온다`() {
-        val findLottoInfo = lottoRoundInfoRepository.findTopByIssueDateLessThanEqualAndEndDateGreaterThanEqual(
+        val findLottoInfo = lottoRoundInfoRepository.findTopByIssueDateLessThanEqualAndDrawDateGreaterThanEqual(
             issueTime
         )
         assertThat(findLottoInfo).isEqualTo(lottoRoundInfo)
@@ -43,7 +43,7 @@ class LottoRoundInfoRepositoryTest {
 
     @Test
     fun `발행 시간보다 1 나노초 이전이면 가져오지 않는다`() {
-        val findLottoInfo = lottoRoundInfoRepository.findTopByIssueDateLessThanEqualAndEndDateGreaterThanEqual(
+        val findLottoInfo = lottoRoundInfoRepository.findTopByIssueDateLessThanEqualAndDrawDateGreaterThanEqual(
             issueTime.minusNanos(1)
         )
         assertThat(findLottoInfo).isNull()
@@ -51,16 +51,16 @@ class LottoRoundInfoRepositoryTest {
 
     @Test
     fun `종료 시간보다 작거나 같으면 정보를 가져온다`() {
-        val findLottoInfo = lottoRoundInfoRepository.findTopByIssueDateLessThanEqualAndEndDateGreaterThanEqual(
+        val findLottoInfo = lottoRoundInfoRepository.findTopByIssueDateLessThanEqualAndDrawDateGreaterThanEqual(
             issueTime.plusHours(12)
         )
         assertThat(findLottoInfo).isEqualTo(lottoRoundInfo)
     }
 
     @Test
-    fun `종료 시간보다 1 나노초 이후이면면 가져오지 않는다`() {
-        val findLottoInfo = lottoRoundInfoRepository.findTopByIssueDateLessThanEqualAndEndDateGreaterThanEqual(
-            endTime.plusNanos(1)
+    fun `종료 시간보다 1 나노초 이후이면 가져오지 않는다`() {
+        val findLottoInfo = lottoRoundInfoRepository.findTopByIssueDateLessThanEqualAndDrawDateGreaterThanEqual(
+            drawTime.plusNanos(1)
         )
         assertThat(findLottoInfo).isNull()
     }

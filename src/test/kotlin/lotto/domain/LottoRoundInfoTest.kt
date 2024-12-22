@@ -1,5 +1,7 @@
 package lotto.domain
 
+import lotto.domain.lotto.LottoRoundInfo
+import lotto.domain.lotto.LottoStatus
 import org.assertj.core.api.Assertions.assertThat
 import java.time.LocalDateTime
 import kotlin.test.Test

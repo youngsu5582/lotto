@@ -1,4 +1,4 @@
-package lotto.domain
+package lotto.domain.lotto
 
 import jakarta.persistence.*
 import java.time.LocalDateTime
@@ -22,7 +22,6 @@ data class LottoRoundInfo(
     @Enumerated(EnumType.STRING)
     val status: LottoStatus = LottoStatus.ONGOING,
 ) {
-
 
     fun isOngoing(): Boolean = status == LottoStatus.ONGOING
     fun isNotOngoing(): Boolean = status != LottoStatus.ONGOING

@@ -1,12 +1,12 @@
-package lotto.domain
+package lotto.domain.lotto
 
 import common.business.Implementation
 import common.business.Transaction
 import common.business.Write
-import lotto.domain.repository.LottoPublishRepository
-import lotto.domain.repository.LottoRepository
-import lotto.domain.repository.LottoRoundInfoRepository
-import lotto.domain.vo.LottoPaper
+import lotto.domain.lotto.repository.LottoPublishRepository
+import lotto.domain.lotto.repository.LottoRepository
+import lotto.domain.lotto.repository.LottoRoundInfoRepository
+import lotto.domain.lotto.vo.LottoPaper
 import java.time.Clock
 import java.time.LocalDateTime
 
@@ -27,16 +27,18 @@ class LottoPublisher(
             LottoPublish(
                 lottoRoundInfo = lottoInfo,
                 issuedAt = issuedAt,
-                lottoes = lottoes
+                lottoes = lottoes,
+                issuedLottoesStatus = lottoPaper.getIssuedStatues()
             )
         )
         return lottoPublish
     }
 
     private fun getLottoInfo(issuedAt: LocalDateTime): LottoRoundInfo {
-        return lottoRoundInfoRepository.findTopByIssueDateLessThanEqualAndEndDateGreaterThanEqual(issuedAt)
+        lottoRoundInfoRepository.findAll().forEach { println(it)}
+        return lottoRoundInfoRepository.findTopByIssueDateLessThanEqualAndDrawDateGreaterThanEqual(issuedAt)
             ?.also {
-                if (it.isNotOngoing()) {
+                if (it.isNotOngoing() || it.isAfter(issuedAt)) {
                     throw IllegalArgumentException("현재, 모집중인 회차가 아닙니다.")
                 }
             } ?: throw NoSuchElementException("$issuedAt 에 맞는 회차가 없습니다.")

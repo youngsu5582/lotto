@@ -1,4 +1,4 @@
-package lotto.domain
+package lotto.domain.lotto
 
 import jakarta.persistence.*
 import java.time.LocalDateTime
@@ -16,4 +16,7 @@ data class LottoPublish(
 
     @OneToMany(fetch = FetchType.LAZY)
     private val lottoes: List<Lotto>,
+
+    @Convert(converter = IssueStatusListConverter::class)
+    private val issuedLottoesStatus: List<IssueStatus>,
 )
