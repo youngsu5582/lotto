@@ -1,10 +1,11 @@
-package purchase.domain
+package purchase.domain.entity
 
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize
 import jakarta.persistence.Entity
 import jakarta.persistence.Id
-import toss.dto.PaymentMethod
-import toss.dto.PaymentMethodDeserializer
+import purchase.domain.vo.PaymentMethod
+import purchase.domain.PaymentMethodDeserializer
+import java.math.BigDecimal
 import java.util.*
 
 @Entity
@@ -14,7 +15,8 @@ class PurchaseInfo(
 
     private val status: String,
 
-    private val totalAmount: Long,
+    private val totalAmount: BigDecimal,
+    
     @JsonDeserialize(using = PaymentMethodDeserializer::class)
     private val method: PaymentMethod
 )

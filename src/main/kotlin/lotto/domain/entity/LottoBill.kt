@@ -1,7 +1,7 @@
 package lotto.domain.entity
 
 import jakarta.persistence.*
-import purchase.domain.Purchase
+import purchase.domain.entity.Purchase
 
 @Entity
 @Table(

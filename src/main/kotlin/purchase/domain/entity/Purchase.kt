@@ -1,6 +1,7 @@
-package purchase.domain
+package purchase.domain.entity
 
 import jakarta.persistence.*
+import purchase.domain.vo.PurchaseProvider
 import java.util.*
 
 @Entity
@@ -16,8 +17,4 @@ class Purchase(
     @Enumerated
     private val purchaseProvider: PurchaseProvider
 ) {
-}
-
-enum class PurchaseProvider {
-    TOSS
 }
