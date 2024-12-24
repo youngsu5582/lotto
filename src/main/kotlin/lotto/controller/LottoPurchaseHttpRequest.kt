@@ -2,7 +2,7 @@ package lotto.controller
 
 import lotto.domain.vo.Currency
 import lotto.domain.vo.LottoNumbers
-import lotto.domain.vo.PurchaseRequest
+import lotto.domain.vo.LottoPurchaseRequest
 import lotto.domain.vo.PurchaseType
 import java.math.BigDecimal
 
@@ -14,8 +14,8 @@ data class LottoPurchaseHttpRequest(
         return LottoNumbers(lottoRequest.numbers)
     }
 
-    fun toPurchaseRequest(): PurchaseRequest {
-        return PurchaseRequest(
+    fun toPurchaseRequest(): LottoPurchaseRequest {
+        return LottoPurchaseRequest(
             purchaseType = purchaseHttpRequest.purchaseType,
             amount = purchaseHttpRequest.amount,
             currency = purchaseHttpRequest.currency,

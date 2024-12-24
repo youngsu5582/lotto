@@ -6,8 +6,8 @@ import config.LottoRepositoryImpl
 import lotto.domain.entity.IssueStatus
 import lotto.domain.implementation.LottoNumberGenerator
 import lotto.domain.implementation.LottoPaperGenerator
-import lotto.domain.implementation.LottoPaperRequest
 import lotto.domain.vo.LottoNumbers
+import lotto.domain.vo.LottoPaperRequest
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.assertThrows
 import org.junit.jupiter.params.ParameterizedTest

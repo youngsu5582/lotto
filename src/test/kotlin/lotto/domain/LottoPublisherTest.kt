@@ -6,7 +6,6 @@ import lotto.Fixture
 import lotto.domain.entity.LottoStatus
 import lotto.domain.implementation.LottoPublisher
 import lotto.domain.repository.LottoPublishRepository
-import lotto.domain.repository.LottoRepository
 import lotto.domain.repository.LottoRoundInfoRepository
 import lotto.domain.vo.LottoPaper
 import lotto.fixture.IssuedLottoBuilder
@@ -18,9 +17,6 @@ import kotlin.test.Test
 
 @ImplementationTest
 class LottoPublisherTest {
-
-    @Autowired
-    private lateinit var lottoRepository: LottoRepository
 
     @Autowired
     private lateinit var lottoRoundInfoRepository: LottoRoundInfoRepository
@@ -36,7 +32,6 @@ class LottoPublisherTest {
     @BeforeEach
     fun setup() {
         lottoPublisher = LottoPublisher(
-            lottoRepository = lottoRepository,
             lottoRoundInfoRepository = lottoRoundInfoRepository,
             lottoPublishRepository = lottoPublishRepository,
             clock = clock

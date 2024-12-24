@@ -7,6 +7,7 @@ import lotto.domain.entity.Lotto
 import lotto.domain.repository.LottoRepository
 import lotto.domain.vo.LottoNumbers
 import lotto.domain.vo.LottoPaper
+import lotto.domain.vo.LottoPaperRequest
 import java.math.BigDecimal
 
 @Implementation
@@ -46,13 +47,5 @@ class LottoPaperGenerator(
 
     private fun getLottoEntities(lottoNumbers: LottoNumbers): List<Lotto> {
         return lottoRepository.findLottoByNumbersIn(lottoNumbers.toStringWithComma())
-    }
-}
-
-data class LottoPaperRequest(
-    val amount: BigDecimal
-) {
-    fun isDivide(unit: BigDecimal): Boolean {
-        return amount.remainder(unit) == BigDecimal.ZERO
     }
 }

@@ -1,47 +1,62 @@
 package toss
 
+import common.business.Implementation
 import org.springframework.http.HttpHeaders
 import org.springframework.web.client.RestClient
-import toss.dto.TossPaymentCancelRequest
+import purchase.domain.PaymentClient
+import purchase.domain.vo.PurchaseData
+import purchase.domain.vo.PurchaseProvider
+import purchase.domain.vo.PurchaseRequest
 import toss.dto.TossPaymentConfirmRequest
 import toss.dto.TossPaymentResponse
+import java.math.BigDecimal
 import java.util.*
 
+@Implementation
 class TossPaymentClient(
     private val restClient: RestClient,
-) {
+) : PaymentClient {
 
-    fun payment(tossPaymentConfirmRequest: TossPaymentConfirmRequest): TossPaymentResponse {
-
+    override fun process(request: PurchaseRequest): PurchaseData {
+        val tossPaymentConfirmRequest = TossPaymentConfirmRequest(
+            paymentKey = request.paymentKey,
+            orderId = request.orderId,
+            amount = request.amount.toLong()
+        )
         val value: String = "test_gsk_docs_OaPz8L5KdmQXkzRz3y47BMw6" + ":"
         val key = Base64
             .getEncoder()
             .encodeToString(value.toByteArray())
-        println(key)
-//        dGVzdF9za196WExrS0V5cE5BcldtbzUwblgzbG1lYXhZRzVSOg==
-//        dGVzdF9za196WExrS0V5cE5BcldtbzUwblgzbG1lYXhZRzVSOg==
-        val result = restClient.post()
+        val response = restClient.post()
             .uri("/v1/payments/confirm")
             .header(HttpHeaders.AUTHORIZATION, "Basic $key")
             .body(tossPaymentConfirmRequest)
             .retrieve()
             .body(TossPaymentResponse::class.java)!!
+        return PurchaseData(
+            paymentKey = response.paymentKey,
+            status = response.status,
+            method = response.method,
+            purchaseProvider = PurchaseProvider.TOSS,
+            orderId = response.orderId,
+            totalAmount = BigDecimal(response.totalAmount)
+        )
 
-        val delete = restClient.post()
-            .uri("/v1/payments/${tossPaymentConfirmRequest.paymentKey}/cancel")
-            .header(HttpHeaders.AUTHORIZATION, "Basic $key")
-            .body(TossPaymentCancelRequest("구매자 변심"))
-            .retrieve()
-            .body(TossPaymentResponse::class.java)!!
-
-        println(delete)
-
-        return restClient.post()
-            .uri("/v1/payments/confirm")
-            .header(HttpHeaders.AUTHORIZATION, "Basic $key")
-            .body(tossPaymentConfirmRequest)
-            .retrieve()
-            .body(TossPaymentResponse::class.java)!!
+//        val delete = restClient.post()
+//            .uri("/v1/payments/${tossPaymentConfirmRequest.paymentKey}/cancel")
+//            .header(HttpHeaders.AUTHORIZATION, "Basic $key")
+//            .body(TossPaymentCancelRequest("구매자 변심"))
+//            .retrieve()
+//            .body(TossPaymentResponse::class.java)!!
+//
+//        println(delete)
+//
+//        return restClient.post()
+//            .uri("/v1/payments/confirm")
+//            .header(HttpHeaders.AUTHORIZATION, "Basic $key")
+//            .body(tossPaymentConfirmRequest)
+//            .retrieve()
+//            .body(TossPaymentResponse::class.java)!!
         //Error while extracting response for type [toss.dto.TossPaymentResponse] and content type [application/json]
         //401 Unauthorized: "{"code":"UNAUTHORIZED_KEY","message":"인증되지 않은 시크릿 키 혹은 클라이언트 키 입니다.","data":null}"
         //400 Bad Request: "{"code":"ALREADY_PROCESSED_PAYMENT","message":"이미 처리된 결제 입니다."}"

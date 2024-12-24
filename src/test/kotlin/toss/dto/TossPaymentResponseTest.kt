@@ -2,6 +2,7 @@ package toss.dto
 
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import org.assertj.core.api.Assertions.assertThat
+import purchase.domain.vo.PaymentMethod
 import kotlin.test.Test
 
 class TossPaymentResponseTest {
