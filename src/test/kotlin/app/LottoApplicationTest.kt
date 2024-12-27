@@ -8,7 +8,7 @@ import kotlin.test.assertNotNull
 
 @SpringBootTest
 class TossClientIntegrationTest(
-    @Autowired private val tossPaymentClient: TossPaymentClient
+    @Autowired private val tossPaymentClient: TossPaymentClient,
 ) {
     @Test
     fun `tossPaymentClient should be autowired`() {

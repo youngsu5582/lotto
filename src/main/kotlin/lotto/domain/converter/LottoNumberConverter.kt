@@ -5,7 +5,6 @@ import jakarta.persistence.Converter
 
 @Converter
 class LottoNumbersConverter : AttributeConverter<List<Int>, String> {
-
     override fun convertToDatabaseColumn(attribute: List<Int>?): String {
         return attribute?.joinToString(",") ?: ""
     }

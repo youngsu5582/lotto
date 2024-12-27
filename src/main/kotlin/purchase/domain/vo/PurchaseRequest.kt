@@ -7,5 +7,5 @@ data class PurchaseRequest(
     val currency: String,
     val amount: BigDecimal,
     val paymentKey: String,
-    val orderId: String
+    val orderId: String,
 )

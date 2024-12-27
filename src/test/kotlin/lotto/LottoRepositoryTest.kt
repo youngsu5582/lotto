@@ -34,7 +34,7 @@ class LottoRepositoryTest {
         val lottoes = lottoRepository.findLottoByNumbersIn(listOf("1,13,22,25,27,29", "13,24,31,35,38,41"))
         assertThat(lottoes).containsExactly(
             lotto1,
-            lotto2
+            lotto2,
         )
     }
 
@@ -44,7 +44,14 @@ class LottoRepositoryTest {
         assertThat(lotto).isNull()
     }
 
-    private fun lottoCreate(i: Int, i1: Int, i2: Int, i3: Int, i4: Int, i5: Int): Lotto {
+    private fun lottoCreate(
+        i: Int,
+        i1: Int,
+        i2: Int,
+        i3: Int,
+        i4: Int,
+        i5: Int,
+    ): Lotto {
         return Lotto(listOf(i, i1, i2, i3, i4, i5))
     }
 }

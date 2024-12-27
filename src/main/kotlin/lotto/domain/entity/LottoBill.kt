@@ -1,22 +1,19 @@
 package lotto.domain.entity
 
 import jakarta.persistence.*
-import purchase.domain.entity.Purchase
+import java.util.*
 
 @Entity
 @Table(
     indexes = [
-        Index(name = "idx_numbers", columnList = "numbers")
-    ]
+        Index(name = "idx_numbers", columnList = "numbers"),
+    ],
 )
 class LottoBill(
     @Id
     @GeneratedValue
     private val id: Long? = null,
-
+    private val purchaseId: UUID?,
     @OneToOne
-    private val purchase: Purchase,
-
-    @OneToOne
-    private val lottoPublish: LottoPublish
+    private val lottoPublish: LottoPublish,
 )

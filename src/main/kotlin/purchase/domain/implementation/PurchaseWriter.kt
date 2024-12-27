@@ -17,20 +17,21 @@ class PurchaseWriter(
     @Transaction
     @Write
     fun savePurchase(response: PurchaseData): Purchase {
-        val purchaseInfo = purchaseInfoRepository.save(
-            PurchaseInfo(
-                status = response.status,
-                totalAmount = response.totalAmount,
-                method = response.method
+        val purchaseInfo =
+            purchaseInfoRepository.save(
+                PurchaseInfo(
+                    status = response.status,
+                    totalAmount = response.totalAmount,
+                    method = response.method,
+                ),
             )
-        )
         return purchaseRepository.save(
             Purchase(
                 paymentKey = response.paymentKey,
                 orderId = response.orderId,
                 purchaseProvider = response.purchaseProvider,
-                purchaseInfo = purchaseInfo
-            )
+                purchaseInfo = purchaseInfo,
+            ),
         )
     }
 }

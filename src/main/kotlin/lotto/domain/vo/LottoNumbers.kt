@@ -1,9 +1,8 @@
 package lotto.domain.vo
 
 data class LottoNumbers(
-    private val lottoNumbers: List<List<Int>>
+    private val lottoNumbers: List<List<Int>>,
 ) {
-
     fun size(): Int {
         return lottoNumbers.size
     }

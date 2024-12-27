@@ -10,11 +10,10 @@ class Purchase(
     private val id: UUID? = UUID.randomUUID(),
     private val orderId: String,
     private val paymentKey: String,
-
     @OneToOne(cascade = [CascadeType.PERSIST])
     private val purchaseInfo: PurchaseInfo,
-
     @Enumerated
-    private val purchaseProvider: PurchaseProvider
+    private val purchaseProvider: PurchaseProvider,
 ) {
+    fun getId() = id
 }

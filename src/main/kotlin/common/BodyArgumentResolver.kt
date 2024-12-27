@@ -1,6 +1,5 @@
 package common
 
-
 import common.web.Body
 import org.springframework.core.MethodParameter
 import org.springframework.http.converter.HttpMessageConverter
@@ -11,7 +10,7 @@ import org.springframework.web.method.support.ModelAndViewContainer
 import org.springframework.web.servlet.mvc.method.annotation.RequestResponseBodyMethodProcessor
 
 class BodyArgumentResolver(
-    messageConverters: List<HttpMessageConverter<*>>
+    messageConverters: List<HttpMessageConverter<*>>,
 ) : HandlerMethodArgumentResolver {
     private val delegate = RequestResponseBodyMethodProcessor(messageConverters)
 
@@ -23,7 +22,7 @@ class BodyArgumentResolver(
         parameter: MethodParameter,
         mavContainer: ModelAndViewContainer?,
         webRequest: NativeWebRequest,
-        binderFactory: WebDataBinderFactory?
+        binderFactory: WebDataBinderFactory?,
     ): Any? {
         return delegate.resolveArgument(parameter, mavContainer, webRequest, binderFactory)
     }

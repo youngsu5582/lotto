@@ -8,12 +8,13 @@ import lotto.domain.repository.LottoRepository
 import lotto.domain.vo.LottoNumbers
 import lotto.domain.vo.LottoPaper
 import lotto.domain.vo.LottoPaperRequest
+import org.springframework.stereotype.Component
 import java.math.BigDecimal
 
-@Implementation
+@Component
 class LottoPaperGenerator(
     private val lottoNumberGenerator: LottoNumberGenerator,
-    private val lottoRepository: LottoRepository
+    private val lottoRepository: LottoRepository,
 ) {
     companion object {
         private val UNIT = BigDecimal(1000L)
@@ -25,7 +26,10 @@ class LottoPaperGenerator(
         return LottoPaper(issuedLottoes)
     }
 
-    fun generateWithNumbers(lottoPaperRequest: LottoPaperRequest, lottoNumbers: LottoNumbers): LottoPaper {
+    fun generateWithNumbers(
+        lottoPaperRequest: LottoPaperRequest,
+        lottoNumbers: LottoNumbers,
+    ): LottoPaper {
         val paperCount = calculatePaperCount(lottoPaperRequest)
         require(paperCount == lottoNumbers.size()) {
             "로또 숫자와 개수는 일치해야 합니다."
@@ -41,7 +45,10 @@ class LottoPaperGenerator(
         return lottoPaperRequest.amount.divide(UNIT).toInt()
     }
 
-    private fun createIssuedLottoes(lottoNumbers: LottoNumbers, issueStatus: IssueStatus): List<IssuedLotto> {
+    private fun createIssuedLottoes(
+        lottoNumbers: LottoNumbers,
+        issueStatus: IssueStatus,
+    ): List<IssuedLotto> {
         return getLottoEntities(lottoNumbers).map { IssuedLotto(issueStatus, it) }.toList()
     }
 

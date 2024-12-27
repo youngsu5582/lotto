@@ -7,5 +7,5 @@ data class ApiResponse<T>(
     val message: String = "ok",
     val data: T? = null,
     @JsonIgnore
-    val headers: Map<String, String> = emptyMap()
+    val headers: Map<String, String> = emptyMap(),
 )

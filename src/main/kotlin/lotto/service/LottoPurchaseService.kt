@@ -15,14 +15,17 @@ class LottoPurchaseService(
     private val lottoPurchaseProcessor: LottoPurchaseProcessor,
     private val lottoPublisher: LottoPublisher,
 ) {
-    fun purchase(purchaseRequest: LottoPurchaseRequest, lottoNumbers: LottoNumbers): LottoBill {
+    fun purchase(
+        purchaseRequest: LottoPurchaseRequest,
+        lottoNumbers: LottoNumbers,
+    ): LottoBill {
         val lottoPaper =
             lottoPaperGenerator.generateWithNumbers(LottoPaperRequest(purchaseRequest.amount), lottoNumbers)
         val purchase = lottoPurchaseProcessor.purchase(purchaseRequest.toPurchaseRequest())
         val lottoPublish = lottoPublisher.publish(lottoPaper)
         return LottoBill(
-            purchase = purchase,
-            lottoPublish = lottoPublish
+            purchaseId = purchase.getId(),
+            lottoPublish = lottoPublish,
         )
     }
 }

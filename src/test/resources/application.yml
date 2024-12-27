@@ -13,3 +13,12 @@ spring:
       ddl-auto: create-drop
   datasource:
     url: jdbc:h2:mem:databaseDB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE;MODE=MySQL
+
+toss:
+  client:
+    api-key: test_key
+    payment-url: /v1/payments/confirm
+
+logging:
+  level:
+    org.springframework.context.annotation: debug

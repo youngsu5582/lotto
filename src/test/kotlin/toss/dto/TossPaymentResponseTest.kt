@@ -10,35 +10,38 @@ class TossPaymentResponseTest {
     fun `역직렬화를 통해 메소드를 ENUM 에 맞게 매핑한다`() {
         val objectMapper = jacksonObjectMapper()
 
-        val json1 = """
-        {
-            "paymentKey": "123456",
-            "status": "DONE",
-            "orderId": "order-001",
-            "totalAmount": 50000,
-            "method": "CARD"
-        }
-    """.trimIndent()
+        val json1 =
+            """
+            {
+                "paymentKey": "123456",
+                "status": "DONE",
+                "orderId": "order-001",
+                "totalAmount": 50000,
+                "method": "CARD"
+            }
+            """.trimIndent()
 
-        val json2 = """
-        {
-            "paymentKey": "123457",
-            "status": "DONE",
-            "orderId": "order-002",
-            "totalAmount": 50000,
-            "method": "카드"
-        }
-    """.trimIndent()
+        val json2 =
+            """
+            {
+                "paymentKey": "123457",
+                "status": "DONE",
+                "orderId": "order-002",
+                "totalAmount": 50000,
+                "method": "카드"
+            }
+            """.trimIndent()
 
-        val json3 = """
-        {
-            "paymentKey": "123457",
-            "status": "DONE",
-            "orderId": "order-002",
-            "totalAmount": 50000,
-            "method": "Tarjeta"
-        }
-    """.trimIndent()
+        val json3 =
+            """
+            {
+                "paymentKey": "123457",
+                "status": "DONE",
+                "orderId": "order-002",
+                "totalAmount": 50000,
+                "method": "Tarjeta"
+            }
+            """.trimIndent()
 
         val response1 = objectMapper.readValue(json1, TossPaymentResponse::class.java)
         val response2 = objectMapper.readValue(json2, TossPaymentResponse::class.java)

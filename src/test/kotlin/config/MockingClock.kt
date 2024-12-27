@@ -4,6 +4,7 @@ import java.time.*
 
 class MockingClock : Clock() {
     private var instant: Instant? = null
+
     fun setInstant(instant: Instant) {
         this.instant = instant
     }
@@ -24,5 +25,3 @@ class MockingClock : Clock() {
         throw UnsupportedOperationException()
     }
 }
-
-

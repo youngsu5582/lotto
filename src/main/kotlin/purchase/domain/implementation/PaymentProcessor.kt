@@ -9,11 +9,11 @@ import purchase.domain.vo.PurchaseRequest
 
 @Implementation
 class PaymentProcessor(
-    private val paymentClients: Map<PurchaseProvider, PaymentClient>
+    private val paymentClients: Map<PurchaseProvider, PaymentClient>,
 ) {
     fun purchase(
         purchaseRequest: PurchaseRequest,
-        purchaseProvider: PurchaseProvider
+        purchaseProvider: PurchaseProvider,
     ): PurchaseData {
         val client = getPurchaseClient(purchaseProvider)
         return client.process(request = purchaseRequest)

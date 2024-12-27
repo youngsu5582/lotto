@@ -12,7 +12,7 @@ class Fixture {
             endDate: LocalDateTime = LocalDateTime.now().plusDays(6),
             drawDate: LocalDateTime = LocalDateTime.now().plusDays(6).plusMinutes(30),
             paymentDeadline: LocalDateTime = LocalDateTime.now().plusYears(1),
-            status: LottoStatus = LottoStatus.ONGOING
+            status: LottoStatus = LottoStatus.ONGOING,
         ): LottoRoundInfo {
             return LottoRoundInfo(
                 round = round,
@@ -20,7 +20,7 @@ class Fixture {
                 endDate = endDate,
                 drawDate = drawDate,
                 paymentDeadline = paymentDeadline,
-                status = status
+                status = status,
             )
         }
     }

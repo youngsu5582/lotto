@@ -5,6 +5,7 @@ plugins {
     id("io.spring.dependency-management") version "1.1.6"
     kotlin("plugin.jpa") version "1.9.25"
     id("org.jlleitschuh.gradle.ktlint") version "12.1.0"
+//    id("org.jetbrains.kotlin.kapt") version "1.9.25"
 }
 
 group = "camp.nextstep.edu"
@@ -33,6 +34,7 @@ dependencies {
     testImplementation("org.jetbrains.kotlin:kotlin-test-junit5")
     testRuntimeOnly("org.junit.platform:junit-platform-launcher")
     implementation(kotlin("stdlib-jdk8"))
+    annotationProcessor("org.springframework:spring-context-indexer")
 }
 
 kotlin {

@@ -16,15 +16,16 @@ class LottoPurchaseInfoProcessorTest {
 
     @Test
     fun `d`() {
-        val response = lottoPurchaseProcessor.purchase(
-            PurchaseRequest(
-                amount = BigDecimal(50000),
-                paymentKey = "tgen_202412170012070fF24",
-                orderId = "MC42NzA0ODc4NTczNzc1",
-                purchaseType = PurchaseType.CARD.name,
-                currency = Currency.KRW.name
+        val response =
+            lottoPurchaseProcessor.purchase(
+                PurchaseRequest(
+                    amount = BigDecimal(50000),
+                    paymentKey = "tgen_202412170012070fF24",
+                    orderId = "MC42NzA0ODc4NTczNzc1",
+                    purchaseType = PurchaseType.CARD.name,
+                    currency = Currency.KRW.name,
+                ),
             )
-        )
         println(response)
     }
 }

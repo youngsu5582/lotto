@@ -17,7 +17,6 @@ import kotlin.test.Test
 
 @ImplementationTest
 class LottoPublisherTest {
-
     @Autowired
     private lateinit var lottoRoundInfoRepository: LottoRoundInfoRepository
 
@@ -31,11 +30,12 @@ class LottoPublisherTest {
 
     @BeforeEach
     fun setup() {
-        lottoPublisher = LottoPublisher(
-            lottoRoundInfoRepository = lottoRoundInfoRepository,
-            lottoPublishRepository = lottoPublishRepository,
-            clock = clock
-        )
+        lottoPublisher =
+            LottoPublisher(
+                lottoRoundInfoRepository = lottoRoundInfoRepository,
+                lottoPublishRepository = lottoPublishRepository,
+                clock = clock,
+            )
     }
 
     @Test
@@ -71,15 +71,15 @@ class LottoPublisherTest {
         round: Long,
         startDate: LocalDateTime,
         endDate: LocalDateTime,
-        status: LottoStatus = LottoStatus.ONGOING
+        status: LottoStatus = LottoStatus.ONGOING,
     ) {
         lottoRoundInfoRepository.save(
             Fixture.LottoInfoFixture.create(
                 round = round,
                 startDate = startDate,
                 endDate = endDate,
-                status = status
-            )
+                status = status,
+            ),
         )
     }
 
@@ -93,8 +93,8 @@ class LottoPublisherTest {
                     IssuedLottoBuilder()
                         .withNumbers(listOf(1, 3, 5, 11, 13, 15))
                         .build(),
-                )
-            )
+                ),
+            ),
         )
     }
 }

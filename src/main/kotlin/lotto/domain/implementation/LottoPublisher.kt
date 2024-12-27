@@ -15,21 +15,22 @@ import java.time.LocalDateTime
 class LottoPublisher(
     private val lottoRoundInfoRepository: LottoRoundInfoRepository,
     private val lottoPublishRepository: LottoPublishRepository,
-    private val clock: Clock
+    private val clock: Clock,
 ) {
     @Transaction
     @Write
     fun publish(lottoPaper: LottoPaper): LottoPublish {
         val issuedAt = LocalDateTime.now(clock)
         val lottoInfo = getLottoInfo(issuedAt)
-        val lottoPublish = lottoPublishRepository.save(
-            LottoPublish(
-                lottoRoundInfo = lottoInfo,
-                issuedAt = issuedAt,
-                lottoes = lottoPaper.getLottoes(),
-                issuedLottoesStatus = lottoPaper.getIssuedStatues()
+        val lottoPublish =
+            lottoPublishRepository.save(
+                LottoPublish(
+                    lottoRoundInfo = lottoInfo,
+                    issuedAt = issuedAt,
+                    lottoes = lottoPaper.getLottoes(),
+                    issuedLottoesStatus = lottoPaper.getIssuedStatues(),
+                ),
             )
-        )
         return lottoPublish
     }
 

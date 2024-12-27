@@ -4,7 +4,7 @@ import lotto.domain.implementation.LottoNumberGenerator
 import lotto.domain.vo.LottoNumbers
 
 class FixtureLottoNumberGenerator(
-    private val numbers: List<List<Int>>
+    private val numbers: List<List<Int>>,
 ) : LottoNumberGenerator {
     private var count = 0
 
@@ -20,4 +20,3 @@ class FixtureLottoNumberGenerator(
         return LottoNumbers(List(number) { generate() })
     }
 }
-

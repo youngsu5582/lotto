@@ -4,7 +4,6 @@ class IssuedLotto(
     private val issueStatus: IssueStatus,
     private val lotto: Lotto,
 ) {
-
     fun toIntList(): List<Int> {
         return lotto.toIntList()
     }
@@ -16,5 +15,5 @@ class IssuedLotto(
 
 enum class IssueStatus {
     AUTO,
-    MANUAL
+    MANUAL,
 }

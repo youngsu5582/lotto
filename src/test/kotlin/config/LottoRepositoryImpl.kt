@@ -5,7 +5,6 @@ import lotto.domain.entity.Lotto
 import lotto.domain.repository.LottoRepository
 
 class LottoRepositoryImpl : FakeCrudRepository<Lotto, Long>(), LottoRepository {
-
     private val lottoNumbersConverter: LottoNumbersConverter = LottoNumbersConverter()
 
     override fun extractId(entity: Lotto): Long? {

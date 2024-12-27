@@ -19,3 +19,9 @@ spring:
     url: jdbc:mysql://localhost:3306/lotto?allowPublicKeyRetrieval=true&useSSL=false&serverTimezone=UTC&useUnicode=true&characterEncoding=UTF-8
     username: lotto
     password: 4321
+
+toss:
+  client:
+    api-key: test_gsk_docs_OaPz8L5KdmQXkzRz3y47BMw6
+    payment-url: /v1/payments/confirm
+

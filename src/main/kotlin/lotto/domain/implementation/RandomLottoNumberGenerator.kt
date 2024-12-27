@@ -6,7 +6,6 @@ import kotlin.random.Random
 
 @Implementation
 class RandomLottoNumberGenerator : LottoNumberGenerator {
-
     override fun generate(number: Int): LottoNumbers {
         val generatedLottoes = mutableSetOf<List<Int>>()
 

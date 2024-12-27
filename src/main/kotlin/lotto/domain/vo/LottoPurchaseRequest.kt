@@ -8,7 +8,7 @@ data class LottoPurchaseRequest(
     val currency: Currency,
     val amount: BigDecimal,
     val paymentKey: String,
-    val orderId: String
+    val orderId: String,
 ) {
     fun toPurchaseRequest(): PurchaseRequest {
         return PurchaseRequest(
@@ -20,4 +20,3 @@ data class LottoPurchaseRequest(
         )
     }
 }
-

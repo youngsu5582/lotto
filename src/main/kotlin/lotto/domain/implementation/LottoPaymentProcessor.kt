@@ -1,4 +1,3 @@
 package lotto.domain.implementation
 
-class LottoPaymentProcessor {
-}
+class LottoPaymentProcessor

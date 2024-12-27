@@ -6,7 +6,6 @@ import org.assertj.core.api.Assertions.assertThatThrownBy
 import org.junit.jupiter.api.Test
 
 class LottoTest {
-
     @Test
     fun `숫자들은 자동으로 정렬된다`() {
         val lotto = Lotto(numbers = listOf(32, 44, 1, 4, 2, 3))
@@ -17,7 +16,7 @@ class LottoTest {
     fun `숫자는 1부터 45까지 가능하다`() {
         assertThatThrownBy {
             Lotto(
-                numbers = listOf(1, 2, 3, 4, 5, 46)
+                numbers = listOf(1, 2, 3, 4, 5, 46),
             )
         }
     }

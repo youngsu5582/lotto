@@ -8,7 +8,7 @@ import java.math.BigDecimal
 
 data class LottoPurchaseHttpRequest(
     private val purchaseHttpRequest: PurchaseHttpRequest,
-    private val lottoRequest: LottoRequest
+    private val lottoRequest: LottoRequest,
 ) {
     fun toLottoNumbers(): LottoNumbers {
         return LottoNumbers(lottoRequest.numbers)
@@ -26,7 +26,7 @@ data class LottoPurchaseHttpRequest(
 }
 
 data class LottoRequest(
-    val numbers: List<List<Int>>
+    val numbers: List<List<Int>>,
 )
 
 data class PurchaseHttpRequest(
@@ -34,5 +34,5 @@ data class PurchaseHttpRequest(
     val currency: Currency,
     val amount: BigDecimal,
     val paymentKey: String,
-    val orderId: String
+    val orderId: String,
 )

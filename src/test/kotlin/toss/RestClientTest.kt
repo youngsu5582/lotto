@@ -1,4 +1,3 @@
 package toss
 
-class RestClientTest {
-}
+class RestClientTest

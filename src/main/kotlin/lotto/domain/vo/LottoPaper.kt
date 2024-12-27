@@ -5,7 +5,7 @@ import lotto.domain.entity.IssuedLotto
 import lotto.domain.entity.Lotto
 
 data class LottoPaper(
-    private val lottoes: List<IssuedLotto>
+    private val lottoes: List<IssuedLotto>,
 ) {
     companion object {
         const val MAX_PURCHASE_LIMIT = 5

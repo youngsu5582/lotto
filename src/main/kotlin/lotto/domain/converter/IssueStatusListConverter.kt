@@ -5,4 +5,3 @@ import lotto.domain.entity.IssueStatus
 
 @Converter
 class IssueStatusListConverter : EnumListToStringConverter<IssueStatus>(IssueStatus::class.java)
-

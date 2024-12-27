@@ -6,16 +6,15 @@ import lotto.domain.converter.LottoNumbersConverter
 @Entity
 @Table(
     indexes = [
-        Index(name = "idx_numbers", columnList = "numbers")
-    ]
+        Index(name = "idx_numbers", columnList = "numbers"),
+    ],
 )
 class Lotto(
     @Id
     @GeneratedValue
     private val id: Long? = null,
-
     @Convert(converter = LottoNumbersConverter::class)
-    private val numbers: List<Int>
+    private val numbers: List<Int>,
 ) {
     companion object {
         private const val REQUIRED_SIZE = 6

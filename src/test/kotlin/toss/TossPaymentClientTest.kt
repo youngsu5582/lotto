@@ -10,7 +10,6 @@ import kotlin.test.Test
 
 @SpringBootConfiguration
 class TossPaymentClientTest {
-
     private val restClient = TestRestClientConfig().restClient()!!
     private val connectTimeoutUrl = "https://10.255.255.1"
     private val readTimeoutUrl = "https://httpbin.org/delay/9"
