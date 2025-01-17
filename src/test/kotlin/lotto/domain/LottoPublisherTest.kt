@@ -34,7 +34,6 @@ class LottoPublisherTest {
             LottoPublisher(
                 lottoRoundInfoRepository = lottoRoundInfoRepository,
                 lottoPublishRepository = lottoPublishRepository,
-                clock = clock,
             )
     }
 
@@ -85,6 +84,7 @@ class LottoPublisherTest {
 
     private fun publishLottoPaper() {
         lottoPublisher.publish(
+            LocalDateTime.now(clock),
             LottoPaper(
                 listOf(
                     IssuedLottoBuilder()

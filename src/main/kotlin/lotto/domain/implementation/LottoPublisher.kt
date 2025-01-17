@@ -8,19 +8,16 @@ import lotto.domain.entity.LottoRoundInfo
 import lotto.domain.repository.LottoPublishRepository
 import lotto.domain.repository.LottoRoundInfoRepository
 import lotto.domain.vo.LottoPaper
-import java.time.Clock
 import java.time.LocalDateTime
 
 @Implementation
 class LottoPublisher(
     private val lottoRoundInfoRepository: LottoRoundInfoRepository,
     private val lottoPublishRepository: LottoPublishRepository,
-    private val clock: Clock,
 ) {
     @Transaction
     @Write
-    fun publish(lottoPaper: LottoPaper): LottoPublish {
-        val issuedAt = LocalDateTime.now(clock)
+    fun publish(issuedAt: LocalDateTime, lottoPaper: LottoPaper): LottoPublish {
         val lottoInfo = getLottoInfo(issuedAt)
         val lottoPublish =
             lottoPublishRepository.save(
@@ -35,7 +32,6 @@ class LottoPublisher(
     }
 
     private fun getLottoInfo(issuedAt: LocalDateTime): LottoRoundInfo {
-        lottoRoundInfoRepository.findAll().forEach { println(it) }
         return lottoRoundInfoRepository.findTopByIssueDateLessThanEqualAndDrawDateGreaterThanEqual(issuedAt)
             ?.also {
                 if (it.isNotOngoing() || it.isAfter(issuedAt)) {

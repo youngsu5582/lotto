@@ -10,11 +10,11 @@ class MockingClock : Clock() {
     }
 
     fun setInstant(localDateTime: LocalDateTime) {
-        this.instant = localDateTime?.toInstant(ZoneOffset.UTC)
+        this.instant = localDateTime.toInstant(ZoneOffset.UTC)
     }
 
     override fun instant(): Instant {
-        return instant!!
+        return instant?: LocalDateTime.now().toInstant(ZoneOffset.UTC)
     }
 
     override fun getZone(): ZoneId {
