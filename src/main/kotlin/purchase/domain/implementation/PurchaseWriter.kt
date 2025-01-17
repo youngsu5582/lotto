@@ -20,7 +20,6 @@ class PurchaseWriter(
         val purchaseInfo =
             purchaseInfoRepository.save(
                 PurchaseInfo(
-                    status = response.status,
                     totalAmount = response.totalAmount,
                     method = response.method,
                 ),
@@ -29,6 +28,7 @@ class PurchaseWriter(
             Purchase(
                 paymentKey = response.paymentKey,
                 orderId = response.orderId,
+                status = response.status,
                 purchaseProvider = response.purchaseProvider,
                 purchaseInfo = purchaseInfo,
             ),
