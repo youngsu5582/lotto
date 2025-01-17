@@ -1,11 +1,10 @@
 plugins {
     kotlin("jvm") version "1.9.25"
     kotlin("plugin.spring") version "1.9.25"
+    kotlin("plugin.jpa") version "2.1.0"
     id("org.springframework.boot") version "3.4.0"
     id("io.spring.dependency-management") version "1.1.6"
-    kotlin("plugin.jpa") version "1.9.25"
-    id("org.jlleitschuh.gradle.ktlint") version "12.1.0"
-//    id("org.jetbrains.kotlin.kapt") version "1.9.25"
+    id("org.asciidoctor.jvm.convert") version "4.0.0"
 }
 
 group = "camp.nextstep.edu"
@@ -22,19 +21,35 @@ repositories {
 }
 
 dependencies {
-    implementation("org.springframework.boot:spring-boot-starter-data-jpa")
-    implementation("org.springframework.boot:spring-boot-starter-thymeleaf")
-    implementation("org.springframework.boot:spring-boot-starter-validation")
+    // Spring Boot 및 Jackson 의존성
     implementation("org.springframework.boot:spring-boot-starter-web")
+    implementation("org.springframework.boot:spring-boot-starter-data-jpa")
+    implementation("org.springframework.boot:spring-boot-starter-validation")
+    implementation ("org.springframework.boot:spring-boot-starter-actuator")
     implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
     implementation("org.jetbrains.kotlin:kotlin-reflect")
+
     runtimeOnly("com.h2database:h2")
     runtimeOnly("com.mysql:mysql-connector-j")
-    testImplementation("org.springframework.boot:spring-boot-starter-test")
-    testImplementation("org.jetbrains.kotlin:kotlin-test-junit5")
-    testRuntimeOnly("org.junit.platform:junit-platform-launcher")
+
     implementation(kotlin("stdlib-jdk8"))
+
+    // Test 및 REST Docs 의존성
+    testImplementation("org.springframework.boot:spring-boot-starter-test") {
+        exclude(group = "org.junit.vintage") // JUnit 5 전용
+    }
+    testImplementation("org.jetbrains.kotlin:kotlin-test-junit5")
+    testImplementation("org.springframework.restdocs:spring-restdocs-mockmvc")
+    testImplementation("org.mockito:mockito-core")
+    testImplementation("org.mockito:mockito-junit-jupiter")
+    testImplementation ("io.rest-assured:rest-assured:5.3.1")
+    testImplementation ("org.springframework.restdocs:spring-restdocs-restassured")
+
+    testRuntimeOnly("org.junit.platform:junit-platform-launcher")
     annotationProcessor("org.springframework:spring-context-indexer")
+    testImplementation("io.kotest:kotest-runner-junit5:5.9.1")
+    testImplementation("io.kotest:kotest-assertions-core:5.9.1")
+    testImplementation("io.kotest.extensions:kotest-extensions-spring:1.1.2")
 }
 
 kotlin {
@@ -52,3 +67,40 @@ allOpen {
 tasks.withType<Test> {
     useJUnitPlatform()
 }
+
+tasks.test {
+    useJUnitPlatform()
+}
+
+tasks.register<Test>("restDocsTest") {
+    useJUnitPlatform {
+        includeTags("AcceptanceTest") // 특정 태그만 포함
+    }
+
+    systemProperty("org.springframework.restdocs.outputDir", file("build/generated-snippets"))
+}
+
+tasks.named("asciidoctor", org.asciidoctor.gradle.jvm.AsciidoctorTask::class.java) {
+    dependsOn(tasks.named("restDocsTest"))
+    inputs.dir(file("build/generated-snippets"))
+    baseDirFollowsSourceFile()
+    attributes(
+        mapOf(
+            "snippets" to file("build/generated-snippets"),
+            "source-highlighter" to "highlightjs",
+            "highlightjs-theme" to "github",
+            "icons" to "font",
+            "sectnums" to true,
+            "toc" to "left",
+            "toc-title" to "Table of Contents",
+            "prewrap" to "true",
+            "docinfo1" to true,
+            "hardbreaks" to true
+        )
+    )
+    outputOptions {
+        backends("html")
+    }
+}
+
+
