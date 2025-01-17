@@ -9,7 +9,7 @@ import purchase.domain.vo.PurchaseRequest
 
 @Implementation
 class PaymentProcessor(
-    private val paymentClients: Map<PurchaseProvider, PaymentClient>,
+    private val paymentClients: Map<String, PaymentClient>,
 ) {
     fun purchase(
         purchaseRequest: PurchaseRequest,
@@ -20,7 +20,7 @@ class PaymentProcessor(
     }
 
     private fun getPurchaseClient(purchaseProvider: PurchaseProvider): PaymentClient {
-        return paymentClients[purchaseProvider]
+        return paymentClients[purchaseProvider.name]
             ?: throw NotSupportedException("지원하지 않는 결제 제공자입니다.")
     }
 }

@@ -7,7 +7,6 @@ import purchase.domain.PaymentClient
 import purchase.domain.vo.PurchaseProvider
 import toss.TossPaymentClient
 import toss.config.TossClientConfig
-import java.util.*
 
 @Config
 @Import(TossClientConfig::class)
@@ -15,9 +14,9 @@ class PaymentClientConfig(
     private val tossPaymentClient: TossPaymentClient,
 ) {
     @Bean
-    fun paymentClients(): EnumMap<PurchaseProvider, PaymentClient> {
-        return EnumMap<PurchaseProvider, PaymentClient>(PurchaseProvider::class.java).apply {
-            put(PurchaseProvider.TOSS, tossPaymentClient)
-        }
+    fun paymentClients(): Map<String, PaymentClient> {
+        val paymentClients = HashMap<String, PaymentClient>()
+        paymentClients[PurchaseProvider.TOSS.name] = tossPaymentClient
+        return paymentClients
     }
 }
