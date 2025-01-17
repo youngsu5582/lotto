@@ -5,7 +5,3 @@ data class TossPaymentConfirmRequest(
     val paymentKey: String,
     val orderId: String,
 )
-
-data class TossPaymentCancelRequest(
-    val cancelReason: String,
-)

@@ -1,78 +1,122 @@
 package toss
 
+import com.fasterxml.jackson.databind.ObjectMapper
 import common.business.Implementation
 import org.springframework.http.HttpHeaders
+import org.springframework.http.HttpRequest
+import org.springframework.http.client.ClientHttpResponse
+import org.springframework.web.client.ResourceAccessException
 import org.springframework.web.client.RestClient
 import purchase.domain.PaymentClient
+import purchase.domain.PurchaseException
+import purchase.domain.PurchaseExceptionCode
 import purchase.domain.vo.PurchaseData
-import purchase.domain.vo.PurchaseProvider
 import purchase.domain.vo.PurchaseRequest
 import toss.config.TossClientProperties
+import toss.dto.TossPaymentConfirmErrorResponse
 import toss.dto.TossPaymentConfirmRequest
 import toss.dto.TossPaymentResponse
-import java.math.BigDecimal
 import java.util.*
-
 
 @Implementation
 class TossPaymentClient(
     private val restClient: RestClient,
     private val tossClientProperties: TossClientProperties,
+    private val objectMapper: ObjectMapper = ObjectMapper()
 ) : PaymentClient {
+
+    private val maxRetries = 3
+    private val backoffMillis = 200L
+    private val authorizationKey: String = Base64.getEncoder()
+        .encodeToString("${tossClientProperties.apiKey}:".toByteArray())
+
     override fun process(request: PurchaseRequest): PurchaseData {
-        val tossPaymentConfirmRequest =
-            TossPaymentConfirmRequest(
-                paymentKey = request.paymentKey,
-                orderId = request.orderId,
-                amount = request.amount.toLong(),
-            )
-        val value: String = tossClientProperties.apiKey + ":"
-        val key =
-            Base64
-                .getEncoder()
-                .encodeToString(value.toByteArray())
-
-        val response =
-            restClient.post()
-                .uri(tossClientProperties.paymentUrl)
-                .header(HttpHeaders.AUTHORIZATION, "Basic $key")
-                .body(tossPaymentConfirmRequest)
-                .retrieve()
-                .body(TossPaymentResponse::class.java)!!
-        return PurchaseData(
-            paymentKey = response.paymentKey,
-            status = response.status,
-            method = response.method,
-            purchaseProvider = PurchaseProvider.TOSS,
-            orderId = response.orderId,
-            totalAmount = BigDecimal(response.totalAmount),
+        val confirmRequest = TossPaymentConfirmRequest(
+            paymentKey = request.paymentKey,
+            orderId = request.orderId,
+            amount = request.amount.toLong()
         )
+        return try {
+            val response = retry(maxRetries) {
+                sendRequest(tossClientProperties.paymentUrl, confirmRequest, TossPaymentResponse::class.java)
+            }
+            response.toPurchaseData()
+        } catch (e: PurchaseException) {
+            throw e
+        } catch (e: Exception) {
+            throw PurchaseException(PurchaseExceptionCode.FAILED, e)
+        }
+    }
 
-//        val delete = restClient.post()
-//            .uri("/v1/payments/${tossPaymentConfirmRequest.paymentKey}/cancel")
-//            .header(HttpHeaders.AUTHORIZATION, "Basic $key")
-//            .body(TossPaymentCancelRequest("구매자 변심"))
-//            .retrieve()
-//            .body(TossPaymentResponse::class.java)!!
-//
-//        println(delete)
-//
-//        return restClient.post()
-//            .uri("/v1/payments/confirm")
-//            .header(HttpHeaders.AUTHORIZATION, "Basic $key")
-//            .body(tossPaymentConfirmRequest)
-//            .retrieve()
-//            .body(TossPaymentResponse::class.java)!!
-        // Error while extracting response for type [toss.dto.TossPaymentResponse] and content type [application/json]
-        // 401 Unauthorized: "{"code":"UNAUTHORIZED_KEY","message":"인증되지 않은 시크릿 키 혹은 클라이언트 키 입니다.","data":null}"
-        // 400 Bad Request: "{"code":"ALREADY_PROCESSED_PAYMENT","message":"이미 처리된 결제 입니다."}"
-        // 404 Not Found: "{"code":"NOT_FOUND_PAYMENT_SESSION","message":"결제 시간이 만료되어 결제 진행 데이터가 존재하지 않습니다."}"
-        // 500 Internal Server Error: "{"code":"FAILED_PAYMENT_INTERNAL_SYSTEM_PROCESSING","message":"결제가능 시간을 초과하였습니다."}"
+    private fun <T> sendRequest(url: String, request: Any, responseClass: Class<T>): T {
+        return restClient.post()
+            .uri(url)
+            .header(HttpHeaders.AUTHORIZATION, "Basic $authorizationKey")
+            .body(request)
+            .retrieve()
+            .onStatus({ it.isError }, ::handleErrorResponse)
+            .body(responseClass)!!
+    }
 
-        // TossPaymentResponse(paymentKey=tgen_20241216235231TWGL3, status=DONE, orderId=MC45ODgyNjYxNTIyODM4, totalAmount=50000, method=SIMPLE_PAY)
+    private fun handleErrorResponse(request: HttpRequest, response: ClientHttpResponse) {
+        val errorCode = extractErrorCode(response)
+        throw when {
+            errorCode.isRetryable() -> RetryableException(errorCode.message)
+            else -> PurchaseException(PurchaseExceptionCode.FAILED, errorCode.message)
+        }
+    }
 
-        // TossPaymentResponse(paymentKey=tgen_202412170012070fF24, status=CANCELED, orderId=MC42NzA0ODc4NTczNzc1, totalAmount=50000, method=SIMPLE_PAY)
-        // 결제 후 다시 처리시
-        // 400 Bad Request: "{"code":"ALREADY_PROCESSED_PAYMENT","message":"이미 처리된 결제 입니다."}"
+    private fun extractErrorCode(response: ClientHttpResponse): TossPaymentErrorCode {
+        val errorResponse = objectMapper.readValue(response.body, TossPaymentConfirmErrorResponse::class.java)
+        return TossPaymentErrorCode.fromCode(errorResponse.code)
+    }
+
+    private fun <T> retry(maxAttempts: Int, block: () -> T): T {
+        repeat(maxAttempts - 1) { attempt ->
+            try {
+                return block()
+            } catch (e: RetryableException) {
+                handleRetryableException(attempt)
+            } catch (e: ResourceAccessException) {
+                handleResourceAccessException(e, attempt)
+            }
+        }
+        return executeFinalAttempt(block)
+    }
+
+    private fun handleRetryableException(attempt: Int) {
+        Thread.sleep(backoffMillis * (attempt + 1))
+    }
+
+    private fun handleResourceAccessException(e: ResourceAccessException, attempt: Int) {
+        if (isConnectTimeoutError(e.message)) {
+            Thread.sleep(backoffMillis * (attempt + 1))
+        } else {
+            throw PurchaseException(PurchaseExceptionCode.READ_TIMEOUT, e)
+        }
+    }
+
+    private fun <T> executeFinalAttempt(block: () -> T): T {
+        return try {
+            block()
+        } catch (e: RetryableException) {
+            throw PurchaseException(PurchaseExceptionCode.RETRY_FAILED, e)
+        } catch (e: ResourceAccessException) {
+            throw determineResourceAccessException(e)
+        }
+    }
+
+    private fun determineResourceAccessException(e: ResourceAccessException): PurchaseException {
+        return if (isConnectTimeoutError(e.message)) {
+            PurchaseException(PurchaseExceptionCode.CONNECT_TIMEOUT, e)
+        } else {
+            PurchaseException(PurchaseExceptionCode.READ_TIMEOUT, e)
+        }
+    }
+
+    private fun isConnectTimeoutError(message: String?): Boolean {
+        return message?.contains("Connect timed out", ignoreCase = true) == true
     }
 }
+
+class RetryableException(message: String) : RuntimeException(message)

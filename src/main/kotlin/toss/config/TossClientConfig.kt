@@ -11,7 +11,8 @@ import toss.TossPaymentClient
 class TossClientConfig {
     @Bean
     fun restClient(): RestClient {
-        return RestClient.builder().baseUrl("https://api.tosspayments.com").build()
+        return RestClient.builder().baseUrl("https://api.tosspayments.com")
+            .build()
     }
 
     @Bean
