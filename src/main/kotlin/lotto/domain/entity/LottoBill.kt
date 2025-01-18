@@ -1,7 +1,7 @@
 package lotto.domain.entity
 
 import jakarta.persistence.*
-import java.util.*
+import purchase.domain.entity.Purchase
 
 @Entity
 @Table(
@@ -13,7 +13,12 @@ class LottoBill(
     @Id
     @GeneratedValue
     private val id: Long? = null,
-    private val purchaseId: UUID?,
+    @OneToOne
+    private val purchase: Purchase,
     @OneToOne
     private val lottoPublish: LottoPublish,
-)
+){
+    fun getId() = id
+    fun getPurchase() = purchase
+    fun getLottoPublish() = lottoPublish
+}
