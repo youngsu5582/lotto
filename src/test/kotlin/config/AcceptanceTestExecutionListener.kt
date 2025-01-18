@@ -3,6 +3,10 @@ package config
 import com.fasterxml.jackson.databind.ObjectMapper
 import io.restassured.RestAssured
 import io.restassured.builder.RequestSpecBuilder
+import io.restassured.config.EncoderConfig
+import io.restassured.config.LogConfig
+import io.restassured.filter.log.LogDetail
+import io.restassured.http.ContentType
 import org.junit.platform.commons.logging.LoggerFactory
 import org.springframework.core.io.ClassPathResource
 import org.springframework.jdbc.core.JdbcTemplate
@@ -14,6 +18,7 @@ import org.springframework.test.context.TestContextAnnotationUtils
 import org.springframework.test.context.support.AbstractTestExecutionListener
 import org.springframework.util.StreamUtils
 import java.nio.charset.Charset
+import java.nio.charset.StandardCharsets
 
 class AcceptanceTestExecutionListener : AbstractTestExecutionListener() {
 
@@ -35,6 +40,13 @@ class AcceptanceTestExecutionListener : AbstractTestExecutionListener() {
                     .withResponseDefaults(prettyPrint())
             )
             .build()
+
+        RestAssured.config = RestAssured.config()
+            .logConfig(LogConfig.logConfig()
+                .enableLoggingOfRequestAndResponseIfValidationFails(LogDetail.ALL)
+                .enablePrettyPrinting(true))
+            .encoderConfig(EncoderConfig.encoderConfig()
+                .defaultCharsetForContentType(StandardCharsets.UTF_8.name(), ContentType.ANY));
         log.info { "Setting Finished" }
     }
 

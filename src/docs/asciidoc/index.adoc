@@ -1,0 +1,31 @@
+= API Documentation
+:toc: left
+:toc-title: Table of Contents
+:sectnums:
+:docinfo1:
+:doctype: book
+:source-highlighter: highlightjs
+:highlightjs-theme: github
+:icons: font
+:icon-set: fas
+
+== API Endpoints
+
+=== 로또 결제
+
+사용자가 자동 발급으로 로또를 결제한다.
+
+==== 로또 결제 성공
+
+include::{snippets}/purchase-ticket-success/http-request.adoc[]
+include::{snippets}/purchase-ticket-success/http-response.adoc[]
+include::{snippets}/purchase-ticket-success/request-fields.adoc[]
+include::{snippets}/purchase-ticket-success/response-fields.adoc[]
+
+==== 로또 결제 실패
+카드 번호가 일치하지 않으면 실패한다.
+
+include::{snippets}/purchase-ticket-failure/http-request.adoc[]
+include::{snippets}/purchase-ticket-failure/http-response.adoc[]
+include::{snippets}/purchase-ticket-failure/request-fields.adoc[]
+include::{snippets}/purchase-ticket-failure/response-fields.adoc[]
