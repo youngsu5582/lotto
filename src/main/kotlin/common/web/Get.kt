@@ -7,9 +7,9 @@ import org.springframework.web.bind.annotation.RequestMethod
 @Target(AnnotationTarget.FUNCTION)
 @Retention(AnnotationRetention.RUNTIME)
 @RequestMapping(
-    method = [RequestMethod.GET]
+    method = [RequestMethod.GET],
 )
 annotation class Get(
     @get:AliasFor(annotation = RequestMapping::class, attribute = "path")
-    val path: String = "/"
+    val path: String = "/",
 )

@@ -1,12 +1,11 @@
 package lotto
 
-import lotto.domain.Lotto
+import lotto.domain.entity.Lotto
 import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.Assertions.assertThatThrownBy
 import org.junit.jupiter.api.Test
 
 class LottoTest {
-
     @Test
     fun `숫자들은 자동으로 정렬된다`() {
         val lotto = Lotto(numbers = listOf(32, 44, 1, 4, 2, 3))
@@ -17,7 +16,7 @@ class LottoTest {
     fun `숫자는 1부터 45까지 가능하다`() {
         assertThatThrownBy {
             Lotto(
-                numbers = listOf(1, 2, 3, 4, 5, 46)
+                numbers = listOf(1, 2, 3, 4, 5, 46),
             )
         }
     }
@@ -34,12 +33,6 @@ class LottoTest {
         assertThatThrownBy {
             Lotto(numbers = listOf(1, 2, 3, 4, 44, 32, 45))
         }
-    }
-
-    @Test
-    fun `콤마(,)를 기준으로 문자열로 변환한다`() {
-        val lotto = Lotto(numbers = listOf(1, 2, 3, 4, 32, 44))
-        assertThat(lotto.toStringWithComma()).isEqualTo("1,2,3,4,32,44")
     }
 
     @Test

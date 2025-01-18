@@ -11,9 +11,8 @@ import org.springframework.web.method.support.HandlerMethodReturnValueHandler
 import org.springframework.web.method.support.ModelAndViewContainer
 
 class ApiResponseReturnValueHandler(
-    private val messageConverters: List<HttpMessageConverter<*>>
+    private val messageConverters: List<HttpMessageConverter<*>>,
 ) : HandlerMethodReturnValueHandler {
-
     override fun supportsReturnType(returnType: MethodParameter): Boolean =
         ApiResponse::class.java.isAssignableFrom(returnType.parameterType)
 
@@ -21,13 +20,15 @@ class ApiResponseReturnValueHandler(
         returnValue: Any?,
         returnType: MethodParameter,
         mavContainer: ModelAndViewContainer,
-        webRequest: NativeWebRequest
+        webRequest: NativeWebRequest,
     ) {
-        val apiResponse = returnValue as? ApiResponse<*>
-            ?: throw IllegalArgumentException("Return value is not of type ApiResponse")
+        val apiResponse =
+            returnValue as? ApiResponse<*>
+                ?: throw IllegalArgumentException("Return value is not of type ApiResponse")
 
-        val nativeResponse = webRequest.getNativeResponse(HttpServletResponse::class.java)
-            ?: throw IllegalStateException("Native response is missing")
+        val nativeResponse =
+            webRequest.getNativeResponse(HttpServletResponse::class.java)
+                ?: throw IllegalStateException("Native response is missing")
 
         val outputMessage = ServletServerHttpResponse(nativeResponse)
         val selectedMediaType = outputMessage.headers.contentType ?: MediaType.APPLICATION_JSON
@@ -35,10 +36,13 @@ class ApiResponseReturnValueHandler(
         apiResponse.headers.forEach { (key, value) ->
             outputMessage.headers.add(key, value)
         }
+        outputMessage.servletResponse.status = apiResponse.status
 
-        val converter = messageConverters.find {
-            it.canWrite(ApiResponse::class.java, selectedMediaType)
-        } ?: throw IllegalArgumentException("No suitable HttpMessageConverter found for $selectedMediaType")
+
+        val converter =
+            messageConverters.find {
+                it.canWrite(ApiResponse::class.java, selectedMediaType)
+            } ?: throw IllegalArgumentException("No suitable HttpMessageConverter found for $selectedMediaType")
 
         @Suppress("UNCHECKED_CAST")
         (converter as HttpMessageConverter<ApiResponse<*>>).write(apiResponse, selectedMediaType, outputMessage)

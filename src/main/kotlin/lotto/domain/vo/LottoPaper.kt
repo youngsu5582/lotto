@@ -1,16 +1,14 @@
 package lotto.domain.vo
 
-import lotto.domain.Lotto
+import lotto.domain.entity.IssueStatus
+import lotto.domain.entity.IssuedLotto
+import lotto.domain.entity.Lotto
 
 data class LottoPaper(
-    private val lottoes: List<Lotto>
+    private val lottoes: List<IssuedLotto>,
 ) {
     companion object {
         const val MAX_PURCHASE_LIMIT = 5
-
-        fun from(lottoNumbers: List<List<Int>>): LottoPaper {
-            return LottoPaper(lottoNumbers.stream().map { Lotto(it) }.toList())
-        }
     }
 
     init {
@@ -19,7 +17,15 @@ data class LottoPaper(
         }
     }
 
-    fun toStringListWithComma(): List<String> {
-        return lottoes.stream().map { it.toStringWithComma() }.toList()
+    fun toIntList(): List<List<Int>> {
+        return lottoes.stream().map { it.toIntList() }.toList()
+    }
+
+    fun getIssuedStatues(): List<IssueStatus> {
+        return lottoes.stream().map { it.getIssueStatus() }.toList()
+    }
+
+    fun getLottoes(): List<Lotto> {
+        return lottoes.stream().map { it.getLotto() }.toList()
     }
 }

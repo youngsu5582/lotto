@@ -4,16 +4,17 @@ import java.time.*
 
 class MockingClock : Clock() {
     private var instant: Instant? = null
+
     fun setInstant(instant: Instant) {
         this.instant = instant
     }
 
     fun setInstant(localDateTime: LocalDateTime) {
-        this.instant = localDateTime?.toInstant(ZoneOffset.UTC)
+        this.instant = localDateTime.toInstant(ZoneOffset.UTC)
     }
 
     override fun instant(): Instant {
-        return instant!!
+        return instant?: LocalDateTime.now().toInstant(ZoneOffset.UTC)
     }
 
     override fun getZone(): ZoneId {
@@ -24,5 +25,3 @@ class MockingClock : Clock() {
         throw UnsupportedOperationException()
     }
 }
-
-
