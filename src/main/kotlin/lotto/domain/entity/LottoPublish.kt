@@ -16,4 +16,10 @@ data class LottoPublish(
     private val lottoes: List<Lotto>,
     @Convert(converter = IssueStatusListConverter::class)
     private val issuedLottoesStatus: List<IssueStatus>,
-)
+){
+    fun getId() = id
+    fun getLottoRoundInfo() = lottoRoundInfo
+    fun getIssuedAt() = issuedAt
+    fun getLottoes() = lottoes
+    fun getIssuedLottoesStatus() = issuedLottoesStatus
+}

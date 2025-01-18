@@ -1,6 +1,6 @@
 package lotto.domain.entity
 
-class IssuedLotto(
+data class IssuedLotto(
     private val issueStatus: IssueStatus,
     private val lotto: Lotto,
 ) {
