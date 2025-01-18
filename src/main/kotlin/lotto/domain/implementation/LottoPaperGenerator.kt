@@ -1,6 +1,8 @@
 package lotto.domain.implementation
 
 import common.business.Implementation
+import common.business.Read
+import common.business.Transaction
 import lotto.domain.entity.IssueStatus
 import lotto.domain.entity.IssuedLotto
 import lotto.domain.entity.Lotto
@@ -8,10 +10,9 @@ import lotto.domain.repository.LottoRepository
 import lotto.domain.vo.LottoNumbers
 import lotto.domain.vo.LottoPaper
 import lotto.domain.vo.LottoPaperRequest
-import org.springframework.stereotype.Component
 import java.math.BigDecimal
 
-@Component
+@Implementation
 class LottoPaperGenerator(
     private val lottoNumberGenerator: LottoNumberGenerator,
     private val lottoRepository: LottoRepository,
@@ -20,12 +21,16 @@ class LottoPaperGenerator(
         private val UNIT = BigDecimal(1000L)
     }
 
+    @Transaction
+    @Read
     fun generateWithAuto(lottoPaperRequest: LottoPaperRequest): LottoPaper {
         val paperCount = calculatePaperCount(lottoPaperRequest)
         val issuedLottoes = createIssuedLottoes(lottoNumberGenerator.generate(paperCount), IssueStatus.AUTO)
         return LottoPaper(issuedLottoes)
     }
 
+    @Transaction
+    @Read
     fun generateWithNumbers(
         lottoPaperRequest: LottoPaperRequest,
         lottoNumbers: LottoNumbers,
@@ -42,7 +47,7 @@ class LottoPaperGenerator(
         require(lottoPaperRequest.isDivide(UNIT)) {
             "금액은 ${UNIT}원 단위여야 합니다."
         }
-        return lottoPaperRequest.amount.divide(UNIT).toInt()
+        return lottoPaperRequest.divide(UNIT)
     }
 
     private fun createIssuedLottoes(

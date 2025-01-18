@@ -8,4 +8,8 @@ data class LottoPaperRequest(
     fun isDivide(unit: BigDecimal): Boolean {
         return amount.remainder(unit) == BigDecimal.ZERO
     }
+
+    fun divide(unit: BigDecimal): Int {
+        return amount.divide(unit).toInt()
+    }
 }
