@@ -1,14 +1,11 @@
 package config
 
-import org.springframework.boot.autoconfigure.domain.EntityScan
-import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest
-import org.springframework.data.jpa.repository.config.EnableJpaRepositories
+import app.LottoApplication
+import org.springframework.boot.test.context.SpringBootTest
+import org.springframework.test.context.jdbc.Sql
 
 @Target(AnnotationTarget.CLASS)
 @Retention(AnnotationRetention.RUNTIME)
-@DataJpaTest
-@EntityScan(basePackages = ["lotto.domain", "purchase.domain"])
-@EnableJpaRepositories(basePackages = ["lotto.domain.repository", "purchase.domain.repository"])
-
-
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.NONE, classes = [LottoApplication::class])
+@Sql(value = ["/clear.sql"], executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
 annotation class RepositoryTest

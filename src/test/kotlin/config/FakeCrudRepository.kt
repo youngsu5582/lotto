@@ -10,13 +10,10 @@ import java.util.concurrent.ConcurrentHashMap
 abstract class FakeCrudRepository<T : Any, ID : Any> : CrudRepository<T, ID> {
     private val store: MutableMap<ID, T> = ConcurrentHashMap()
 
-    @PersistenceContext
-    private lateinit var entityManager: EntityManager
 
     @Transactional
     override fun <S : T> save(entity: S): S {
         val id = extractId(entity) ?: throw IllegalArgumentException("Entity must have an ID")
-        entityManager.persist(entity)
         store[id] = entity
         return entity
     }
@@ -54,14 +51,12 @@ abstract class FakeCrudRepository<T : Any, ID : Any> : CrudRepository<T, ID> {
 
     @Transactional
     override fun deleteById(id: ID) {
-        store[id]?.let { entityManager.remove(it) } // Remove from persistence context
         store.remove(id)
     }
 
     @Transactional
     override fun delete(entity: T) {
         val id = extractId(entity) ?: throw IllegalArgumentException("Entity must have an ID")
-        entityManager.remove(entity) // Remove the entity
         store.remove(id)
     }
 
@@ -77,7 +72,6 @@ abstract class FakeCrudRepository<T : Any, ID : Any> : CrudRepository<T, ID> {
 
     @Transactional
     override fun deleteAll() {
-        store.values.forEach { entityManager.remove(it) } // Remove all entities
         store.clear()
     }
 

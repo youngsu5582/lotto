@@ -12,23 +12,26 @@ import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.assertThrows
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.ValueSource
+import org.springframework.beans.factory.annotation.Autowired
 import java.math.BigDecimal
 import kotlin.test.Test
 
 @ImplementationTest
 class LottoPaperGeneratorTest {
-    private var lottoRepository: LottoRepositoryImpl = LottoRepositoryImpl()
+    
+    @Autowired
+    private lateinit var lottoRepository: LottoRepositoryImpl
 
     @Test
     fun `금액에 맞게 자동으로 숫자를 생성한다1`() {
         val generator =
             LottoPaperGenerator(
                 lottoNumberGenerator =
-                    lottoNumberGenerator(
-                        listOf(
-                            listOf(1, 14, 17, 19, 21, 34),
-                        ),
+                lottoNumberGenerator(
+                    listOf(
+                        listOf(1, 14, 17, 19, 21, 34),
                     ),
+                ),
                 lottoRepository = lottoRepository,
             )
         val response =
@@ -45,12 +48,12 @@ class LottoPaperGeneratorTest {
         val generator =
             LottoPaperGenerator(
                 lottoNumberGenerator =
-                    lottoNumberGenerator(
-                        listOf(
-                            listOf(1, 14, 17, 19, 21, 34),
-                            listOf(23, 27, 39, 40, 41, 43),
-                        ),
+                lottoNumberGenerator(
+                    listOf(
+                        listOf(1, 14, 17, 19, 21, 34),
+                        listOf(23, 27, 39, 40, 41, 43),
                     ),
+                ),
                 lottoRepository = lottoRepository,
             )
 
@@ -72,11 +75,11 @@ class LottoPaperGeneratorTest {
         val generator =
             LottoPaperGenerator(
                 lottoNumberGenerator =
-                    lottoNumberGenerator(
-                        listOf(
-                            listOf(1, 14, 17, 19, 21, 34),
-                        ),
+                lottoNumberGenerator(
+                    listOf(
+                        listOf(1, 14, 17, 19, 21, 34),
                     ),
+                ),
                 lottoRepository = lottoRepository,
             )
         assertThrows<IllegalArgumentException> {
