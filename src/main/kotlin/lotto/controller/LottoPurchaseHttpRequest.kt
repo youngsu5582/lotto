@@ -1,14 +1,15 @@
 package lotto.controller
 
+import com.fasterxml.jackson.annotation.JsonCreator
 import lotto.domain.vo.Currency
 import lotto.domain.vo.LottoNumbers
 import lotto.domain.vo.LottoPurchaseRequest
 import lotto.domain.vo.PurchaseType
 import java.math.BigDecimal
 
-data class LottoPurchaseHttpRequest(
-    private val purchaseHttpRequest: PurchaseHttpRequest,
-    private val lottoRequest: LottoRequest,
+data class LottoPurchaseHttpRequest @JsonCreator constructor(
+    val purchaseHttpRequest: PurchaseHttpRequest,
+    val lottoRequest: LottoRequest
 ) {
     fun toLottoNumbers(): LottoNumbers {
         return LottoNumbers(lottoRequest.numbers)

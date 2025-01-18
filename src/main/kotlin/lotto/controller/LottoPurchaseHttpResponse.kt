@@ -1,19 +1,32 @@
 package lotto.controller
 
-import lotto.domain.entity.LottoBill
+import lotto.service.dto.LottoPurchaseData
+import lotto.service.dto.PurchaseData
+import java.math.BigDecimal
+import java.util.*
 
 data class LottoPurchaseHttpResponse(
-    private val lottoResponse: lotto.controller.LottoResponse,
+    val purchaseResponse: PurchaseResponse,
 ) {
     companion object {
-        fun from(lottoBill: LottoBill): lotto.controller.LottoPurchaseHttpResponse {
-            return lotto.controller.LottoPurchaseHttpResponse(
-                lottoResponse = lotto.controller.LottoResponse(listOf(listOf(1))),
+        fun from(lottoPurchaseData: LottoPurchaseData): LottoPurchaseHttpResponse {
+            return LottoPurchaseHttpResponse(
+                purchaseResponse = PurchaseResponse.from(lottoPurchaseData.purchase),
             )
         }
     }
 }
 
-data class LottoResponse(
-    val numbers: List<List<Int>>,
-)
+data class PurchaseResponse(
+    val id: UUID,
+    val amount: BigDecimal
+) {
+    companion object {
+        fun from(purchaseData: PurchaseData): PurchaseResponse {
+            return PurchaseResponse(
+                id = purchaseData.id,
+                amount = purchaseData.amount,
+            )
+        }
+    }
+}
