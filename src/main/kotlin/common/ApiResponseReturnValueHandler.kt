@@ -36,6 +36,8 @@ class ApiResponseReturnValueHandler(
         apiResponse.headers.forEach { (key, value) ->
             outputMessage.headers.add(key, value)
         }
+        outputMessage.servletResponse.status = apiResponse.status
+
 
         val converter =
             messageConverters.find {
