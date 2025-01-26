@@ -28,7 +28,7 @@ class PurchaseWriter(
             Purchase(
                 paymentKey = response.paymentKey,
                 orderId = response.orderId,
-                status = response.status,
+                status = response.status(),
                 purchaseProvider = response.purchaseProvider,
                 purchaseInfo = purchaseInfo,
             ),

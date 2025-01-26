@@ -1,6 +1,6 @@
 package toss.dto
 
-data class TossPaymentConfirmErrorResponse(
+data class TossPaymentErrorResponse(
     val code: String = "",
     val message: String = "",
 )
