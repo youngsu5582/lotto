@@ -8,5 +8,6 @@ import org.springframework.stereotype.Component
 data class TossClientProperties(
     var apiKey: String = "",
     var paymentUrl: String = "",
+    var cancelUrl:String = "",
 ) {
 }

@@ -3,9 +3,7 @@ package purchase.domain.implementation
 import common.business.Implementation
 import jakarta.transaction.NotSupportedException
 import purchase.domain.PaymentClient
-import purchase.domain.vo.PurchaseData
-import purchase.domain.vo.PurchaseProvider
-import purchase.domain.vo.PurchaseRequest
+import purchase.domain.vo.*
 
 @Implementation
 class PaymentProcessor(
@@ -17,6 +15,14 @@ class PaymentProcessor(
     ): PurchaseData {
         val client = getPurchaseClient(purchaseProvider)
         return client.process(request = purchaseRequest)
+    }
+
+    fun cancel(
+        cancelRequest: CancelRequest,
+        purchaseProvider: PurchaseProvider,
+    ): CancelData {
+        val client = getPurchaseClient(purchaseProvider)
+        return client.cancel(request = cancelRequest)
     }
 
     private fun getPurchaseClient(purchaseProvider: PurchaseProvider): PaymentClient {
