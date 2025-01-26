@@ -5,7 +5,7 @@ import org.assertj.core.api.Assertions.assertThat
 import purchase.domain.vo.PaymentMethod
 import kotlin.test.Test
 
-class TossPaymentResponseTest {
+class TossPaymentConfirmResponseTest {
     @Test
     fun `역직렬화를 통해 메소드를 ENUM 에 맞게 매핑한다`() {
         val objectMapper = jacksonObjectMapper()
@@ -43,9 +43,9 @@ class TossPaymentResponseTest {
             }
             """.trimIndent()
 
-        val response1 = objectMapper.readValue(json1, TossPaymentResponse::class.java)
-        val response2 = objectMapper.readValue(json2, TossPaymentResponse::class.java)
-        val response3 = objectMapper.readValue(json3, TossPaymentResponse::class.java)
+        val response1 = objectMapper.readValue(json1, TossPaymentConfirmResponse::class.java)
+        val response2 = objectMapper.readValue(json2, TossPaymentConfirmResponse::class.java)
+        val response3 = objectMapper.readValue(json3, TossPaymentConfirmResponse::class.java)
 
         assertThat(response1.method)
             .isEqualTo(response2.method)
