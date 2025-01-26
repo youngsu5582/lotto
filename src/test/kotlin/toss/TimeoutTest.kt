@@ -4,11 +4,12 @@ import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Disabled
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
+import org.springframework.http.client.SimpleClientHttpRequestFactory
 import org.springframework.web.client.ResourceAccessException
-import toss.config.TestRestClientConfig
+import org.springframework.web.client.RestClient
 
-class RestClientTest {
-    private val restClient = TestRestClientConfig().restClient()!!
+class TimeoutTest {
+    private val restClient = createClient()
     private val connectTimeoutUrl = "https://10.255.255.1"
     private val readTimeoutUrl = "https://httpbin.org/delay/9"
 
@@ -32,5 +33,15 @@ class RestClientTest {
         }.also {
             assertThat(it.message).contains("Read timed out")
         }
+    }
+
+    private fun createClient(): RestClient {
+        val factory = SimpleClientHttpRequestFactory()
+        factory.setReadTimeout(1000)
+        factory.setConnectTimeout(8000)
+        return RestClient
+            .builder()
+            .requestFactory(factory)
+            .build()
     }
 }
