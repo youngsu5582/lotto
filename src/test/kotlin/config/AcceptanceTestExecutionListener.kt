@@ -50,6 +50,10 @@ class AcceptanceTestExecutionListener : AbstractTestExecutionListener() {
         log.info { "Setting Finished" }
     }
 
+    override fun afterTestClass(testContext: TestContext) {
+        RestAssured.reset()
+    }
+
     override fun beforeTestMethod(testContext: TestContext) {
         val jdbcTemplate = testContext.applicationContext.getBean(JdbcTemplate::class.java)
         val objectMapper = testContext.applicationContext.getBean(ObjectMapper::class.java)

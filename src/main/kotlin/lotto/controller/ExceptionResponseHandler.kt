@@ -11,4 +11,9 @@ class ExceptionResponseHandler {
     fun handlePurchaseException(ex: PurchaseException): ApiResponse<Void> {
         return ApiResponse.fail(message = ex.message)
     }
+
+    @ExceptionHandler(IllegalArgumentException::class)
+    fun handleIllegalException(ex: IllegalArgumentException): ApiResponse<Void> {
+        return ApiResponse.fail(message = ex.message)
+    }
 }

@@ -1,4 +1,4 @@
-package lotto
+package lotto.controller
 
 import config.AcceptanceTest
 import io.restassured.RestAssured
@@ -11,7 +11,7 @@ import org.springframework.restdocs.payload.ResponseFieldsSnippet
 import org.springframework.restdocs.restassured.RestAssuredRestDocumentation
 
 @AcceptanceTest(["/acceptance/lottoPurchase.json"])
-class LottoControllerTest {
+class LottoControllerPurchaseTest {
     @Test
     fun `결제를 한다`() {
         val request = createRequest(
@@ -77,7 +77,7 @@ class LottoControllerTest {
         responseFields: ResponseFieldsSnippet,
         expectedStatus: Int
     ) {
-        val response = RestAssured.given().log().all()
+        RestAssured.given().log().all()
             .contentType(ContentType.JSON)
             .body(request)
             .filter(
@@ -88,8 +88,6 @@ class LottoControllerTest {
                 )
             )
             .post("/api/tickets").then().log().all().statusCode(expectedStatus).extract()
-        println(response.body())
-        println(response.statusCode())
     }
 
     private fun commonRequestFields() = requestFields(

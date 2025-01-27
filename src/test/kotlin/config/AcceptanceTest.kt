@@ -1,7 +1,6 @@
 package config
 
 import app.LottoApplication
-import common.CustomWebConfig
 import org.springframework.boot.test.autoconfigure.actuate.observability.AutoConfigureObservability
 import org.springframework.boot.test.autoconfigure.restdocs.AutoConfigureRestDocs
 import org.springframework.boot.test.context.SpringBootTest
@@ -23,7 +22,7 @@ import org.springframework.test.context.TestExecutionListeners
     mergeMode = TestExecutionListeners.MergeMode.MERGE_WITH_DEFAULTS
 )
 @AutoConfigureRestDocs
-@Import(*[CustomWebConfig::class, AcceptanceConfig::class])
+@Import(*[AcceptanceConfig::class])
 annotation class AcceptanceTest(
     @get:AliasFor("setUpScripts")
     val value: Array<String> = [],

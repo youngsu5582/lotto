@@ -29,3 +29,22 @@ include::{snippets}/purchase-ticket-failure/http-request.adoc[]
 include::{snippets}/purchase-ticket-failure/http-response.adoc[]
 include::{snippets}/purchase-ticket-failure/request-fields.adoc[]
 include::{snippets}/purchase-ticket-failure/response-fields.adoc[]
+
+=== 로또 결제 취소
+
+사용자가 결제한 로또를 취소한다.
+
+==== 로또 결제 취소 성공
+
+include::{snippets}/cancel-success/http-request.adoc[]
+include::{snippets}/cancel-success/http-response.adoc[]
+include::{snippets}/cancel-success/request-fields.adoc[]
+include::{snippets}/cancel-success/response-fields.adoc[]
+
+==== 로또 결제 취소 실패
+영수증이 존재하지 않으면 실패한다.
+
+include::{snippets}/cancel-failure/http-request.adoc[]
+include::{snippets}/cancel-failure/http-response.adoc[]
+include::{snippets}/cancel-failure/request-fields.adoc[]
+include::{snippets}/cancel-failure/response-fields.adoc[]
