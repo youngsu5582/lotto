@@ -31,6 +31,13 @@ class LottoPublisher(
         return lottoPublish
     }
 
+    @Transaction
+    @Write
+    fun unPublish(lottoPublish: LottoPublish): LottoPublish {
+        lottoPublish.cancel()
+        return lottoPublish
+    }
+
     private fun getLottoInfo(issuedAt: LocalDateTime): LottoRoundInfo {
         return lottoRoundInfoRepository.findTopByIssueDateLessThanEqualAndDrawDateGreaterThanEqual(issuedAt)
             ?.also {
