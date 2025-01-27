@@ -1,10 +1,7 @@
 package purchase.domain.entity
 
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize
-import jakarta.persistence.Entity
-import jakarta.persistence.EnumType
-import jakarta.persistence.Enumerated
-import jakarta.persistence.Id
+import jakarta.persistence.*
 import purchase.domain.PaymentMethodDeserializer
 import purchase.domain.vo.PaymentMethod
 import java.math.BigDecimal
@@ -13,7 +10,8 @@ import java.util.*
 @Entity
 class PurchaseInfo(
     @Id
-    private val id: UUID? = UUID.randomUUID(),
+    @GeneratedValue(generator = "UUID")
+    private val id: UUID? = null,
     private val totalAmount: BigDecimal,
     @JsonDeserialize(using = PaymentMethodDeserializer::class)
     @Enumerated(EnumType.STRING)
@@ -22,4 +20,5 @@ class PurchaseInfo(
     fun getId() = id
     fun getTotalAmount() = totalAmount
     fun getMethod() = method
+    fun isEqual(amount: BigDecimal) = totalAmount == amount.setScale(2)
 }
