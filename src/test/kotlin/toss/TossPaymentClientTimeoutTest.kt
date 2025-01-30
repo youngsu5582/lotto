@@ -1,6 +1,7 @@
 package toss
 
 import org.assertj.core.api.Assertions
+import org.junit.jupiter.api.Disabled
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
 import org.springframework.boot.context.properties.EnableConfigurationProperties
@@ -20,6 +21,7 @@ class TossPaymentClientTimeoutTest {
     private val properties = TossClientProperties()
 
     @Test
+    @Disabled("이는 사이트의 상태에 따라 의존되므로 비활성화 한다.")
     fun `결제중 CONNECT TIMEOUT 이 발생하면, 예외를 던진다`() {
         val client = getTossTestClient(url = connectTimeoutUrl)
         assertThrows<PurchaseException> {

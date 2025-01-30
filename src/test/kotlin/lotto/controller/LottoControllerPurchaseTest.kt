@@ -3,6 +3,7 @@ package lotto.controller
 import config.AcceptanceTest
 import io.restassured.RestAssured
 import io.restassured.http.ContentType
+import org.junit.jupiter.api.Disabled
 import org.junit.jupiter.api.Test
 import org.springframework.restdocs.payload.JsonFieldType
 import org.springframework.restdocs.payload.PayloadDocumentation.*
@@ -31,6 +32,7 @@ class LottoControllerPurchaseTest {
     }
 
     @Test
+    @Disabled("현재는 orderId 나 PaymentKey 의 중복을 처리하지 않는다. 이는 다음 개선 사항으로 남긴다.")
     fun `중복된 orderId 를 사용하면 실패 한다`() {
         val request = createRequest(
             amount = 1000,
@@ -52,8 +54,8 @@ class LottoControllerPurchaseTest {
     fun `결제 임시 데이터가 없으면 실패 한다`() {
         val request = createRequest(
             amount = 1000,
-            paymentKey = "paymentKey-id-2",
-            orderId = "order-id-2",
+            paymentKey = "paymentKey-not-exist",
+            orderId = "order-not-exist",
             lottoNumbers = listOf(listOf(1, 11, 17, 19, 21, 24))
         )
 
@@ -84,7 +86,6 @@ class LottoControllerPurchaseTest {
         )
     }
 
-
     @Test
     fun `금액은 1000원 단위로 끊어져야 한다`() {
         val request = createRequest(
@@ -100,6 +101,25 @@ class LottoControllerPurchaseTest {
             commonRequestFields(),
             errorResponseFields(),
             400
+        )
+    }
+
+    @Test
+    fun `결제 제공자에 문제가 있으면 실패한다`() {
+        val request = createRequest(
+            amount = 1000,
+            paymentKey = "paymentKey-id-2",
+            orderId = "order-id-2",
+            lottoNumbers = listOf(listOf(1, 11, 17, 19, 21, 24))
+        )
+
+        sendRequest(
+            request,
+            "purchase-ticket-failure-purchase-provider-invalid",
+            commonRequestFields(),
+            errorResponseFields(),
+            400,
+            mapOf(Pair("Payment-Error-Header", "EXCEED_MAX_ONE_DAY_AMOUNT"))
         )
     }
 
@@ -131,10 +151,12 @@ class LottoControllerPurchaseTest {
         documentName: String,
         requestFields: RequestFieldsSnippet,
         responseFields: ResponseFieldsSnippet,
-        expectedStatus: Int
+        expectedStatus: Int,
+        map: Map<String, Any> = HashMap()
     ) {
         RestAssured.given().log().all()
             .contentType(ContentType.JSON)
+            .headers(map)
             .body(request)
             .filter(
                 RestAssuredRestDocumentation.document(

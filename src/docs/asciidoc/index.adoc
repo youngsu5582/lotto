@@ -9,42 +9,69 @@
 :icons: font
 :icon-set: fas
 
-== API Endpoints
+= API Endpoints
 
-=== 로또 결제
+== 로또 결제
 
 사용자가 자동 발급으로 로또를 결제한다.
 
-==== 로또 결제 성공
+=== 로또 결제 성공
 
 include::{snippets}/purchase-ticket-success/http-request.adoc[]
 include::{snippets}/purchase-ticket-success/http-response.adoc[]
 include::{snippets}/purchase-ticket-success/request-fields.adoc[]
 include::{snippets}/purchase-ticket-success/response-fields.adoc[]
 
-==== 로또 결제 실패
-카드 번호가 일치하지 않으면 실패한다.
+=== 로또 결제 실패
+==== 결제 임시 데이터 미존재
+결제 임시 데이터가 없으면 실패한다.
+결제의 정합성을 보장하기 위해서 임시 데이터를 저장 후 프론트엔드에서 작업을 수행한다.
+그 후 SDK 를 통해 결제를 완료하면 결제 승인을 요청해야 한다.
 
-include::{snippets}/purchase-ticket-failure/http-request.adoc[]
-include::{snippets}/purchase-ticket-failure/http-response.adoc[]
-include::{snippets}/purchase-ticket-failure/request-fields.adoc[]
-include::{snippets}/purchase-ticket-failure/response-fields.adoc[]
+include::{snippets}/purchase-ticket-failure-order-data-not-exist/http-request.adoc[]
+include::{snippets}/purchase-ticket-failure-order-data-not-exist/http-response.adoc[]
+include::{snippets}/purchase-ticket-failure-order-data-not-exist/response-fields.adoc[]
 
-=== 로또 결제 취소
+==== 결제 임시 데이터 정합성 오류
+결제 임시 데이터와 다른 금액을 보내면 실패한다.
+주문 번호에 해당하는 금액이 다를시 정합성이 깨진 것으로 판단한다.
+
+include::{snippets}/purchase-ticket-failure-order-data-different-amount/http-request.adoc[]
+include::{snippets}/purchase-ticket-failure-order-data-different-amount/http-response.adoc[]
+include::{snippets}/purchase-ticket-failure-order-data-different-amount/response-fields.adoc[]
+
+==== 결제 금액과 로또 구매 금액 미일치
+
+로또 결제 금액 단위와 다르게 보내면 실패한다.
+현재, 로또 금액은 1000원 단위로 되어있다. ( 이는, 당장 변할 가능성이 없다고 생각해 DB 가 아닌 서버 단에서 검증한다. )
+
+include::{snippets}/purchase-ticket-failure-not-remainder-unit/http-request.adoc[]
+include::{snippets}/purchase-ticket-failure-not-remainder-unit/http-response.adoc[]
+include::{snippets}/purchase-ticket-failure-not-remainder-unit/response-fields.adoc[]
+
+==== 결제 제공수단 오류
+
+결제 제공 수단에 문제가 생길시 실패한다.
+이는, 토스 API 서버 및 결제 제공자(카드,카카오페이 등등)의 오류와 사용자(잔액 부족,한도 초과)를 포괄적으로 처리한다.
+
+include::{snippets}/purchase-ticket-failure-purchase-provider-invalid/http-request.adoc[]
+include::{snippets}/purchase-ticket-failure-purchase-provider-invalid/http-response.adoc[]
+include::{snippets}/purchase-ticket-failure-purchase-provider-invalid/response-fields.adoc[]
+
+== 로또 결제 취소
 
 사용자가 결제한 로또를 취소한다.
 
-==== 로또 결제 취소 성공
+=== 로또 결제 취소 성공
 
 include::{snippets}/cancel-success/http-request.adoc[]
 include::{snippets}/cancel-success/http-response.adoc[]
 include::{snippets}/cancel-success/request-fields.adoc[]
 include::{snippets}/cancel-success/response-fields.adoc[]
 
-==== 로또 결제 취소 실패
+=== 로또 결제 취소 실패
 영수증이 존재하지 않으면 실패한다.
 
 include::{snippets}/cancel-failure/http-request.adoc[]
 include::{snippets}/cancel-failure/http-response.adoc[]
-include::{snippets}/cancel-failure/request-fields.adoc[]
 include::{snippets}/cancel-failure/response-fields.adoc[]

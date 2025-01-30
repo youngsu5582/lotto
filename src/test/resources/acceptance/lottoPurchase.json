@@ -13,16 +13,33 @@
   "purchase": [
     {
       "id": "dfb3ad82-e2ba-4220-a969-0b4a293c9a8b",
-      "order_id": "orderId",
-      "payment_key": "duplicatePaymentKey",
-      "purchase_info_id": "b4386e47-8555-437c-bcd9-164262a9a3bd",
+      "order_id": "orderId-duplicate",
+      "payment_key": "paymentKey-duplicate",
+      "purchase_info_id": "b4386e47-8555-437c-bcd9-164262a9a3ba",
       "purchase_provider": "TOSS",
       "status": "SUCCESS"
     }
   ],
+  "purchase_info": [
+    {
+      "id":"b4386e47-8555-437c-bcd9-164262a9a3ba",
+      "total_amount":1000,
+      "method": "CARD"
+    }
+  ],
+
   "purchase_temporary": [
     {
-      "order_id": "order-random-id-1",
+      "_comment": "정상적으로 처리될 결제",
+      "order_id": "order-id-1",
+      "amount": 1000
+    },
+    {
+      "order_id": "order-id-2",
+      "amount": 1000
+    },
+    {
+      "order_id": "orderId-duplicate",
       "amount": 1000
     }
   ]
