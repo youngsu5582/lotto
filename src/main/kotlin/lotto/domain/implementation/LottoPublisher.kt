@@ -34,9 +34,6 @@ class LottoPublisher(
     @Transaction
     @Write
     fun unPublish(lottoPublish: LottoPublish): LottoPublish {
-        if(lottoPublish.getLottoRoundInfo().isNotOngoing()){
-            throw IllegalArgumentException("")
-        }
         lottoPublish.cancel()
         return lottoPublish
     }
