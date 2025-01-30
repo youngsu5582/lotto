@@ -11,7 +11,7 @@ import org.springframework.restdocs.payload.ResponseFieldsSnippet
 import org.springframework.restdocs.restassured.RestAssuredRestDocumentation
 
 @AcceptanceTest(["/acceptance/lottoCancel.json"])
-class LottoControllerCancelTest {
+class LottoPurchaseCancelTest {
     @Test
     fun `결제취소를 한다`() {
         val request = createRequest(
@@ -80,8 +80,8 @@ class LottoControllerCancelTest {
         fieldWithPath("status").type(JsonFieldType.NUMBER).description("응답 상태"),
         fieldWithPath("message").type(JsonFieldType.STRING).description("응답 메시지"),
         fieldWithPath("data.purchaseResponse").type(JsonFieldType.OBJECT).description("응답 데이터"),
-        fieldWithPath("data.purchaseResponse.id").type(JsonFieldType.STRING).description("발행된 로또 번호"),
-        fieldWithPath("data.purchaseResponse.amount").type(JsonFieldType.NUMBER).description("발행 일시")
+        fieldWithPath("data.purchaseResponse.id").type(JsonFieldType.STRING).description("취소된 결제의 고유 식별자"),
+        fieldWithPath("data.purchaseResponse.amount").type(JsonFieldType.NUMBER).description("취소된 결제 금액")
     )
 
     private fun errorResponseFields() = responseFields(
