@@ -19,7 +19,20 @@ class LottoController(
                 lottoPurchaseHttpRequest.toPurchaseRequest(),
                 lottoPurchaseHttpRequest.toLottoNumbers()
             )
-        return ApiResponse(
+        return ApiResponse.ok(
+            data = LottoPurchaseHttpResponse.from(lottoPurchaseData)
+        )
+    }
+
+    @Post("/api/cancel")
+    fun cancel(
+        @Body lottoCancelHttpRequest: LottoCancelHttpRequest
+    ): ApiResponse<LottoPurchaseHttpResponse> {
+        val lottoPurchaseData =
+            lottoPurchaseService.cancel(
+                lottoCancelHttpRequest.billId
+            )
+        return ApiResponse.ok(
             data = LottoPurchaseHttpResponse.from(lottoPurchaseData)
         )
     }

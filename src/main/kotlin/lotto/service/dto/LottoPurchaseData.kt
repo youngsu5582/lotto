@@ -2,7 +2,8 @@ package lotto.service.dto
 
 import lotto.domain.entity.Lotto
 import lotto.domain.entity.LottoBill
-import org.springframework.boot.web.server.Cookie
+import lotto.domain.entity.LottoPublish
+import purchase.domain.entity.Purchase
 import java.math.BigDecimal
 import java.util.*
 
@@ -13,8 +14,8 @@ class LottoPurchaseData(
     companion object {
         fun from(lottoBill: LottoBill): LottoPurchaseData {
             return LottoPurchaseData(
-                purchase = PurchaseData.from(lottoBill),
-                lottoPublish = LottoPublishData.from(lottoBill),
+                purchase = PurchaseData.from(lottoBill.getPurchase()),
+                lottoPublish = LottoPublishData.from(lottoBill.getLottoPublish()),
             )
         }
     }
@@ -25,10 +26,10 @@ data class PurchaseData(
     val amount: BigDecimal
 ) {
     companion object {
-        fun from(lottoBill: LottoBill): PurchaseData {
+        fun from(purchase: Purchase): PurchaseData {
             return PurchaseData(
-                id = lottoBill.getPurchase().getId()!!,
-                amount = lottoBill.getPurchase().getTotalAmount(),
+                id = purchase.getId(),
+                amount = purchase.getTotalAmount(),
             )
         }
     }
@@ -36,13 +37,15 @@ data class PurchaseData(
 
 data class LottoPublishData(
     val id: Long,
-    val numbers: List<Lotto>
+    val numbers: List<Lotto>,
+    val isCanceled: Boolean
 ) {
     companion object {
-        fun from(lottoBill: LottoBill): LottoPublishData {
+        fun from(lottoPublish: LottoPublish): LottoPublishData {
             return LottoPublishData(
-                id = lottoBill.getLottoPublish().getId()!!,
-                numbers = lottoBill.getLottoPublish().getLottoes(),
+                id = lottoPublish.getId(),
+                numbers = lottoPublish.getLottoes(),
+                isCanceled = lottoPublish.getCanceled()
             )
         }
     }

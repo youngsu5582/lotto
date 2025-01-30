@@ -1,28 +1,28 @@
 package toss
 
-import com.fasterxml.jackson.databind.ObjectMapper
 import common.business.Implementation
 import org.springframework.http.HttpHeaders
-import org.springframework.http.HttpRequest
-import org.springframework.http.client.ClientHttpResponse
 import org.springframework.web.client.ResourceAccessException
 import org.springframework.web.client.RestClient
 import purchase.domain.PaymentClient
 import purchase.domain.PurchaseException
 import purchase.domain.PurchaseExceptionCode
+import purchase.domain.vo.CancelData
+import purchase.domain.vo.CancelRequest
 import purchase.domain.vo.PurchaseData
 import purchase.domain.vo.PurchaseRequest
 import toss.config.TossClientProperties
-import toss.dto.TossPaymentConfirmErrorResponse
+import toss.dto.TossPaymentCancelRequest
+import toss.dto.TossPaymentCancelResponse
 import toss.dto.TossPaymentConfirmRequest
-import toss.dto.TossPaymentResponse
+import toss.dto.TossPaymentConfirmResponse
 import java.util.*
 
 @Implementation
 class TossPaymentClient(
     private val restClient: RestClient,
     private val tossClientProperties: TossClientProperties,
-    private val objectMapper: ObjectMapper = ObjectMapper()
+    private val tossResponseErrorHandler: TossResponseErrorHandler
 ) : PaymentClient {
 
     private val maxRetries = 3
@@ -36,11 +36,32 @@ class TossPaymentClient(
             orderId = request.orderId,
             amount = request.amount.toLong()
         )
+        val response = executeWithRetry {
+            sendRequest(tossClientProperties.paymentUrl, confirmRequest, TossPaymentConfirmResponse::class.java)
+        }
+        return response.toPurchaseData()
+    }
+
+    override fun cancel(request: CancelRequest): CancelData {
+        val cancelRequest = TossPaymentCancelRequest(
+            cancelReason = request.cancelReason,
+        )
+        val response = executeWithRetry {
+            sendRequest(
+                tossClientProperties.cancelUrl,
+                cancelRequest,
+                TossPaymentCancelResponse::class.java,
+                request.paymentKey
+            )
+        }
+        return response.toCancelData()
+    }
+
+    private fun <T> executeWithRetry(block: () -> T): T {
         return try {
-            val response = retry(maxRetries) {
-                sendRequest(tossClientProperties.paymentUrl, confirmRequest, TossPaymentResponse::class.java)
+            retry(maxRetries) {
+                block()
             }
-            response.toPurchaseData()
         } catch (e: PurchaseException) {
             throw e
         } catch (e: Exception) {
@@ -48,27 +69,15 @@ class TossPaymentClient(
         }
     }
 
-    private fun <T> sendRequest(url: String, request: Any, responseClass: Class<T>): T {
+
+    private fun <T> sendRequest(url: String, request: Any, responseClass: Class<T>, vararg variables: Any): T {
         return restClient.post()
-            .uri(url)
+            .uri(url, *variables)
             .header(HttpHeaders.AUTHORIZATION, "Basic $authorizationKey")
             .body(request)
             .retrieve()
-            .onStatus({ it.isError }, ::handleErrorResponse)
+            .onStatus(tossResponseErrorHandler)
             .body(responseClass)!!
-    }
-
-    private fun handleErrorResponse(request: HttpRequest, response: ClientHttpResponse) {
-        val errorCode = extractErrorCode(response)
-        throw when {
-            errorCode.isRetryable() -> RetryableException(errorCode.message)
-            else -> PurchaseException(PurchaseExceptionCode.FAILED, errorCode.message)
-        }
-    }
-
-    private fun extractErrorCode(response: ClientHttpResponse): TossPaymentErrorCode {
-        val errorResponse = objectMapper.readValue(response.body, TossPaymentConfirmErrorResponse::class.java)
-        return TossPaymentErrorCode.fromCode(errorResponse.code)
     }
 
     private fun <T> retry(maxAttempts: Int, block: () -> T): T {

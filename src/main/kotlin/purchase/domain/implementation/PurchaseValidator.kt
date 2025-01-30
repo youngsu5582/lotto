@@ -6,12 +6,13 @@ import common.business.Transaction
 import common.business.Write
 import purchase.domain.PurchaseException
 import purchase.domain.PurchaseExceptionCode
+import purchase.domain.entity.Purchase
 import purchase.domain.entity.PurchaseTemporary
 import purchase.domain.repository.PurchaseTemporaryRepository
 import java.math.BigDecimal
 
 @Implementation
-class OrderDataProcessor(
+class PurchaseValidator(
     private val purchaseTemporaryRepository: PurchaseTemporaryRepository,
 ) {
     @Transaction
@@ -33,6 +34,15 @@ class OrderDataProcessor(
         }
         if (orderData.isNotEqualAmount(request.amount)) {
             throw PurchaseException(PurchaseExceptionCode.NOT_VALID_ORDER_ID)
+        }
+    }
+
+    fun checkCancelValid(purchase: Purchase) {
+        if (purchase.isCanceled()) {
+            throw PurchaseException(PurchaseExceptionCode.ALREADY_CANCELED)
+        }
+        if (purchase.isNotSuccess()) {
+            throw PurchaseException(PurchaseExceptionCode.NOT_CONFIRMED)
         }
     }
 }

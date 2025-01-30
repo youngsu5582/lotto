@@ -42,12 +42,20 @@ class AcceptanceTestExecutionListener : AbstractTestExecutionListener() {
             .build()
 
         RestAssured.config = RestAssured.config()
-            .logConfig(LogConfig.logConfig()
-                .enableLoggingOfRequestAndResponseIfValidationFails(LogDetail.ALL)
-                .enablePrettyPrinting(true))
-            .encoderConfig(EncoderConfig.encoderConfig()
-                .defaultCharsetForContentType(StandardCharsets.UTF_8.name(), ContentType.ANY));
+            .logConfig(
+                LogConfig.logConfig()
+                    .enableLoggingOfRequestAndResponseIfValidationFails(LogDetail.ALL)
+                    .enablePrettyPrinting(true)
+            )
+            .encoderConfig(
+                EncoderConfig.encoderConfig()
+                    .defaultCharsetForContentType(StandardCharsets.UTF_8.name(), ContentType.ANY)
+            );
         log.info { "Setting Finished" }
+    }
+
+    override fun afterTestClass(testContext: TestContext) {
+        RestAssured.reset()
     }
 
     override fun beforeTestMethod(testContext: TestContext) {
@@ -78,7 +86,7 @@ class AcceptanceTestExecutionListener : AbstractTestExecutionListener() {
 
     private fun createInsertQueries(parsedJsonSql: Map<String, List<Map<String, Any>>>): List<String> {
         return parsedJsonSql.flatMap { (tableName, rows) ->
-            rows.map { row ->
+            rows.map { it.minus("_comment") }.map { row ->
                 val columns = row.keys.joinToString(", ")
                 val values = row.values.joinToString(", ") { value: Any? ->
                     formatValue(value)
