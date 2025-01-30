@@ -25,7 +25,7 @@ dependencies {
     implementation("org.springframework.boot:spring-boot-starter-web")
     implementation("org.springframework.boot:spring-boot-starter-data-jpa")
     implementation("org.springframework.boot:spring-boot-starter-validation")
-    implementation ("org.springframework.boot:spring-boot-starter-actuator")
+    implementation("org.springframework.boot:spring-boot-starter-actuator")
     implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
     implementation("org.jetbrains.kotlin:kotlin-reflect")
 
@@ -33,6 +33,7 @@ dependencies {
     runtimeOnly("com.mysql:mysql-connector-j")
 
     implementation(kotlin("stdlib-jdk8"))
+    implementation("io.github.oshai:kotlin-logging-jvm:7.0.3")
 
     // Test 및 REST Docs 의존성
     testImplementation("org.springframework.boot:spring-boot-starter-test") {
@@ -42,8 +43,9 @@ dependencies {
     testImplementation("org.springframework.restdocs:spring-restdocs-mockmvc")
     testImplementation("org.mockito:mockito-core")
     testImplementation("org.mockito:mockito-junit-jupiter")
-    testImplementation ("io.rest-assured:rest-assured:5.3.1")
-    testImplementation ("org.springframework.restdocs:spring-restdocs-restassured")
+    testImplementation("io.rest-assured:rest-assured:5.3.1")
+    testImplementation("org.springframework.restdocs:spring-restdocs-restassured")
+    testImplementation("io.mockk:mockk:1.13.5")
 
     testRuntimeOnly("org.junit.platform:junit-platform-launcher")
     annotationProcessor("org.springframework:spring-context-indexer")
