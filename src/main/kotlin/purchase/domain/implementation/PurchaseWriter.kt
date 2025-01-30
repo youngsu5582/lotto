@@ -42,7 +42,7 @@ class PurchaseWriter(
     @Transaction
     @Write
     fun cancelPurchase(cancelData: CancelData, purchase: Purchase): Purchase {
-        val data = cancelData.cancels.last()
+        val data = cancelData.cancels.lastOrNull() ?: throw IllegalArgumentException("취소 데이터가 존재하지 않습니다.")
         cancelRepository.save(
             Cancel(
                 cancelAt = data.cancelAt,

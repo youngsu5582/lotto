@@ -8,7 +8,9 @@ enum class PurchaseExceptionCode(val message: String) {
     ALREADY_PROCESS("Already processed"),
     DUPLICATE_ORDER_ID("Duplicate orderId"),
     NOT_EXIST_ORDER_ID("Not exist order id"),
-    NOT_VALID_ORDER_ID(" not valid order id"),
+    NOT_VALID_ORDER_ID("Not valid order id"),
+    ALREADY_CANCELED("Already canceled"),
+    NOT_CONFIRMED("Not Confirmed"),
     UNKNOWN("Unknown")
     ;
 

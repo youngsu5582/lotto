@@ -19,4 +19,8 @@ enum class PurchaseStatus(
 ) {
     SUCCESS("SUCCESS"),
     FAIL("FAIL"),
+    CANCELED("CANCELED"),
+    READY("READY"),
+    DONE("DONE"),
+    IN_PROGRESS("IN_PROGRESS")
 }

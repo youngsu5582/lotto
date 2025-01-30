@@ -13,11 +13,11 @@ import org.springframework.restdocs.restassured.RestAssuredRestDocumentation
 @AcceptanceTest(["/acceptance/lottoPurchase.json"])
 class LottoControllerPurchaseTest {
     @Test
-    fun `결제를 한다`() {
+    fun `결제승인을 통해 성공적으로 결제를 진행한다`() {
         val request = createRequest(
             amount = 1000,
-            paymentKey = "paymentTestKey",
-            orderId = "order-random-id-1",
+            paymentKey = "paymentKey-id-1",
+            orderId = "order-id-1",
             lottoNumbers = listOf(listOf(1, 11, 17, 19, 21, 24))
         )
 
@@ -31,22 +31,78 @@ class LottoControllerPurchaseTest {
     }
 
     @Test
-    fun `결제 실패를 한다`() {
+    fun `중복된 orderId 를 사용하면 실패 한다`() {
         val request = createRequest(
             amount = 1000,
-            paymentKey = "duplicatePaymentKey",
-            orderId = "order-random-id-2",
+            paymentKey = "paymentKey-duplicate-1",
+            orderId = "orderId-duplicate",
             lottoNumbers = listOf(listOf(1, 11, 17, 19, 21, 24))
         )
 
         sendRequest(
             request,
-            "purchase-ticket-failure",
+            "purchase-ticket-failure-duplicate-payment-key",
             commonRequestFields(),
             errorResponseFields(),
             400
         )
     }
+
+    @Test
+    fun `결제 임시 데이터가 없으면 실패 한다`() {
+        val request = createRequest(
+            amount = 1000,
+            paymentKey = "paymentKey-id-2",
+            orderId = "order-id-2",
+            lottoNumbers = listOf(listOf(1, 11, 17, 19, 21, 24))
+        )
+
+        sendRequest(
+            request,
+            "purchase-ticket-failure-order-data-not-exist",
+            commonRequestFields(),
+            errorResponseFields(),
+            400
+        )
+    }
+
+    @Test
+    fun `결제 임시 데이터와 금액이 다르면 실패 한다`() {
+        val request = createRequest(
+            amount = 1500,
+            paymentKey = "paymentKey-duplicate",
+            orderId = "orderId-duplicate",
+            lottoNumbers = listOf(listOf(1, 11, 17, 19, 21, 24))
+        )
+
+        sendRequest(
+            request,
+            "purchase-ticket-failure-order-data-different-amount",
+            commonRequestFields(),
+            errorResponseFields(),
+            400
+        )
+    }
+
+
+    @Test
+    fun `금액은 1000원 단위로 끊어져야 한다`() {
+        val request = createRequest(
+            amount = 1500,
+            paymentKey = "paymentKey-id-2",
+            orderId = "order-id-2",
+            lottoNumbers = listOf(listOf(1, 11, 17, 19, 21, 24))
+        )
+
+        sendRequest(
+            request,
+            "purchase-ticket-failure-not-remainder-unit",
+            commonRequestFields(),
+            errorResponseFields(),
+            400
+        )
+    }
+
 
     private fun createRequest(
         purchaseType: String = "CARD",
@@ -107,6 +163,7 @@ class LottoControllerPurchaseTest {
     )
 
     private fun successResponseFields() = responseFields(
+        fieldWithPath("success").type(JsonFieldType.BOOLEAN).description("성공 여부"),
         fieldWithPath("status").type(JsonFieldType.NUMBER).description("응답 상태"),
         fieldWithPath("message").type(JsonFieldType.STRING).description("응답 메시지"),
         fieldWithPath("data.purchaseResponse").type(JsonFieldType.OBJECT).description("응답 데이터"),
@@ -115,6 +172,7 @@ class LottoControllerPurchaseTest {
     )
 
     private fun errorResponseFields() = responseFields(
+        fieldWithPath("success").type(JsonFieldType.BOOLEAN).description("성공 여부"),
         fieldWithPath("status").type(JsonFieldType.NUMBER).description("응답 상태"),
         fieldWithPath("message").type(JsonFieldType.STRING).description("에러 메시지")
     )

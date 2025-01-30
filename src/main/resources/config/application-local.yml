@@ -14,6 +14,11 @@ spring:
   datasource:
     url: jdbc:h2:mem:database
 
+  h2:
+    console:
+      enabled: true
+
+
 toss:
   client:
     api-key: test_gsk_docs_OaPz8L5KdmQXkzRz3y47BMw6

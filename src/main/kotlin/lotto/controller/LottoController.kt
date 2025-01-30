@@ -19,7 +19,7 @@ class LottoController(
                 lottoPurchaseHttpRequest.toPurchaseRequest(),
                 lottoPurchaseHttpRequest.toLottoNumbers()
             )
-        return ApiResponse(
+        return ApiResponse.ok(
             data = LottoPurchaseHttpResponse.from(lottoPurchaseData)
         )
     }
@@ -32,7 +32,7 @@ class LottoController(
             lottoPurchaseService.cancel(
                 lottoCancelHttpRequest.billId
             )
-        return ApiResponse(
+        return ApiResponse.ok(
             data = LottoPurchaseHttpResponse.from(lottoPurchaseData)
         )
     }

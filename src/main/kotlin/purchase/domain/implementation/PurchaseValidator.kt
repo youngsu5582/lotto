@@ -38,8 +38,11 @@ class PurchaseValidator(
     }
 
     fun checkCancelValid(purchase: Purchase) {
+        if (purchase.isCanceled()) {
+            throw PurchaseException(PurchaseExceptionCode.ALREADY_CANCELED)
+        }
         if (purchase.isNotSuccess()) {
-            throw IllegalArgumentException("결제가 아직 승인되지 않았습니다")
+            throw PurchaseException(PurchaseExceptionCode.NOT_CONFIRMED)
         }
     }
 }

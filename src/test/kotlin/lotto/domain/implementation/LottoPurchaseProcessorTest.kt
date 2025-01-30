@@ -122,7 +122,7 @@ class LottoPurchaseProcessorTest(
             }
         }
         test("결제가 성공 상태가 아니면 예외를 발생한다.") {
-            shouldThrow<IllegalArgumentException> {
+            shouldThrow<PurchaseException> {
                 purchaseProcessor.cancel(
                     failPurchase,
                 )

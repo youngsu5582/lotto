@@ -28,7 +28,7 @@ data class PurchaseData(
     companion object {
         fun from(purchase: Purchase): PurchaseData {
             return PurchaseData(
-                id = purchase.getId()!!,
+                id = purchase.getId(),
                 amount = purchase.getTotalAmount(),
             )
         }
@@ -43,7 +43,7 @@ data class LottoPublishData(
     companion object {
         fun from(lottoPublish: LottoPublish): LottoPublishData {
             return LottoPublishData(
-                id = lottoPublish.getId()!!,
+                id = lottoPublish.getId(),
                 numbers = lottoPublish.getLottoes(),
                 isCanceled = lottoPublish.getCanceled()
             )

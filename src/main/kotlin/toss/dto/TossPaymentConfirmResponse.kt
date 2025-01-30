@@ -32,6 +32,8 @@ data class TossPaymentConfirmResponse(
     private fun convertStatus(status: String): PurchaseStatus {
         return when (status) {
             "DONE" -> PurchaseStatus.SUCCESS
+            "READY" -> PurchaseStatus.READY
+            "CANCELED" -> PurchaseStatus.CANCELED
             else -> PurchaseStatus.FAIL
         }
     }

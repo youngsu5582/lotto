@@ -16,9 +16,9 @@ data class LottoPublish(
     private val lottoes: List<Lotto>,
     @Convert(converter = IssueStatusListConverter::class)
     private val issuedLottoesStatus: List<IssueStatus>,
-    private var canceled: Boolean = false
+    private var canceled: Boolean = false,
 ) {
-    fun getId() = id
+    fun getId() = id?: throw IllegalArgumentException("Not Exist Id")
     fun getLottoRoundInfo() = lottoRoundInfo
     fun getIssuedAt() = issuedAt
     fun getLottoes() = lottoes

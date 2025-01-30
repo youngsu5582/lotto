@@ -76,6 +76,7 @@ class LottoControllerCancelTest {
     )
 
     private fun successResponseFields() = responseFields(
+        fieldWithPath("success").type(JsonFieldType.BOOLEAN).description("성공 여부"),
         fieldWithPath("status").type(JsonFieldType.NUMBER).description("응답 상태"),
         fieldWithPath("message").type(JsonFieldType.STRING).description("응답 메시지"),
         fieldWithPath("data.purchaseResponse").type(JsonFieldType.OBJECT).description("응답 데이터"),
@@ -84,6 +85,7 @@ class LottoControllerCancelTest {
     )
 
     private fun errorResponseFields() = responseFields(
+        fieldWithPath("success").type(JsonFieldType.BOOLEAN).description("성공 여부"),
         fieldWithPath("status").type(JsonFieldType.NUMBER).description("응답 상태"),
         fieldWithPath("message").type(JsonFieldType.STRING).description("에러 메시지")
     )

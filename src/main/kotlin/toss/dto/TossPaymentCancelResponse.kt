@@ -6,10 +6,16 @@ import purchase.domain.vo.CancelStatus
 import purchase.domain.vo.PurchaseProvider
 import java.time.LocalDateTime
 
+/**
+ * 해당 부분은 사실 {TossPaymentConfirmResponse 와 동일하다.
+ * Payment 객체이나, cancels 에 null 인지, 배열에 오는지의 차이다.
+ * 당장은 분리하나, 다른 요청을 사용해 중복되면 공통화 해야 한다.
+ */
 data class TossPaymentCancelResponse(
-    val orderId: String = "",
     val paymentKey: String = "",
     val status: String = "",
+    val orderId: String = "",
+    val totalAmount: Long = 0,
     val cancels: Array<CancelResponse>
 ) {
     fun toCancelData(): CancelData {

@@ -20,7 +20,7 @@ class Purchase(
     @Enumerated(EnumType.STRING)
     private val purchaseProvider: PurchaseProvider,
 ) {
-    fun getId() = id
+    fun getId() = id ?: throw IllegalArgumentException("Not Exist Id")
     fun getOrderId() = orderId
     fun getPaymentKey() = paymentKey
     fun getPurchaseProvider() = purchaseProvider
@@ -29,7 +29,13 @@ class Purchase(
     fun getMethod() = purchaseInfo.getMethod()
 
     fun isSuccess() = status == "SUCCESS"
+    fun isCanceled() = status == "CANCELED"
     fun isNotSuccess() = !isSuccess()
     fun isNotEqual(amount: BigDecimal) = !purchaseInfo.isEqual(amount)
-    fun cancel() = run { this.status = "CANCELED" }
+    fun cancel() = run {
+        if (this.status == "CANCELED") {
+            throw IllegalArgumentException("이미 취소된 결제입니다.")
+        }
+        this.status = "CANCELED"
+    }
 }
