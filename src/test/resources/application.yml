@@ -13,13 +13,12 @@ spring:
       ddl-auto: create-drop
   datasource:
     url: jdbc:h2:mem:databaseDB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE;MODE=MySQL
-
+    hikari:
+      data-source-properties:
+        serverTimezone: UTC
 toss:
   client:
     api-key: test_gsk_docs_OaPz8L5KdmQXkzRz3y47BMw6
     payment-url: /v1/payments/confirm
     cancel-url: /v1/payments/{paymentKey}/cancel
 
-logging:
-  level:
-    org.springframework.context.annotation: debug

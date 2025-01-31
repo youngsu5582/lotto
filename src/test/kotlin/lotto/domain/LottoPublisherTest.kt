@@ -40,7 +40,7 @@ class LottoPublisherTest {
     @Test
     fun `현재 해당하는 회차가 없으면 예외를 발생한다 - 시작일 이전`() {
         prepareLottoInfo(1, startDate, endDate)
-        clock.setInstant(startDate.minusNanos(1))
+        clock.setInstant(startDate.minusSeconds(2))
 
         assertThrows<NoSuchElementException> {
             publishLottoPaper()
@@ -59,7 +59,7 @@ class LottoPublisherTest {
     @Test
     fun `조회한 회차가 모집중이 아니면 예외를 발생한다`() {
         prepareLottoInfo(2, startDate, endDate, LottoStatus.CLOSED)
-        clock.setInstant(startDate.plusNanos(1))
+        clock.setInstant(startDate.plusSeconds(2))
 
         assertThrows<IllegalArgumentException> {
             publishLottoPaper()
