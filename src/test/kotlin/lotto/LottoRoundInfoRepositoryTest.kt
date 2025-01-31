@@ -7,6 +7,7 @@ import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.BeforeEach
 import org.springframework.beans.factory.annotation.Autowired
 import java.time.LocalDateTime
+import java.time.temporal.ChronoUnit
 import kotlin.test.Test
 
 @RepositoryTest
@@ -26,14 +27,13 @@ class LottoRoundInfoRepositoryTest {
                 LottoRoundInfo(
                     null,
                     round = 1,
-                    startDate = issueTime,
-                    endDate = endTime,
-                    drawDate = drawTime,
-                    paymentDeadline = issueTime.plusYears(1),
+                    startDate = issueTime.truncatedTo(ChronoUnit.MICROS),
+                    endDate = endTime.truncatedTo(ChronoUnit.MICROS),
+                    drawDate = drawTime.truncatedTo(ChronoUnit.MICROS),
+                    paymentDeadline = issueTime.plusYears(1).truncatedTo(ChronoUnit.MICROS),
                 ),
             )
     }
-
     @Test
     fun `발행 시간보다 크거나 같으면 정보를 가져온다`() {
         val findLottoInfo =
