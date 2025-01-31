@@ -55,10 +55,11 @@ export default function PaymentSuccess() {
           router.push('/');
         }, 3000);
       } catch (error) {
-        console.error('Payment verification failed:', error);
+        const errorMessage = error instanceof Error ?
+        `결제 검증 실패: ${error.message}. 다시 시도하시거나 고객센터로 문의해주세요.`: '결제 검증에 실패했습니다. 고객센터로 문의해주세요.';
         setPaymentStatus({ 
           status: 'error', 
-          message: '결제 검증에 실패했습니다. 고객센터로 문의해주세요.' 
+          message: errorMessage
         });
       }
     };

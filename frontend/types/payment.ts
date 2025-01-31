@@ -1,6 +1,6 @@
 export interface LottoPurchaseRequest {
   purchaseHttpRequest: {
-    purchaseType: 'CARD';
+    purchaseType: 'CARD' | 'TOSS_PAY';
     currency: 'KRW';
     amount: number;
     paymentKey: string;

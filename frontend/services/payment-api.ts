@@ -3,11 +3,32 @@ import { LottoPurchaseRequest, OrderDataRequest, OrderDataResponse } from '../ty
 import { LottoTickets } from '../types/lotto';
 
 export class PaymentApiService extends BaseApiService {
-  async verifyPayment(params: { paymentKey: string; orderId: string; amount: number }, tickets: LottoTickets) {
+  private readonly TICKET_PRICE = 1000; // 티켓당 1,000원
+
+  async verifyPayment(
+    params: { 
+      paymentKey: string; 
+      orderId: string; 
+      amount: number;
+      purchaseType?: 'CARD' | 'TOSS_PAY';
+      currency?: 'KRW';
+    }, 
+    tickets: LottoTickets
+  ) {
+    // 결제 금액 검증
+    if (params.amount <= 0) {
+      throw new Error('결제 금액은 0보다 커야 합니다.');
+    }
+
+    const expectedAmount = tickets.length * this.TICKET_PRICE;
+    if (params.amount !== expectedAmount) {
+      throw new Error(`결제 금액이 올바르지 않습니다. 예상 금액: ${expectedAmount}원, 실제 금액: ${params.amount}원`);
+    }
+
     const requestBody: LottoPurchaseRequest = {
       purchaseHttpRequest: {
-        purchaseType: 'CARD',
-        currency: 'KRW',
+        purchaseType: params.purchaseType || 'CARD',
+        currency: params.currency || 'KRW',
         amount: params.amount,
         paymentKey: params.paymentKey,
         orderId: params.orderId,
@@ -29,4 +50,4 @@ export class PaymentApiService extends BaseApiService {
       body: JSON.stringify(data),
     });
   }
-} 
+}

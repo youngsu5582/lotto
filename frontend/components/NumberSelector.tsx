@@ -77,6 +77,8 @@ export default function NumberSelector({ onAddToCart, cartCount }: NumberSelecto
             whileHover={{ scale: 1.1 }}
             whileTap={{ scale: 0.95 }}
             onClick={() => handleNumberSelect(num)}
+            aria-label={`숫자 ${num} ${currentNumbers.includes(num) ? '선택됨' : ''}`}
+            aria-pressed={currentNumbers.includes(num)}
             className={`w-10 h-10 rounded-full font-semibold text-white transition-colors
               ${currentNumbers.includes(num)
                 ? 'ring-2 ring-white ring-offset-2 ring-offset-neutral-800 ' + getNumberColor(num)

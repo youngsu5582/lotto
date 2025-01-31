@@ -57,7 +57,7 @@ export default function Payment() {
           amount: totalAmount,
           orderId,
           orderName: `로또 티켓 ${tickets.length}장`,
-          customerName: "고객",
+          customerName: localStorage.getItem('userName') || "고객",
           successUrl: `${window.location.origin}/payment/success`,
           failUrl: `${window.location.origin}/payment/fail`,
         })
@@ -91,6 +91,10 @@ export default function Payment() {
         src="https://js.tosspayments.com/v1/payment"
         strategy="afterInteractive"
         onLoad={() => setIsScriptLoaded(true)}
+        onError={() => {
+          alert('결제 시스템을 불러오는데 실패했습니다. 페이지를 새로고침 해주세요.');
+          console.error('Toss Payments 스크립트 로드 실패');
+        }}
       />
       
       <div className="min-h-screen bg-neutral-900">

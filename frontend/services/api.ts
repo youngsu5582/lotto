@@ -26,6 +26,9 @@ class ApiService {
   }
 
   async verifyPayment(params: { paymentKey: string; orderId: string; amount: number }, tickets: LottoTickets) {
+    if (!params.paymentKey || !params.orderId || params.amount <= 0) {
+      throw new Error('잘못된 결제 정보입니다.');
+    }
     const requestBody: LottoPurchaseRequest = {
       purchaseHttpRequest: {
         purchaseType: 'CARD',

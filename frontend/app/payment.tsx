@@ -46,7 +46,9 @@ export default function Payment() {
         failUrl: `${window.location.origin}/payment/fail`,
       });
     } catch (error) {
-      console.error('결제 실패:', error);
+        const errorMessage = error instanceof Error ? error.message : '알 수 없는 오류가 발생했습니다.';
+        alert(`결제 중 오류가 발생했습니다: ${errorMessage}`);
+    }
     }
   };
 
