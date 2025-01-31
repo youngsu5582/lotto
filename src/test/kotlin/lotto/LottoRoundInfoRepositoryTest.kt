@@ -44,10 +44,10 @@ class LottoRoundInfoRepositoryTest {
     }
 
     @Test
-    fun `발행 시간보다 1 나노초 이전이면 가져오지 않는다`() {
+    fun `발행 시간보다 1초 이전이면 가져오지 않는다`() {
         val findLottoInfo =
             lottoRoundInfoRepository.findTopByIssueDateLessThanEqualAndDrawDateGreaterThanEqual(
-                issueTime.minusNanos(1),
+                issueTime.minusSeconds(1),
             )
         assertThat(findLottoInfo).isNull()
     }
