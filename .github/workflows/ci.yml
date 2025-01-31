@@ -12,6 +12,11 @@ jobs:
       - name: Repository checkout
         uses: actions/checkout@v4
 
+      - name: Setup timezone
+        uses: zcong1993/setup-timezone@master
+        with:
+          timezone: Asia/Seoul
+
       - name: Set up JDK 21
         uses: actions/setup-java@v3
         with:
