@@ -1,6 +1,7 @@
 package lotto.domain.implementation
 
 import common.business.Implementation
+import common.business.Read
 import common.business.Transaction
 import common.business.Write
 import lotto.domain.entity.LottoPublish
@@ -15,6 +16,13 @@ class LottoPublisher(
     private val lottoRoundInfoRepository: LottoRoundInfoRepository,
     private val lottoPublishRepository: LottoPublishRepository,
 ) {
+    @Transaction
+    @Read
+    fun findPublish(publishId: Long): LottoPublish {
+        return lottoPublishRepository.findById(publishId)
+            .orElseThrow { IllegalArgumentException("Not Exist Publish") }
+    }
+
     @Transaction
     @Write
     fun publish(issuedAt: LocalDateTime, lottoPaper: LottoPaper): LottoPublish {

@@ -1,15 +1,11 @@
 package lotto.controller
 
 import config.AcceptanceTest
-import io.restassured.RestAssured
-import io.restassured.http.ContentType
 import org.junit.jupiter.api.Disabled
 import org.junit.jupiter.api.Test
 import org.springframework.restdocs.payload.JsonFieldType
 import org.springframework.restdocs.payload.PayloadDocumentation.*
-import org.springframework.restdocs.payload.RequestFieldsSnippet
-import org.springframework.restdocs.payload.ResponseFieldsSnippet
-import org.springframework.restdocs.restassured.RestAssuredRestDocumentation
+import sendRequest
 
 @AcceptanceTest(["/acceptance/lottoPurchase.json"])
 class LottoPurchaseTest {
@@ -19,7 +15,7 @@ class LottoPurchaseTest {
             amount = 1000,
             paymentKey = "paymentKey-id-1",
             orderId = "order-id-1",
-            lottoNumbers = listOf(listOf(1, 11, 17, 19, 21, 24))
+            lottoPublishId = 1
         )
 
         sendRequest(
@@ -27,7 +23,8 @@ class LottoPurchaseTest {
             "purchase-ticket-success",
             commonRequestFields(),
             successResponseFields(),
-            200
+            200,
+            "/api/tickets"
         )
     }
 
@@ -38,7 +35,7 @@ class LottoPurchaseTest {
             amount = 1000,
             paymentKey = "paymentKey-duplicate-1",
             orderId = "orderId-duplicate",
-            lottoNumbers = listOf(listOf(1, 11, 17, 19, 21, 24))
+            lottoPublishId = 1
         )
 
         sendRequest(
@@ -46,7 +43,8 @@ class LottoPurchaseTest {
             "purchase-ticket-failure-duplicate-payment-key",
             commonRequestFields(),
             errorResponseFields(),
-            400
+            400,
+            "/api/tickets"
         )
     }
 
@@ -56,7 +54,7 @@ class LottoPurchaseTest {
             amount = 1000,
             paymentKey = "paymentKey-not-exist",
             orderId = "order-not-exist",
-            lottoNumbers = listOf(listOf(1, 11, 17, 19, 21, 24))
+            lottoPublishId = 1
         )
 
         sendRequest(
@@ -64,7 +62,8 @@ class LottoPurchaseTest {
             "purchase-ticket-failure-order-data-not-exist",
             commonRequestFields(),
             errorResponseFields(),
-            400
+            400,
+            "/api/tickets"
         )
     }
 
@@ -74,7 +73,7 @@ class LottoPurchaseTest {
             amount = 1500,
             paymentKey = "paymentKey-duplicate",
             orderId = "orderId-duplicate",
-            lottoNumbers = listOf(listOf(1, 11, 17, 19, 21, 24))
+            lottoPublishId = 1
         )
 
         sendRequest(
@@ -82,7 +81,8 @@ class LottoPurchaseTest {
             "purchase-ticket-failure-order-data-different-amount",
             commonRequestFields(),
             errorResponseFields(),
-            400
+            400,
+            "/api/tickets"
         )
     }
 
@@ -92,7 +92,7 @@ class LottoPurchaseTest {
             amount = 1500,
             paymentKey = "paymentKey-id-2",
             orderId = "order-id-2",
-            lottoNumbers = listOf(listOf(1, 11, 17, 19, 21, 24))
+            lottoPublishId = 1
         )
 
         sendRequest(
@@ -100,7 +100,8 @@ class LottoPurchaseTest {
             "purchase-ticket-failure-not-remainder-unit",
             commonRequestFields(),
             errorResponseFields(),
-            400
+            400,
+            "/api/tickets"
         )
     }
 
@@ -110,7 +111,7 @@ class LottoPurchaseTest {
             amount = 1000,
             paymentKey = "paymentKey-id-2",
             orderId = "order-id-2",
-            lottoNumbers = listOf(listOf(1, 11, 17, 19, 21, 24))
+            lottoPublishId = 1
         )
 
         sendRequest(
@@ -119,7 +120,8 @@ class LottoPurchaseTest {
             commonRequestFields(),
             errorResponseFields(),
             400,
-            mapOf(Pair("Payment-Error-Header", "EXCEED_MAX_ONE_DAY_AMOUNT"))
+            "/api/tickets",
+            mapOf(Pair("Payment-Error-Header", "EXCEED_MAX_ONE_DAY_AMOUNT")),
         )
     }
 
@@ -130,7 +132,7 @@ class LottoPurchaseTest {
         amount: Int,
         paymentKey: String,
         orderId: String,
-        lottoNumbers: List<List<Int>>
+        lottoPublishId: Long
     ): Map<String, Any> {
         return mapOf(
             "purchaseHttpRequest" to mapOf(
@@ -140,32 +142,8 @@ class LottoPurchaseTest {
                 "paymentKey" to paymentKey,
                 "orderId" to orderId
             ),
-            "lottoRequest" to mapOf(
-                "numbers" to lottoNumbers
-            )
+            "lottoPublishId" to lottoPublishId
         )
-    }
-
-    private fun sendRequest(
-        request: Map<String, Any>,
-        documentName: String,
-        requestFields: RequestFieldsSnippet,
-        responseFields: ResponseFieldsSnippet,
-        expectedStatus: Int,
-        map: Map<String, Any> = HashMap()
-    ) {
-        RestAssured.given().log().all()
-            .contentType(ContentType.JSON)
-            .headers(map)
-            .body(request)
-            .filter(
-                RestAssuredRestDocumentation.document(
-                    documentName,
-                    requestFields,
-                    responseFields
-                )
-            )
-            .post("/api/tickets").then().log().all().statusCode(expectedStatus).extract()
     }
 
     private fun commonRequestFields() = requestFields(
@@ -179,9 +157,7 @@ class LottoPurchaseTest {
             .description("결제 키 (결제 시스템에서 제공)"),
         fieldWithPath("purchaseHttpRequest.orderId").type(JsonFieldType.STRING)
             .description("주문 ID (결제 시스템에서 제공)"),
-        fieldWithPath("lottoRequest").type(JsonFieldType.OBJECT).description("로또 요청 정보"),
-        fieldWithPath("lottoRequest.numbers").type(JsonFieldType.ARRAY).description("구매할 로또 번호 목록"),
-        fieldWithPath("lottoRequest.numbers[].[]").type(JsonFieldType.ARRAY).description("로또 번호")
+        fieldWithPath("lottoPublishId").type(JsonFieldType.NUMBER).description("퍼블리싱 한 로또 번호"),
     )
 
     private fun successResponseFields() = responseFields(

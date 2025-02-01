@@ -1,10 +1,16 @@
 package lotto.domain.vo
 
+import java.math.BigDecimal
+
 data class LottoNumbers(
     private val lottoNumbers: List<List<Int>>,
 ) {
-    fun size(): Int {
-        return lottoNumbers.size
+    fun hasSize(size: Int): Boolean {
+        return lottoNumbers.size == size
+    }
+
+    fun calculatePrice(unitPrice: BigDecimal): BigDecimal {
+        return unitPrice.multiply(lottoNumbers.size.toBigDecimal())
     }
 
     fun toStringWithComma(): List<String> {

@@ -13,6 +13,12 @@ data class LottoPublish(
     private val lottoRoundInfo: LottoRoundInfo,
     private val issuedAt: LocalDateTime,
     @OneToMany(fetch = FetchType.LAZY)
+    @JoinTable(
+        name = "lotto_publish_lotto",
+        joinColumns = [JoinColumn(name = "lotto_publish_id")],
+        inverseJoinColumns = [JoinColumn(name = "lotto_id")],
+
+    )
     private val lottoes: List<Lotto>,
     @Convert(converter = IssueStatusListConverter::class)
     private val issuedLottoesStatus: List<IssueStatus>,
@@ -24,7 +30,6 @@ data class LottoPublish(
     fun getLottoes() = lottoes
     fun getIssuedLottoesStatus() = issuedLottoesStatus
     fun getCanceled() = canceled
-
     fun cancel() {
         this.canceled = true
     }

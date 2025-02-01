@@ -12,6 +12,7 @@ import lotto.fixture.IssuedLottoBuilder
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.assertThrows
 import org.springframework.beans.factory.annotation.Autowired
+import java.math.BigDecimal
 import java.time.LocalDateTime
 import kotlin.test.Test
 
@@ -94,6 +95,7 @@ class LottoPublisherTest {
                         .withNumbers(listOf(1, 3, 5, 11, 13, 15))
                         .build(),
                 ),
+                amount = BigDecimal(2000),
             ),
         )
     }

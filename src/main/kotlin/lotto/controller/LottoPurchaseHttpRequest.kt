@@ -9,12 +9,8 @@ import java.math.BigDecimal
 
 data class LottoPurchaseHttpRequest @JsonCreator constructor(
     val purchaseHttpRequest: PurchaseHttpRequest,
-    val lottoRequest: LottoRequest
+    val lottoPublishId: Long
 ) {
-    fun toLottoNumbers(): LottoNumbers {
-        return LottoNumbers(lottoRequest.numbers)
-    }
-
     fun toPurchaseRequest(): LottoPurchaseRequest {
         return LottoPurchaseRequest(
             purchaseType = purchaseHttpRequest.purchaseType,
@@ -26,9 +22,13 @@ data class LottoPurchaseHttpRequest @JsonCreator constructor(
     }
 }
 
-data class LottoRequest(
-    val numbers: List<List<Int>>,
-)
+data class LottoRequest @JsonCreator constructor(
+    val numbers: List<List<Int>>
+) {
+    fun toLottoNumbers(): LottoNumbers {
+        return LottoNumbers(numbers)
+    }
+}
 
 data class PurchaseHttpRequest(
     val purchaseType: PurchaseType,

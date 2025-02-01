@@ -1,5 +1,6 @@
 package lotto.domain.vo
 
+import order.domain.implementation.OrderDataRequest
 import purchase.domain.vo.PurchaseRequest
 import java.math.BigDecimal
 
@@ -16,6 +17,12 @@ data class LottoPurchaseRequest(
             amount = amount,
             currency = currency.name,
             paymentKey = paymentKey,
+            orderId = orderId,
+        )
+    }
+    fun toOrderDataRequest(): OrderDataRequest {
+        return OrderDataRequest(
+            amount = amount,
             orderId = orderId,
         )
     }

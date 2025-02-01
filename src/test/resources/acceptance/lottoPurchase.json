@@ -10,6 +10,27 @@
       "status": "ONGOING"
     }
   ],
+  "lotto_publish": [
+    {
+      "id": 1,
+      "lotto_round_info_id": 1,
+      "issued_at": "2025-01-19T10:00:00",
+      "issued_lottoes_status":"MANUAL",
+      "canceled": false
+    }
+  ],
+  "lotto": [
+    {
+      "id": 1,
+      "numbers": "1,10,11,14,15,17"
+    }
+  ],
+  "lotto_publish_lotto": [
+    {
+      "lotto_id": 1,
+      "lotto_publish_id": 1
+    }
+  ],
   "purchase": [
     {
       "id": "dfb3ad82-e2ba-4220-a969-0b4a293c9a8b",
@@ -28,7 +49,7 @@
     }
   ],
 
-  "purchase_temporary": [
+  "orders": [
     {
       "_comment": "정상적으로 처리될 결제",
       "order_id": "order-id-1",

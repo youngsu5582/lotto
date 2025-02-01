@@ -43,7 +43,7 @@
       "lotto_publish_id": 1
     }
   ],
-  "purchase_temporary": [
+  "orders": [
     {
       "order_id": "order-random-id-1",
       "amount": 1000
