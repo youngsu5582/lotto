@@ -8,11 +8,6 @@ import purchase.domain.implementation.TestPaymentClient
 
 @TestConfiguration
 class AcceptanceConfig {
-    @Bean
-    @Primary
-    fun lottoRepositoryImpl(): LottoRepositoryImpl {
-        return LottoRepositoryImpl()
-    }
 
     @Bean
     @Primary
