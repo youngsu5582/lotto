@@ -23,32 +23,36 @@ class LottoPaperGenerator(
 
     @Transaction
     @Read
-    fun generateWithAuto(lottoPaperRequest: LottoPaperRequest): LottoPaper {
-        val paperCount = calculatePaperCount(lottoPaperRequest)
-        val issuedLottoes = createIssuedLottoes(lottoNumberGenerator.generate(paperCount), IssueStatus.AUTO)
-        return LottoPaper(issuedLottoes)
-    }
-
-    @Transaction
-    @Read
     fun generateWithNumbers(
-        lottoPaperRequest: LottoPaperRequest,
         lottoNumbers: LottoNumbers,
     ): LottoPaper {
-        val paperCount = calculatePaperCount(lottoPaperRequest)
-        require(paperCount == lottoNumbers.size()) {
-            "로또 숫자와 개수는 일치해야 합니다."
-        }
         val issuedLottoes = createIssuedLottoes(lottoNumbers, IssueStatus.MANUAL)
-        return LottoPaper(issuedLottoes)
+        val amount = calculateAmount(lottoNumbers)
+        return LottoPaper(lottoes = issuedLottoes, amount = amount)
     }
 
-    private fun calculatePaperCount(lottoPaperRequest: LottoPaperRequest): Int {
-        require(lottoPaperRequest.isDivide(UNIT)) {
-            "금액은 ${UNIT}원 단위여야 합니다."
-        }
-        return lottoPaperRequest.divide(UNIT)
+    private fun calculateAmount(lottoNumbers: LottoNumbers): BigDecimal {
+        return lottoNumbers.calculatePrice(UNIT)
     }
+
+    /**
+     * 당장 서버 내부에서 자체 생성해주는 로또는 보류한다.
+     * 2025.02.02
+     */
+//    @Transaction
+//    @Read
+//    fun generateWithAuto(lottoPaperRequest: LottoPaperRequest): LottoPaper {
+//        val paperCount = calculatePaperCount(lottoPaperRequest)
+//        val issuedLottoes = createIssuedLottoes(lottoNumberGenerator.generate(paperCount), IssueStatus.AUTO)
+//        return LottoPaper(issuedLottoes)
+//    }
+//
+//    private fun calculatePaperCount(lottoPaperRequest: LottoPaperRequest): Int {
+//        require(lottoPaperRequest.isDivide(UNIT)) {
+//            "금액은 ${UNIT}원 단위여야 합니다."
+//        }
+//        return lottoPaperRequest.divide(UNIT)
+//    }
 
     private fun createIssuedLottoes(
         lottoNumbers: LottoNumbers,

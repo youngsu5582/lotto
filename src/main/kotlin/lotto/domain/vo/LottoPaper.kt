@@ -3,9 +3,11 @@ package lotto.domain.vo
 import lotto.domain.entity.IssueStatus
 import lotto.domain.entity.IssuedLotto
 import lotto.domain.entity.Lotto
+import java.math.BigDecimal
 
 data class LottoPaper(
     private val lottoes: List<IssuedLotto>,
+    private val amount: BigDecimal
 ) {
     companion object {
         const val MAX_PURCHASE_LIMIT = 5
@@ -28,4 +30,6 @@ data class LottoPaper(
     fun getLottoes(): List<Lotto> {
         return lottoes.stream().map { it.getLotto() }.toList()
     }
+
+    fun getAmount(): BigDecimal = amount
 }
