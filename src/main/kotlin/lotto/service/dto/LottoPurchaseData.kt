@@ -37,14 +37,12 @@ data class PurchaseData(
 
 data class LottoPublishData(
     val id: Long,
-    val numbers: List<Lotto>,
     val isCanceled: Boolean
 ) {
     companion object {
         fun from(lottoPublish: LottoPublish): LottoPublishData {
             return LottoPublishData(
                 id = lottoPublish.getId(),
-                numbers = lottoPublish.getLottoes(),
                 isCanceled = lottoPublish.getCanceled()
             )
         }

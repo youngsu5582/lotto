@@ -9,7 +9,6 @@ import lotto.domain.entity.Lotto
 import lotto.domain.repository.LottoRepository
 import lotto.domain.vo.LottoNumbers
 import lotto.domain.vo.LottoPaper
-import lotto.domain.vo.LottoPaperRequest
 import java.math.BigDecimal
 
 @Implementation
@@ -58,7 +57,9 @@ class LottoPaperGenerator(
         lottoNumbers: LottoNumbers,
         issueStatus: IssueStatus,
     ): List<IssuedLotto> {
-        return getLottoEntities(lottoNumbers).map { IssuedLotto(issueStatus, it) }.toList()
+        val lottoes = getLottoEntities(lottoNumbers)
+        require(lottoNumbers.hasSize(lottoes.size)) { IllegalStateException("입력한 숫자와 조회한 숫자가 다릅니다.") }
+        return lottoes.map { IssuedLotto(issueStatus, it) }.toList()
     }
 
     private fun getLottoEntities(lottoNumbers: LottoNumbers): List<Lotto> {
