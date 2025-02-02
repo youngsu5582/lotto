@@ -20,7 +20,7 @@ class LottoOrderTest {
             commonRequestFields(),
             successResponseFields(),
             200,
-            "/api/order"
+            "/api/orders"
         )
     }
 

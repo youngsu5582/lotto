@@ -4,6 +4,8 @@ import config.FixtureLottoNumberGenerator
 import config.ImplementationTest
 import config.LottoRepositoryImpl
 import lotto.domain.entity.IssueStatus
+import lotto.domain.entity.IssuedLotto
+import lotto.domain.entity.Lotto
 import lotto.domain.implementation.LottoNumberGenerator
 import lotto.domain.implementation.LottoPaperGenerator
 import lotto.domain.vo.LottoNumbers
@@ -29,13 +31,12 @@ class LottoPaperGeneratorTest {
             generator.generateWithNumbers(
                 LottoNumbers(listOf(listOf(1, 14, 17, 19, 21, 34), listOf(23, 27, 39, 40, 41, 43))),
             )
-        assertThat(response.toIntList()).isEqualTo(
+        assertThat(response.getLottoes()).isEqualTo(
             listOf(
-                listOf(1, 14, 17, 19, 21, 34),
-                listOf(23, 27, 39, 40, 41, 43),
+                IssuedLotto(issueStatus = IssueStatus.MANUAL, lotto = Lotto(listOf(1, 14, 17, 19, 21, 34))),
+                IssuedLotto(issueStatus = IssueStatus.MANUAL, lotto = Lotto(listOf(23, 27, 39, 40, 41, 43))),
             ),
         )
-        assertThat(response.getIssuedStatues()).isEqualTo(listOf(IssueStatus.MANUAL, IssueStatus.MANUAL))
     }
 
 //    @ParameterizedTest

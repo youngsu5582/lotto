@@ -15,7 +15,6 @@
       "id": 1,
       "lotto_round_info_id": 1,
       "issued_at": "2025-01-19T10:00:00",
-      "issued_lottoes_status":"MANUAL",
       "canceled": false
     }
   ],
@@ -25,10 +24,11 @@
       "numbers": "1,10,11,14,15,17"
     }
   ],
-  "lotto_publish_lotto": [
+  "published_lotto": [
     {
       "lotto_id": 1,
-      "lotto_publish_id": 1
+      "lotto_publish_id": 1,
+      "status": "MANUAL"
     }
   ],
   "purchase": [
@@ -43,12 +43,11 @@
   ],
   "purchase_info": [
     {
-      "id":"b4386e47-8555-437c-bcd9-164262a9a3ba",
-      "total_amount":1000,
+      "id": "b4386e47-8555-437c-bcd9-164262a9a3ba",
+      "total_amount": 1000,
       "method": "CARD"
     }
   ],
-
   "orders": [
     {
       "_comment": "정상적으로 처리될 결제",

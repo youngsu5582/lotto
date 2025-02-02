@@ -66,9 +66,7 @@ class LottoPurchaseServiceTest {
             lottoPublishId = lottoPublishRepository.save(
                 LottoPublish(
                     lottoRoundInfo = roundInfo,
-                    lottoes = listOf(lottoRepository.save(Lotto(listOf(1, 10, 11, 14, 17, 19)))),
                     issuedAt = LocalDateTime.now(),
-                    issuedLottoesStatus = listOf(IssueStatus.MANUAL)
                 )
             ).getId()
         }
@@ -99,9 +97,6 @@ class LottoPurchaseServiceTest {
     @Autowired
     private lateinit var lottoBillRepository: LottoBillRepository
 
-    @Autowired
-    private lateinit var lottoRepository: LottoRepository
-
     @Nested
     inner class CancelCase {
         private lateinit var bill: LottoBill
@@ -121,8 +116,6 @@ class LottoPurchaseServiceTest {
                         ),
                     ),
                     issuedAt = dateTime,
-                    lottoes = listOf(lottoRepository.save(Lotto(listOf(1, 5, 7, 11, 13, 15)))),
-                    issuedLottoesStatus = listOf(IssueStatus.AUTO),
                 )
             )
             val purchase = purchaseRepository.save(

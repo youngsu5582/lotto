@@ -39,7 +39,7 @@ class LottoPurchaseController(
         )
     }
 
-    @Post("/api/order")
+    @Post("/api/orders")
     fun saveOrder(
         @Body lottoRequest: LottoRequest
     ): ApiResponse<LottoOrderDataHttpResponse> {
