@@ -7,6 +7,7 @@ import { LottoTickets } from "../../types/lotto";
 import { nanoid } from "nanoid";
 import { TOSS_CLIENT_KEY } from '../../config';
 import { apiService } from "../../services/api";
+import { paymentApi } from "../../services";
 
 declare global {
   interface Window {
@@ -39,37 +40,28 @@ export default function Payment() {
     try {
       const orderId = nanoid();
       
-      // 결제 창을 열기 전에 백그라운드에서 임시 주문 생성 요청
-      const temporaryOrderPromise = apiService.createTemporaryOrder({
-        orderId,
-        amount: totalAmount,
+      // 임시 주문 생성 요청
+      const temporaryOrderResult = await paymentApi.createTemporaryOrder({
         numbers: tickets,
       });
+
+      // lottoPublishId를 localStorage에 저장
+      localStorage.setItem('lottoPublishId', temporaryOrderResult.data.lottoPublishId.toString());
+      
+      // orderId도 서버에서 받은 것을 사용
+      const serverOrderId = temporaryOrderResult.data.orderId;
 
       // 토스페이먼츠 결제 위젯 초기화
       const tossPayments = window.TossPayments(TOSS_CLIENT_KEY);
 
-      // 두 작업을 동시에 실행
-      const [temporaryOrderResult] = await Promise.all([
-        temporaryOrderPromise,
-        // 결제 창 열기 (Promise를 반환하지 않음)
-        tossPayments.requestPayment('카드', {
-          amount: totalAmount,
-          orderId,
-          orderName: `로또 티켓 ${tickets.length}장`,
-          customerName: localStorage.getItem('userName') || "고객",
-          successUrl: `${window.location.origin}/payment/success`,
-          failUrl: `${window.location.origin}/payment/fail`,
-        })
-      ]).catch(error => {
-        // 임시 주문 생성이 실패하더라도 결제 창은 이미 열렸을 수 있음
-        throw error;
+      await tossPayments.requestPayment('카드', {
+        amount: totalAmount,
+        orderId: serverOrderId, // 서버에서 받은 orderId 사용
+        orderName: `로또 티켓 ${tickets.length}장`,
+        customerName: localStorage.getItem('userName') || "고객",
+        successUrl: `${window.location.origin}/payment/success`,
+        failUrl: `${window.location.origin}/payment/fail`,
       });
-
-      // 임시 주문 생성 결과 확인
-      if (!temporaryOrderResult.success) {
-        throw new Error(temporaryOrderResult.message || '임시 주문 생성 실패');
-      }
 
     } catch (error: any) {
       if (error.code === "USER_CANCEL") {

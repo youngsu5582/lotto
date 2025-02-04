@@ -10,19 +10,14 @@ export class PaymentApiService extends BaseApiService {
       paymentKey: string; 
       orderId: string; 
       amount: number;
-      purchaseType?: 'CARD' | 'TOSS_PAY';
+      lottoPublishId: number;
+      purchaseType?: 'CARD';
       currency?: 'KRW';
-    }, 
-    tickets: LottoTickets
+    }
   ) {
     // 결제 금액 검증
     if (params.amount <= 0) {
       throw new Error('결제 금액은 0보다 커야 합니다.');
-    }
-
-    const expectedAmount = tickets.length * this.TICKET_PRICE;
-    if (params.amount !== expectedAmount) {
-      throw new Error(`결제 금액이 올바르지 않습니다. 예상 금액: ${expectedAmount}원, 실제 금액: ${params.amount}원`);
     }
 
     const requestBody: LottoPurchaseRequest = {
@@ -33,9 +28,7 @@ export class PaymentApiService extends BaseApiService {
         paymentKey: params.paymentKey,
         orderId: params.orderId,
       },
-      lottoRequest: {
-        numbers: tickets,
-      },
+      lottoPublishId: params.lottoPublishId
     };
 
     return this.fetchJson('/api/tickets', {
@@ -45,7 +38,7 @@ export class PaymentApiService extends BaseApiService {
   }
 
   async createTemporaryOrder(data: OrderDataRequest): Promise<OrderDataResponse> {
-    return this.fetchJson('/api/orders/temporary', {
+    return this.fetchJson('/api/orders', {
       method: 'POST',
       body: JSON.stringify(data),
     });

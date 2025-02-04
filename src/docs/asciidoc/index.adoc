@@ -75,3 +75,48 @@ include::{snippets}/cancel-success/response-fields.adoc[]
 include::{snippets}/cancel-failure/http-request.adoc[]
 include::{snippets}/cancel-failure/http-response.adoc[]
 include::{snippets}/cancel-failure/response-fields.adoc[]
+
+== 멤버 로그인
+=== 멤버 로그인 성공
+이메일과 비밀번호가 일치하면 로그인에 성공해 토큰을 반환한다.
+
+include::{snippets}/login-success/http-request.adoc[]
+include::{snippets}/login-success/http-response.adoc[]
+include::{snippets}/login-success/request-fields.adoc[]
+include::{snippets}/login-success/response-fields.adoc[]
+
+=== 멤버 로그인 실패
+아래와 같은 경우 로그인에 실패한다.
+
+==== 이메일에 해당하는 멤버 미존재
+존재하지 않는 이메일로 로그인 시도시 실패한다.
+
+include::{snippets}/login-fail-not-exist-member/http-request.adoc[]
+include::{snippets}/login-fail-not-exist-member/http-response.adoc[]
+include::{snippets}/login-fail-not-exist-member/response-fields.adoc[]
+
+==== 비밀번호 불일치
+이메일에 해당하는 비밀번호가 불일치 하면 실패한다.
+
+include::{snippets}/login-fail-password/http-request.adoc[]
+include::{snippets}/login-fail-password/http-response.adoc[]
+include::{snippets}/login-fail-password/response-fields.adoc[]
+
+== 멤버 회원가입
+=== 멤버 회원가입 성공
+이메일과 비밀번호로 회원가입을 한다.
+
+include::{snippets}/register-success/http-request.adoc[]
+include::{snippets}/register-success/http-response.adoc[]
+include::{snippets}/register-success/request-fields.adoc[]
+include::{snippets}/register-success/response-fields.adoc[]
+
+=== 멤버 회원가입 실패
+아래와 같은 경우 회원가입에 실패한다.
+
+==== 이미 존재하는 이메일
+
+include::{snippets}/register-fail-exist-email/http-request.adoc[]
+include::{snippets}/register-fail-exist-email/http-response.adoc[]
+include::{snippets}/register-fail-exist-email/request-fields.adoc[]
+include::{snippets}/register-fail-exist-email/response-fields.adoc[]
