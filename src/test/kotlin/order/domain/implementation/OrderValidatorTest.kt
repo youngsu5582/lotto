@@ -11,7 +11,7 @@ import org.junit.jupiter.api.Assertions.assertDoesNotThrow
 import org.springframework.context.annotation.Import
 import purchase.domain.PurchaseException
 import purchase.domain.PurchaseExceptionCode
-import purchase.domain.entity.Order
+import order.domain.entity.Order
 import java.math.BigDecimal
 
 @ImplementationTest
