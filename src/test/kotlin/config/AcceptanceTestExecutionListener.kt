@@ -19,6 +19,7 @@ import org.springframework.test.context.support.AbstractTestExecutionListener
 import org.springframework.util.StreamUtils
 import java.nio.charset.Charset
 import java.nio.charset.StandardCharsets
+import java.util.UUID
 
 class AcceptanceTestExecutionListener : AbstractTestExecutionListener() {
 
@@ -100,6 +101,7 @@ class AcceptanceTestExecutionListener : AbstractTestExecutionListener() {
         return when {
             value == null -> "NULL"
             value is String && value.lowercase() == "now()" -> "now()"
+            value is String && value.lowercase() == "uuid()" -> "'${UUID.randomUUID()}'"
             else -> "'$value'"
         }
     }

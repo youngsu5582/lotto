@@ -5,9 +5,9 @@ import org.springframework.boot.autoconfigure.domain.EntityScan
 import org.springframework.boot.runApplication
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories
 
-@SpringBootApplication(scanBasePackages = ["lotto", "purchase", "order","toss", "common"])
-@EntityScan(basePackages = ["lotto", "purchase", "order"])
-@EnableJpaRepositories(basePackages = ["lotto", "purchase", "order"])
+@SpringBootApplication(scanBasePackages = ["lotto", "purchase", "order","toss", "common","member"])
+@EntityScan(basePackages = ["lotto", "purchase", "order","member"])
+@EnableJpaRepositories(basePackages = ["lotto", "purchase", "order","member"])
 class LottoApplication
 
 fun main(args: Array<String>) {

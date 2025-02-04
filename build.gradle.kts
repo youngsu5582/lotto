@@ -35,6 +35,11 @@ dependencies {
     implementation(kotlin("stdlib-jdk8"))
     implementation("io.github.oshai:kotlin-logging-jvm:7.0.3")
 
+    // 토큰
+    implementation("io.jsonwebtoken:jjwt-api:0.11.5")
+    implementation("io.jsonwebtoken:jjwt-impl:0.11.5")
+    runtimeOnly("io.jsonwebtoken:jjwt-jackson:0.11.5")
+
     // Test 및 REST Docs 의존성
     testImplementation("org.springframework.boot:spring-boot-starter-test") {
         exclude(group = "org.junit.vintage") // JUnit 5 전용
@@ -76,7 +81,7 @@ tasks.test {
 
 tasks.register<Test>("restDocsTest") {
     useJUnitPlatform {
-        includeTags("AcceptanceTest") // 특정 태그만 포함
+        includeTags("AcceptanceTest")
     }
 
     systemProperty("org.springframework.restdocs.outputDir", file("build/generated-snippets"))
