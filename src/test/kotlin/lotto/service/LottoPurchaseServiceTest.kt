@@ -8,20 +8,19 @@ import lotto.domain.repository.LottoPublishRepository
 import lotto.domain.repository.LottoRepository
 import lotto.domain.repository.LottoRoundInfoRepository
 import lotto.domain.vo.Currency
-import lotto.domain.vo.LottoNumbers
 import lotto.domain.vo.LottoPurchaseRequest
 import lotto.domain.vo.PurchaseType
+import order.domain.repository.OrderRepository
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertDoesNotThrow
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.context.annotation.Import
+import purchase.domain.entity.Order
 import purchase.domain.entity.Purchase
 import purchase.domain.entity.PurchaseInfo
-import purchase.domain.entity.PurchaseTemporary
 import purchase.domain.repository.PurchaseRepository
-import purchase.domain.repository.PurchaseTemporaryRepository
 import purchase.domain.vo.PaymentMethod
 import purchase.domain.vo.PurchaseProvider
 import java.math.BigDecimal
@@ -38,7 +37,9 @@ class LottoPurchaseServiceTest {
     private lateinit var lottoRoundInfoRepository: LottoRoundInfoRepository
 
     @Autowired
-    private lateinit var purchaseTemporaryRepository: PurchaseTemporaryRepository
+    private lateinit var orderRepository: OrderRepository
+
+    private var lottoPublishId: Long = 0
 
     private val dateTime = LocalDateTime.now()
 
@@ -46,7 +47,7 @@ class LottoPurchaseServiceTest {
     inner class PurchaseCase {
         @BeforeEach
         fun setUp() {
-            lottoRoundInfoRepository.save(
+            val roundInfo = lottoRoundInfoRepository.save(
                 LottoRoundInfo(
                     null,
                     round = 1,
@@ -56,12 +57,18 @@ class LottoPurchaseServiceTest {
                     paymentDeadline = dateTime.plusYears(1),
                 ),
             )
-            purchaseTemporaryRepository.save(
-                PurchaseTemporary(
+            orderRepository.save(
+                Order(
                     orderId = "orderId",
                     amount = BigDecimal(1000)
                 )
             )
+            lottoPublishId = lottoPublishRepository.save(
+                LottoPublish(
+                    lottoRoundInfo = roundInfo,
+                    issuedAt = LocalDateTime.now(),
+                )
+            ).getId()
         }
 
         @Test
@@ -75,7 +82,7 @@ class LottoPurchaseServiceTest {
                         paymentKey = "paymentKey",
                         orderId = "orderId"
                     ),
-                    lottoNumbers = LottoNumbers(listOf(listOf(1, 14, 17, 19, 21, 34)))
+                    lottoPublishId = lottoPublishId
                 )
             }
         }
@@ -89,9 +96,6 @@ class LottoPurchaseServiceTest {
 
     @Autowired
     private lateinit var lottoBillRepository: LottoBillRepository
-
-    @Autowired
-    private lateinit var lottoRepository: LottoRepository
 
     @Nested
     inner class CancelCase {
@@ -112,8 +116,6 @@ class LottoPurchaseServiceTest {
                         ),
                     ),
                     issuedAt = dateTime,
-                    lottoes = listOf(lottoRepository.save(Lotto(listOf(1, 5, 7, 11, 13, 15)))),
-                    issuedLottoesStatus = listOf(IssueStatus.AUTO),
                 )
             )
             val purchase = purchaseRepository.save(

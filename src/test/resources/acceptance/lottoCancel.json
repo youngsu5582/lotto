@@ -32,7 +32,6 @@
       "id": 1,
       "lotto_round_info_id": 1,
       "issued_at": "now()",
-      "issued_lottoes_status": "MANUAL",
       "canceled": false
     }
   ],
@@ -43,7 +42,7 @@
       "lotto_publish_id": 1
     }
   ],
-  "purchase_temporary": [
+  "orders": [
     {
       "order_id": "order-random-id-1",
       "amount": 1000

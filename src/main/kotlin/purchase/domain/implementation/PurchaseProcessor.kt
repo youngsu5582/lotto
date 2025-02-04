@@ -17,7 +17,6 @@ class PurchaseProcessor(
     }
 
     fun purchase(purchaseRequest: PurchaseRequest): Purchase {
-        purchaseValidator.checkOrderValid(purchaseRequest.toOrderDataRequest())
         val purchaseData = paymentProcessor.purchase(purchaseRequest, PurchaseProvider.TOSS)
         val purchase = purchaseWriter.savePurchase(purchaseData)
         return purchase

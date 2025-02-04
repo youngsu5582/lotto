@@ -24,3 +24,6 @@ toss:
     api-key: test_gsk_docs_OaPz8L5KdmQXkzRz3y47BMw6
     payment-url: /v1/payments/confirm
     cancel-url: /v1/payments/{paymentKey}/cancel
+
+cors:
+  allowed-origins: http://localhost:3000
