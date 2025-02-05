@@ -16,6 +16,7 @@ class TokenGenerator(
     private val accessTokenExpire: Long = jwtProperties.accessTokenExpiry
 
     fun generateAccessToken(value: String): String {
+        require(value.isNotBlank()){"토큰 생성은 빈 값이 될 수 없습니다"}
         val now = clock.now()
         val validity = Date(now.time.plus(accessTokenExpire))
 

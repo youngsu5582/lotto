@@ -12,10 +12,10 @@ class MemberReader(
 ) {
     fun findMember(memberIdentifier: MemberIdentifier): Member =
         (memberRepository.findByEmail(memberIdentifier.email)
-            ?: throw NoSuchElementException("Member not found with email: ${memberIdentifier.email}"))
+            ?: throw NoSuchElementException("이메일(${memberIdentifier.email})에 해당하는 회원을 찾을 수 없습니다"))
             .also {
                 if (passwordEncoder.matches(it.getPassword(), memberIdentifier.password).not()) {
-                    throw IllegalArgumentException("Not Equal Password")
+                    throw IllegalArgumentException("비밀번호가 일치하지 않습니다")
                 }
             }
     fun existByEmail(email: String) = memberRepository.findByEmail(email) != null
