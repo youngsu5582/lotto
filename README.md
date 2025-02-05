@@ -23,3 +23,5 @@
 
 ## 진행 기간
 2024년 12월 14일 ~ (진행 중)
+
+- [API 문서 링크](https://youngsu5582.github.io/lotto/)
