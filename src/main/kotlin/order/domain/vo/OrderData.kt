@@ -1,6 +1,6 @@
 package order.domain.vo
 
-import purchase.domain.entity.Order
+import order.domain.entity.Order
 import java.math.BigDecimal
 
 class OrderData(

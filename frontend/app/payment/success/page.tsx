@@ -2,8 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
-import { apiService } from "../../../services/api";
-import { LottoTickets } from "../../../types/lotto";
+import { paymentApi } from "../../../services";
 
 interface PaymentStatus {
   status: 'loading' | 'success' | 'error';
@@ -18,48 +17,36 @@ export default function PaymentSuccess() {
   useEffect(() => {
     const verifyPayment = async () => {
       try {
-        // URL에서 결제 정보 파라미터 추출
         const paymentKey = searchParams.get('paymentKey');
         const orderId = searchParams.get('orderId');
         const amount = searchParams.get('amount');
+        const lottoPublishId = localStorage.getItem('lottoPublishId');
 
-        // localStorage에서 로또 번호 가져오기
-        const savedTickets = localStorage.getItem('lottoTickets');
-        if (!paymentKey || !orderId || !amount || !savedTickets) {
-          throw new Error('Missing payment parameters or lotto tickets');
+        if (!paymentKey || !orderId || !amount || !lottoPublishId) {
+          throw new Error('Missing payment parameters');
         }
 
-        const tickets = JSON.parse(savedTickets) as LottoTickets;
-        
-        console.log('Payment Info:', { paymentKey, orderId, amount });
-        console.log('Lotto Tickets:', tickets);
+        await paymentApi.verifyPayment({
+          paymentKey,
+          orderId,
+          amount: Number(amount),
+          lottoPublishId: Number(lottoPublishId)
+        });
 
-        // 결제 검증 요청
-        await apiService.verifyPayment(
-          {
-            paymentKey,
-            orderId,
-            amount: Number(amount),
-          },
-          tickets
-        );
-
-        // 결제 검증 성공
         setPaymentStatus({ status: 'success' });
         
         // 결제 완료 후 로컬 스토리지 정리
+        localStorage.removeItem('lottoPublishId');
         localStorage.removeItem('lottoTickets');
         
-        // 3초 후 홈으로 이동
         setTimeout(() => {
           router.push('/');
         }, 3000);
       } catch (error) {
-        const errorMessage = error instanceof Error ?
-        `결제 검증 실패: ${error.message}. 다시 시도하시거나 고객센터로 문의해주세요.`: '결제 검증에 실패했습니다. 고객센터로 문의해주세요.';
+        console.error('Payment verification failed:', error);
         setPaymentStatus({ 
           status: 'error', 
-          message: errorMessage
+          message: '결제 검증에 실패했습니다. 고객센터로 문의해주세요.' 
         });
       }
     };

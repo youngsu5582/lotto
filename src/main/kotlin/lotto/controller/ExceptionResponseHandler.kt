@@ -5,7 +5,6 @@ import io.github.oshai.kotlinlogging.KotlinLogging
 import org.springframework.web.bind.annotation.ControllerAdvice
 import org.springframework.web.bind.annotation.ExceptionHandler
 import purchase.domain.PurchaseException
-import kotlin.math.log
 
 private val logger = KotlinLogging.logger {}
 
@@ -21,6 +20,12 @@ class ExceptionResponseHandler {
 
     @ExceptionHandler(IllegalArgumentException::class)
     fun handleIllegalException(ex: IllegalArgumentException): ApiResponse<Void> {
+        logger.warn { ex.stackTraceToString() }
+        return ApiResponse.fail(message = ex.message)
+    }
+
+    @ExceptionHandler(NoSuchElementException::class)
+    fun handleNoSuchElementException(ex: NoSuchElementException): ApiResponse<Void> {
         logger.warn { ex.stackTraceToString() }
         return ApiResponse.fail(message = ex.message)
     }

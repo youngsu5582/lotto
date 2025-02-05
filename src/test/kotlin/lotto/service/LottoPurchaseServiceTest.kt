@@ -5,7 +5,6 @@ import config.ImplementationTest
 import lotto.domain.entity.*
 import lotto.domain.repository.LottoBillRepository
 import lotto.domain.repository.LottoPublishRepository
-import lotto.domain.repository.LottoRepository
 import lotto.domain.repository.LottoRoundInfoRepository
 import lotto.domain.vo.Currency
 import lotto.domain.vo.LottoPurchaseRequest
@@ -17,7 +16,7 @@ import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertDoesNotThrow
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.context.annotation.Import
-import purchase.domain.entity.Order
+import order.domain.entity.Order
 import purchase.domain.entity.Purchase
 import purchase.domain.entity.PurchaseInfo
 import purchase.domain.repository.PurchaseRepository

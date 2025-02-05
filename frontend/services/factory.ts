@@ -12,9 +12,9 @@ interface Services {
     payment: PaymentApiService | PaymentMockService;
 }
 
-const isMockAuth = process.env.NEXT_PUBLIC_MOCK_AUTH === 'true';
-const isMockPayment = process.env.NEXT_PUBLIC_MOCK_PAYMENT === 'true';
-const isMockTicket = process.env.NEXT_PUBLIC_MOCK_TICKET === 'true';
+const isMockAuth = process.env.NEXT_PUBLIC_MOCK_AUTH === 'true' || false;
+const isMockPayment = process.env.NEXT_PUBLIC_MOCK_PAYMENT === 'true' || false;
+const isMockTicket = process.env.NEXT_PUBLIC_MOCK_TICKET === 'true' || false;
 
 export function createServices() : Services {
   return {

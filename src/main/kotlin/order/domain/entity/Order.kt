@@ -1,4 +1,4 @@
-package purchase.domain.entity
+package order.domain.entity
 
 import jakarta.persistence.Column
 import jakarta.persistence.Entity

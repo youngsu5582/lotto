@@ -4,7 +4,7 @@ import common.business.Implementation
 import common.business.Transaction
 import common.business.Write
 import order.domain.vo.OrderRequest
-import purchase.domain.entity.Order
+import order.domain.entity.Order
 import order.domain.repository.OrderRepository
 
 @Implementation

@@ -1,7 +1,6 @@
 package purchase.domain.implementation
 
 import config.ImplementationTest
-import io.kotest.assertions.throwables.shouldNotThrow
 import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.core.spec.style.FunSpec
 import io.kotest.extensions.spring.SpringExtension
@@ -10,15 +9,9 @@ import purchase.domain.PurchaseException
 import purchase.domain.PurchaseExceptionCode
 import purchase.domain.entity.Purchase
 import purchase.domain.entity.PurchaseInfo
-import purchase.domain.entity.Order
-import order.domain.repository.OrderRepository
 import purchase.domain.vo.PaymentMethod
 import purchase.domain.vo.PurchaseProvider
 import java.math.BigDecimal
-
-fun createPurchaseTemporary(orderId: String, amount: BigDecimal): Order {
-    return Order(orderId = orderId, amount = amount.setScale(0))
-}
 
 @ImplementationTest
 class PurchaseValidatorTest(

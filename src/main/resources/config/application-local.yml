@@ -27,3 +27,7 @@ toss:
 
 cors:
   allowed-origins: http://localhost:3000
+
+jwt:
+  access-token-expiry: 16000000
+  secret: justkeyfortestkeyisThisKeyWithOverall256bits
