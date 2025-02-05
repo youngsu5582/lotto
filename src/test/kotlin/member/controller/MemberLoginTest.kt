@@ -43,7 +43,7 @@ class MemberLoginTest {
     @Test
     fun `비밀번호가 틀리면 예외가 발생한다`() {
         val request = createRequest(
-            email = "notExist@gmail.com",
+            email = "joyson5582@gmail.com",
             password = "notEqualPassword"
         )
         sendRequest(

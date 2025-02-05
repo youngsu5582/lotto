@@ -1,10 +1,7 @@
 package member.domain.implementation
 
 import common.business.Implementation
-import io.jsonwebtoken.Claims
-import io.jsonwebtoken.Clock
-import io.jsonwebtoken.Jwts
-import io.jsonwebtoken.SignatureAlgorithm
+import io.jsonwebtoken.*
 import io.jsonwebtoken.security.Keys
 import member.config.TokenProperties
 import java.util.*
@@ -37,8 +34,12 @@ class TokenGenerator(
                 .build()
                 .parseClaimsJws(token)
                 .body
+        } catch (e: ExpiredJwtException) {
+            throw IllegalArgumentException("만료된 토큰입니다")
+        } catch (e: MalformedJwtException) {
+            throw IllegalArgumentException("잘못된 형식의 토큰입니다")
         } catch (e: Exception) {
-            throw IllegalArgumentException("Invalid token: ${e.message}")
+            throw IllegalArgumentException("토큰 처리 중 오류가 발생했습니다: ${e.message}")
         }
     }
 }
