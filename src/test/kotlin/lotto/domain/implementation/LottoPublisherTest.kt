@@ -1,10 +1,9 @@
-package lotto.domain
+package lotto.domain.implementation
 
 import config.ImplementationTest
 import config.MockingClock
 import lotto.Fixture
 import lotto.domain.entity.LottoStatus
-import lotto.domain.implementation.LottoPublisher
 import lotto.domain.repository.LottoRoundInfoRepository
 import lotto.domain.vo.LottoPaper
 import lotto.fixture.IssuedLottoBuilder

@@ -1,8 +1,7 @@
-package lotto
+package lotto.domain.repository
 
 import config.RepositoryTest
 import lotto.domain.entity.LottoRoundInfo
-import lotto.domain.repository.LottoRoundInfoRepository
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.BeforeEach
 import org.springframework.beans.factory.annotation.Autowired

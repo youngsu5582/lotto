@@ -1,7 +1,6 @@
 package purchase.domain.implementation
 
 import common.business.Implementation
-import jakarta.transaction.NotSupportedException
 import purchase.domain.PaymentClient
 import purchase.domain.vo.*
 
@@ -27,6 +26,6 @@ class PaymentProcessor(
 
     private fun getPurchaseClient(purchaseProvider: PurchaseProvider): PaymentClient {
         return paymentClients[purchaseProvider.name]
-            ?: throw NotSupportedException("지원하지 않는 결제 제공자입니다.")
+            ?: throw IllegalArgumentException("지원하지 않는 결제 제공자입니다.")
     }
 }
