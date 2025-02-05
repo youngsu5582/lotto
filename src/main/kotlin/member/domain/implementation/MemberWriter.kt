@@ -10,7 +10,8 @@ import member.domain.vo.MemberIdentifier
 @Implementation
 class MemberWriter(
     private val memberReader: MemberReader,
-    private val memberRepository: MemberRepository
+    private val memberRepository: MemberRepository,
+    private val passwordEncoder: PasswordEncoder
 ) {
     @Transaction
     @Write
@@ -20,7 +21,7 @@ class MemberWriter(
                 memberRepository.save(
                     Member(
                         email = memberIdentifier.email,
-                        password = memberIdentifier.password
+                        password = passwordEncoder.encode(memberIdentifier.password)
                     )
                 )
             }
