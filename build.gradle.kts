@@ -41,7 +41,7 @@ dependencies {
     runtimeOnly("io.jsonwebtoken:jjwt-jackson:0.11.5")
 
     //암호화
-    implementation ("org.mindrot:jbcrypt:0.4")
+    implementation("org.mindrot:jbcrypt:0.4")
 
     // Test 및 REST Docs 의존성
     testImplementation("org.springframework.boot:spring-boot-starter-test") {
@@ -91,8 +91,29 @@ tasks.register<Test>("restDocsTest") {
     systemProperty("org.springframework.restdocs.outputDir", file("build/generated-snippets"))
 }
 
+
+tasks.register("generateSnippetIndexes") {
+    val snippetsDir = file("build/generated-snippets")
+    snippetsDir.listFiles { file -> file.isDirectory }?.forEach { snippetFolder ->
+        val includeFiles = listOf(
+            "http-request.adoc",
+            "http-response.adoc",
+            "request-fields.adoc",
+            "response-fields.adoc"
+        )
+        val includesContent = includeFiles
+            .filter { File(snippetFolder, it).exists() }
+            .joinToString("\n") { "include::${it}[]" }
+        val indexFile = File(snippetFolder, "index.adoc")
+        indexFile.writeText(includesContent)
+        println("Generated index.adoc in ${snippetFolder.name}:")
+        println(includesContent)
+    }
+}
+
+
 tasks.named("asciidoctor", org.asciidoctor.gradle.jvm.AsciidoctorTask::class.java) {
-    dependsOn(tasks.named("restDocsTest"))
+    dependsOn("restDocsTest", "generateSnippetIndexes")
     inputs.dir(file("build/generated-snippets"))
     baseDirFollowsSourceFile()
     attributes(

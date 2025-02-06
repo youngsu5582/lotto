@@ -127,10 +127,27 @@ include::{snippets}/register-success/response-fields.adoc[]
 
 ==== 이미 존재하는 이메일
 
-include::{snippets}/register-fail-exist-email/http-request.adoc[]
-include::{snippets}/register-fail-exist-email/http-response.adoc[]
-include::{snippets}/register-fail-exist-email/request-fields.adoc[]
-include::{snippets}/register-fail-exist-email/response-fields.adoc[]
+include::{snippets}/register-fail-exist-email/index.adoc[]
+
+== 멤버 조회
+
+=== 멤버 조회 성공
+토큰으로 멤버를 조회한다
+
+include::{snippets}/info-success/index.adoc[]
+
+=== 멤버 조회 실패
+
+==== 없는 토큰
+부적절한 토큰을 담아 보내면 실패한다.
+
+include::{snippets}/info-fail-not-valid-token/index.adoc[]
+
+==== 만료된 토큰
+
+기한이 지난 토큰을 담아 보내면 실패한다.
+
+include::{snippets}/info-fail-not-valid-token/index.adoc[]
 
 == DocsAPI 확인 문서
 
