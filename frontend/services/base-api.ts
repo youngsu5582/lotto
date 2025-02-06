@@ -6,18 +6,39 @@ export abstract class BaseApiService {
   }
 
   protected async fetchJson(endpoint: string, options: RequestInit = {}) {
-    const response = await fetch(`${this.baseUrl}${endpoint}`, {
-      ...options,
-      headers: {
-        'Content-Type': 'application/json',
-        ...options.headers,
-      },
-    });
+    try {
+      const response = await fetch(`${this.baseUrl}${endpoint}`, {
+        ...options,
+        headers: {
+          'Content-Type': 'application/json',
+          ...options.headers,
+        },
+      });
 
-    if (!response.ok) {
-      throw new Error(`API call failed: ${response.statusText}`);
+      let data;
+      try {
+        data = await response.json();
+      } catch (e) {
+        console.error('JSON parse error:', e);
+        throw new Error('Invalid JSON response');
+      }
+
+      if (!response.ok) {
+        const errorMessage = data?.message || response.statusText || 'API call failed';
+        console.error('API Error:', {
+          status: response.status,
+          message: errorMessage,
+          data
+        });
+        throw new Error(errorMessage);
+      }
+
+      return data;
+    } catch (error) {
+      if (error instanceof Error) {
+        throw error;
+      }
+      throw new Error('Unknown API error occurred');
     }
-
-    return response.json();
   }
 } 
