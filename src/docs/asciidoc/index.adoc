@@ -147,7 +147,7 @@ include::{snippets}/info-fail-not-valid-token/index.adoc[]
 
 기한이 지난 토큰을 담아 보내면 실패한다.
 
-include::{snippets}/info-fail-not-valid-token/index.adoc[]
+include::{snippets}/info-fail-expired-token/index.adoc[]
 
 == DocsAPI 확인 문서
 
