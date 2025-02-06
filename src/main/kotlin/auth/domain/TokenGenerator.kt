@@ -1,9 +1,9 @@
-package member.domain.implementation
+package auth.domain
 
+import auth.domain.vo.AccessToken
 import common.business.Implementation
 import io.jsonwebtoken.*
 import io.jsonwebtoken.security.Keys
-import member.config.TokenProperties
 import java.util.*
 import javax.crypto.SecretKey
 
@@ -15,25 +15,27 @@ class TokenGenerator(
     private val key: SecretKey = Keys.hmacShaKeyFor(jwtProperties.secret.encodeToByteArray())
     private val accessTokenExpire: Long = jwtProperties.accessTokenExpiry
 
-    fun generateAccessToken(value: String): String {
-        require(value.isNotBlank()){"토큰 생성은 빈 값이 될 수 없습니다"}
+    fun generateAccessToken(value: String): AccessToken {
+        require(value.isNotBlank()) { "토큰 생성은 빈 값이 될 수 없습니다" }
         val now = clock.now()
         val validity = Date(now.time.plus(accessTokenExpire))
 
-        return Jwts.builder()
-            .setSubject(value)
-            .setIssuedAt(now)
-            .setExpiration(validity)
-            .signWith(key, SignatureAlgorithm.HS256)
-            .compact()
+        return AccessToken(
+            Jwts.builder()
+                .setSubject(value)
+                .setIssuedAt(now)
+                .setExpiration(validity)
+                .signWith(key, SignatureAlgorithm.HS256)
+                .compact()
+        )
     }
 
-    fun decodeToken(token: String): Claims {
+    fun decodeToken(token: AccessToken): Claims {
         return try {
             Jwts.parserBuilder()
                 .setSigningKey(key)
                 .build()
-                .parseClaimsJws(token)
+                .parseClaimsJws(token.value())
                 .body
         } catch (e: ExpiredJwtException) {
             throw IllegalArgumentException("만료된 토큰입니다")

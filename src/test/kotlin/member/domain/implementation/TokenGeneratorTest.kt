@@ -1,11 +1,12 @@
 package member.domain.implementation
 
+import auth.domain.TokenGenerator
 import io.jsonwebtoken.Clock
 import io.jsonwebtoken.impl.FixedClock
-import io.kotest.assertions.print.print
 import io.kotest.core.spec.style.FunSpec
 import io.kotest.matchers.shouldBe
-import member.config.TokenProperties
+import auth.domain.TokenProperties
+import auth.domain.vo.AccessToken
 import org.junit.jupiter.api.assertThrows
 import java.time.Instant
 import java.util.*
@@ -17,6 +18,7 @@ class TokenGeneratorTest : FunSpec({
 
         val value = "sample"
         val token = tokenGenerator.generateAccessToken(value)
+
         tokenGenerator.decodeToken(token).subject shouldBe value
     }
     // Jwts 자체 Clock 은 건들수가 없다.
@@ -35,10 +37,10 @@ class TokenGeneratorTest : FunSpec({
     }
 })
 
-private fun createTokenGenerator(expire: Long = 160000, clock: Clock = FixedClock()) =
+private fun createTokenGenerator(expire: Long = 16000000000000000, clock: Clock = FixedClock()) =
     TokenGenerator(
         TokenProperties(
-            secret = "secretKeyNeedMustOver256bitsAndThisKeyBitsOver256bits",
+            secret = "justkeyfortestkeyisThisKeyWithOverall256bits",
             accessTokenExpiry = expire,
         ),
         clock = clock

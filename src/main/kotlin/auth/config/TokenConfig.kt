@@ -1,4 +1,4 @@
-package member.config
+package auth.config
 
 import io.jsonwebtoken.Clock
 import io.jsonwebtoken.impl.DefaultClock

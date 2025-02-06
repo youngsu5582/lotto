@@ -1,8 +1,9 @@
-package member.service
+package auth.service
 
+import auth.domain.TokenGenerator
+import auth.domain.vo.AccessToken
+import auth.domain.vo.Token
 import common.business.BusinessService
-import member.domain.implementation.TokenGenerator
-import member.domain.vo.Token
 import java.util.*
 
 @BusinessService
@@ -11,5 +12,10 @@ class TokenService(
 ) {
     fun createToken(id: UUID): Token {
         return Token(tokenGenerator.generateAccessToken(id.toString()))
+    }
+
+    fun decodeToken(token: AccessToken): String {
+        val claims = tokenGenerator.decodeToken(token)
+        return claims.subject
     }
 }
