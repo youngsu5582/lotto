@@ -131,3 +131,15 @@ include::{snippets}/register-fail-exist-email/http-request.adoc[]
 include::{snippets}/register-fail-exist-email/http-response.adoc[]
 include::{snippets}/register-fail-exist-email/request-fields.adoc[]
 include::{snippets}/register-fail-exist-email/response-fields.adoc[]
+
+== DocsAPI 확인 문서
+
+`DocsApiBuilder` 를 사용해 요청과 응답 매우 직관적이면 간편하게 생성 가능하다.
+
+include::{snippets}/docs-test/curl-request.adoc[]
+include::{snippets}/docs-test/http-request.adoc[]
+include::{snippets}/docs-test/http-response.adoc[]
+include::{snippets}/docs-test/request-fields.adoc[]
+include::{snippets}/docs-test/request-headers.adoc[]
+include::{snippets}/docs-test/response-fields.adoc[]
+include::{snippets}/docs-test/response-headers.adoc[]
