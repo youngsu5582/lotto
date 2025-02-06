@@ -1,10 +1,10 @@
 package member.controller
 
 import config.AcceptanceTest
-import docs.*
+import docs.DocsApiBuilder
+import docs.HttpMethod
 import docs.field.DocsFieldType
 import docs.field.means
-import docs.field.type
 import docs.field.value
 import docs.request.DslContainer
 import docs.request.body
@@ -23,7 +23,7 @@ class MemberLoginTest {
             }
             .setResponse {
                 body {
-                    field { "accessToken" type DocsFieldType.STRING means "생성된 액세스 토큰" }
+                    "accessToken" type DocsFieldType.STRING means "생성된 액세스 토큰"
                 }
             }
             .execute()
@@ -62,8 +62,8 @@ class MemberLoginTest {
     ): DslContainer {
         return DslContainer().apply {
             body {
-                field { "email" type DocsFieldType.STRING means "로그인 할 이메일" value email }
-                field { "password" type DocsFieldType.STRING means "로그인 할 비밀번호" value password }
+                "email" type DocsFieldType.STRING means "로그인 할 이메일" value email
+                "password" type DocsFieldType.STRING means "로그인 할 비밀번호" value password
             }
         }
     }

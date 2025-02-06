@@ -10,27 +10,37 @@ import org.springframework.restdocs.snippet.Attributes
 data class ApiField(
     val name: String,
     val docsFieldType: DocsFieldType,
-    val value: Any,
-    val description: String,
-    val optional: Boolean,
-    val children: List<ApiField> = emptyList()
+    var value: Any,
+    var description: String,
+    var optional: Boolean,
+    var children: List<ApiField> = emptyList()
 )
 
 infix fun String.type(docsFieldType: DocsFieldType): ApiField =
     ApiField(name = this, docsFieldType = docsFieldType, value = "", description = "", optional = false)
 
-infix fun ApiField.means(desc: String): ApiField =
-    this.copy(description = desc)
+infix fun ApiField.means(description: String): ApiField {
+    this.description = description
+    return this
+}
 
-infix fun ApiField.value(value: Any): ApiField =
-    this.copy(value = value)
+infix fun ApiField.value(value: Any): ApiField {
+    this.value = value
+    return this
+}
 
-infix fun ApiField.optional(flag: Boolean): ApiField =
-    this.copy(optional = flag)
+infix fun ApiField.optional(flag: Boolean): ApiField {
+    this.optional = flag
+    return this
+}
 
 // 하위 필드를 추가할 때, 여러 ApiField를 반환하도록 하기 위해 블록은 List<ApiField>를 반환합니다.
-infix fun ApiField.withChildren(block: DslBuilder.() -> Unit): ApiField =
-    this.copy(children = DslBuilder().apply(block).fields)
+infix fun ApiField.withChildren(block: DslBuilder.() -> Unit): ApiField {
+    val childBuilder = DslBuilder()
+    childBuilder.block()
+    this.children = childBuilder.fields
+    return this
+}
 
 fun List<ApiField>.toFieldDescriptors(): List<FieldDescriptor> {
     val descriptors = mutableListOf<FieldDescriptor>()
@@ -52,7 +62,7 @@ fun List<ApiField>.toFieldDescriptors(): List<FieldDescriptor> {
             .description(
                 field.description + if (field.docsFieldType is DocsFieldType.ARRAY) {
                     " (요소 타입: ${getArrayTypeString(field.docsFieldType.elementType)})"
-                } else "" +  (field.docsFieldType.format?.let { " (형식: $it)" } ?: "")
+                } else "" + (field.docsFieldType.format?.let { " (형식: $it)" } ?: "")
             )
             .attributes(
                 Attributes.Attribute("optional", field.optional.toString().uppercase())

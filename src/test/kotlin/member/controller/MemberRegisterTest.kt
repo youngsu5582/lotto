@@ -1,10 +1,10 @@
 package member.controller
 
 import config.AcceptanceTest
-import docs.*
+import docs.DocsApiBuilder
+import docs.HttpMethod
 import docs.field.DocsFieldType
 import docs.field.means
-import docs.field.type
 import docs.field.value
 import docs.request.DslContainer
 import docs.request.body
@@ -23,7 +23,7 @@ class MemberRegisterTest {
             }
             .setResponse {
                 body {
-                    field { "id" type DocsFieldType.STRING means "생성된 멤버 아이디" }
+                    "id" type DocsFieldType.STRING means "생성된 멤버 아이디"
                 }
             }
             .execute()
@@ -49,8 +49,8 @@ class MemberRegisterTest {
     ): DslContainer {
         return DslContainer().apply {
             body {
-                field { "email" type DocsFieldType.STRING means "회원 가입할 이메일" value email }
-                field { "password" type DocsFieldType.STRING means "회원 가입할 비밀번호" value password }
+                "email" type DocsFieldType.STRING means "회원 가입할 이메일" value email
+                "password" type DocsFieldType.STRING means "회원 가입할 비밀번호" value password
             }
         }
     }

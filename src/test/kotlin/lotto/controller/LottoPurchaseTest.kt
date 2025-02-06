@@ -1,7 +1,8 @@
 package lotto.controller
 
 import config.AcceptanceTest
-import docs.*
+import docs.DocsApiBuilder
+import docs.HttpMethod
 import docs.field.*
 import docs.request.DslContainer
 import docs.request.body
@@ -24,11 +25,9 @@ class LottoPurchaseTest {
                 )
             }.setResponse {
                 body {
-                    field {
-                        "purchaseResponse" type DocsFieldType.OBJECT means "응답 데이터" withChildren {
-                            field { "id" type DocsFieldType.STRING means "취소된 결제의 고유 식별자" }
-                            field { "amount" type DocsFieldType.NUMBER means "취소된 결제 금액" }
-                        }
+                    "purchaseResponse" type DocsFieldType.OBJECT means "응답 데이터" withChildren {
+                        "id" type DocsFieldType.STRING means "취소된 결제의 고유 식별자"
+                        "amount" type DocsFieldType.NUMBER means "취소된 결제 금액"
                     }
                 }
             }.execute()
@@ -130,19 +129,19 @@ class LottoPurchaseTest {
     ): DslContainer {
         return DslContainer().apply {
             body {
-                field { "lottoPublishId" type DocsFieldType.NUMBER means "주문한 영수증 ID" value lottoPublishId }
-                field {
-                    "purchaseHttpRequest" type DocsFieldType.OBJECT means "결제 승인 HTTP 객체" withChildren {
-                        field { "purchaseType" type DocsFieldType.ENUM.of<PurchaseType>() means "구매 유형" value purchaseType }
-                        field { "currency" type DocsFieldType.ENUM.of<Currency>() means "결제할 통화 유형" value currency }
-                        field { "amount" type DocsFieldType.NUMBER means "취소할 결제 금액" value amount }
-                        field { "orderId" type DocsFieldType.STRING means "취소할 주문 번호" value orderId }
-                        field { "paymentKey" type DocsFieldType.STRING means "취소할 결제 식별자 - 결제 시스템 제공" value paymentKey }
-                    }
+                "lottoPublishId" type DocsFieldType.NUMBER means "주문한 영수증 ID" value lottoPublishId
+
+                "purchaseHttpRequest" type DocsFieldType.OBJECT means "결제 승인 HTTP 객체" withChildren {
+                    "purchaseType" type DocsFieldType.ENUM.of<PurchaseType>() means "구매 유형" value purchaseType
+                    "currency" type DocsFieldType.ENUM.of<Currency>() means "결제할 통화 유형" value currency
+                    "amount" type DocsFieldType.NUMBER means "취소할 결제 금액" value amount
+                    "orderId" type DocsFieldType.STRING means "취소할 주문 번호" value orderId
+                    "paymentKey" type DocsFieldType.STRING means "취소할 결제 식별자 - 결제 시스템 제공" value paymentKey
+
                 }
             }
             headers {
-                if (paymentErrorCode.isNotBlank()) field { "Payment-Error-Header" type DocsFieldType.STRING means "토스 임의 에러 코드" value paymentErrorCode optional true }
+                if (paymentErrorCode.isNotBlank()) "Payment-Error-Header" type DocsFieldType.STRING means "토스 임의 에러 코드" value paymentErrorCode optional true
             }
         }
     }
