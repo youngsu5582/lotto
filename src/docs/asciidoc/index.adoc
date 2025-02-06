@@ -76,6 +76,17 @@ include::{snippets}/cancel-failure/http-request.adoc[]
 include::{snippets}/cancel-failure/http-response.adoc[]
 include::{snippets}/cancel-failure/response-fields.adoc[]
 
+== 로또 주문
+
+사용자가 결제하기 전 미리 로또를 생성 및 주문을 생성한다.
+
+=== 로또 주문 성공
+
+include::{snippets}/order-success/http-request.adoc[]
+include::{snippets}/order-success/http-response.adoc[]
+include::{snippets}/order-success/request-fields.adoc[]
+include::{snippets}/order-success/response-fields.adoc[]
+
 == 멤버 로그인
 === 멤버 로그인 성공
 이메일과 비밀번호가 일치하면 로그인에 성공해 토큰을 반환한다.
