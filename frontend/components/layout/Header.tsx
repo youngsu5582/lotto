@@ -3,32 +3,48 @@
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { authApi } from '../../services';
-import LoginModal from '../auth/LoginModal';
+import AuthModal from '../auth/AuthModal';
 import { User } from '../../types/auth';
 
-export default function Header() {
+interface HeaderProps {
+  onAuthStateChange?: (isLoggedIn: boolean) => void;
+}
+
+export default function Header({ onAuthStateChange }: HeaderProps) {
   const router = useRouter();
-  const [showLoginModal, setShowLoginModal] = useState(false);
+  const [showAuthModal, setShowAuthModal] = useState(false);
   const [user, setUser] = useState<User | null>(null);
 
   useEffect(() => {
     const checkAuth = async () => {
+      const token = localStorage.getItem('accessToken');
+      if (!token) {
+        setUser(null);
+        onAuthStateChange?.(false);
+        return;
+      }
+
       try {
         const userData = await authApi.getMe();
-        setUser(userData);
+        setUser(userData.data);
+        onAuthStateChange?.(true);
       } catch (error) {
+        console.error('Auth check failed:', error);
+        localStorage.removeItem('accessToken'); // 토큰이 유효하지 않으면 제거
         setUser(null);
+        onAuthStateChange?.(false);
       }
     };
 
     checkAuth();
-  }, []);
+  }, []); // onAuthStateChange 제거
 
   const handleLogout = async () => {
     try {
       await authApi.logout();
       localStorage.removeItem('accessToken');
       setUser(null);
+      onAuthStateChange?.(false);
     } catch (error) {
       console.error('Logout failed:', error);
     }
@@ -37,7 +53,7 @@ export default function Header() {
   return (
     <header className="bg-neutral-800 py-4">
       <div className="max-w-7xl mx-auto px-4 flex justify-between items-center">
-        <h1 className="text-white text-xl font-bold">로또</h1>
+        <h1 className="text-white text-xl font-bold cursor-pointer" onClick={() => router.push('/')}>로또</h1>
         <div className="flex items-center gap-4">
           {user ? (
             <>
@@ -47,19 +63,16 @@ export default function Header() {
               >
                 구매 내역
               </button>
-              <div className="flex items-center gap-4">
-                <span className="text-white">{user.name}님</span>
-                <button
-                  onClick={handleLogout}
-                  className="px-4 py-2 bg-neutral-700 text-white rounded hover:bg-neutral-600"
-                >
-                  로그아웃
-                </button>
-              </div>
+              <button
+                onClick={handleLogout}
+                className="px-4 py-2 bg-neutral-700 text-white rounded hover:bg-neutral-600"
+              >
+                로그아웃
+              </button>
             </>
           ) : (
             <button
-              onClick={() => setShowLoginModal(true)}
+              onClick={() => setShowAuthModal(true)}
               className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700"
             >
               로그인
@@ -68,11 +81,11 @@ export default function Header() {
         </div>
       </div>
 
-      {showLoginModal && (
-        <LoginModal
-          onClose={() => setShowLoginModal(false)}
+      {showAuthModal && (
+        <AuthModal
+          onClose={() => setShowAuthModal(false)}
           onSuccess={() => {
-            setShowLoginModal(false);
+            setShowAuthModal(false);
             window.location.reload();
           }}
         />

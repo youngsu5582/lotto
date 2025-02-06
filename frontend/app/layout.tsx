@@ -1,21 +1,12 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
+import { Inter } from "next/font/google";
 import "./globals.css";
-import Header from '../components/layout/Header';
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
-  subsets: ["latin"],
-});
-
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
-  subsets: ["latin"],
-});
+const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "로또 구매 서비스",
-  description: "온라인으로 편리하게 로또를 구매하세요",
+  title: "로또",
+  description: "로또 번호 선택 및 구매",
 };
 
 export default function RootLayout({
@@ -25,10 +16,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="ko">
-      <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
-      >
-        <Header />
+      <body className={inter.className}>
         {children}
       </body>
     </html>

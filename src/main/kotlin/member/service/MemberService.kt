@@ -20,4 +20,7 @@ class MemberService(
 
     fun readMember(memberIdentifier: MemberIdentifier): MemberData =
         MemberData.from(memberReader.findMember(memberIdentifier))
+
+    fun readMember(id: String): MemberData =
+        MemberData.from(memberReader.findMember(id))
 }
