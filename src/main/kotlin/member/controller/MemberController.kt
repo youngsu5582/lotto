@@ -3,10 +3,12 @@ package member.controller
 import common.dto.ApiResponse
 import common.dto.apiResponse
 import common.web.Body
+import common.web.Get
 import common.web.HttpController
 import common.web.Post
+import auth.domain.vo.AccessToken
 import member.service.MemberService
-import member.service.TokenService
+import auth.service.TokenService
 
 @HttpController
 class MemberController(
@@ -18,7 +20,7 @@ class MemberController(
         val memberData = memberService.readMember(localLoginHttpRequest.toIdentifier())
         val token = tokenService.createToken(memberData.id)
         return apiResponse {
-            data = LocalLoginHttpResponse(accessToken = token.accessToken)
+            data = LocalLoginHttpResponse(accessToken = token.accessToken.value)
         }
     }
 
@@ -29,6 +31,18 @@ class MemberController(
             data = LocalRegisterHttpResponse(id = memberData.id)
             message = "회원가입이 완료되었습니다"
             status = 201
+        }
+    }
+
+    @Get("/api/auth")
+    fun info(accessToken: AccessToken): ApiResponse<InfoHttpResponse> {
+        val memberId = tokenService.decodeToken(accessToken)
+        val memberData = memberService.readMember(memberId)
+        return apiResponse {
+            data = InfoHttpResponse(
+                id = memberData.id,
+                email = memberData.email
+            )
         }
     }
 }
