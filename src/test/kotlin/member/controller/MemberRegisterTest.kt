@@ -1,70 +1,57 @@
 package member.controller
 
 import config.AcceptanceTest
+import docs.*
+import docs.field.DocsFieldType
+import docs.field.means
+import docs.field.type
+import docs.field.value
+import docs.request.DslContainer
+import docs.request.body
 import org.junit.jupiter.api.Test
-import org.springframework.restdocs.payload.JsonFieldType
-import org.springframework.restdocs.payload.PayloadDocumentation.*
-import sendRequest
 
 @AcceptanceTest(["/acceptance/member.json"])
 class MemberRegisterTest {
     @Test
     fun `새로운 멤버가 회원가입을 한다`() {
-        val request = createRequest(
-            email = "newMember@gmail.com",
-            password = "password1234"
-        )
-        sendRequest(
-            request,
-            "register-success",
-            commonRequestFields(),
-            successResponseFields(),
-            201,
-            "/api/auth/register"
-        )
+        DocsApiBuilder("register-success")
+            .setRequestContainer("/api/auth/register", HttpMethod.POST) {
+                createRequest(
+                    email = "newMember@gmail.com",
+                    password = "password1234"
+                )
+            }
+            .setResponse {
+                body {
+                    field { "id" type DocsFieldType.STRING means "생성된 멤버 아이디" }
+                }
+            }
+            .execute()
+            .statusCode(201)
     }
 
     @Test
     fun `기존에 있는 이메일로 회원가입시 실패한다`() {
-        val request = createRequest(
-            email = "joyson5582@gmail.com",
-            password = "password1234"
-        )
-        sendRequest(
-            request,
-            "register-fail-exist-email",
-            commonRequestFields(),
-            errorResponseFields(),
-            400,
-            "/api/auth/register"
-        )
+        DocsApiBuilder("register-fail-exist-email")
+            .setRequestContainer("/api/auth/register", HttpMethod.POST) {
+                createRequest(
+                    email = "joyson5582@gmail.com",
+                    password = "password1234"
+                )
+            }
+            .execute()
+            .statusCode(400)
     }
 
     private fun createRequest(
         email: String,
         password: String
-    ): Map<String, Any> {
-        return mapOf(
-            "email" to email,
-            "password" to password
-        )
+    ): DslContainer {
+        return DslContainer().apply {
+            body {
+                field { "email" type DocsFieldType.STRING means "회원 가입할 이메일" value email }
+                field { "password" type DocsFieldType.STRING means "회원 가입할 비밀번호" value password }
+            }
+        }
     }
-
-    private fun commonRequestFields() = requestFields(
-        fieldWithPath("email").type(JsonFieldType.STRING).description("이메일"),
-        fieldWithPath("password").type(JsonFieldType.STRING).description("비밀번호"),
-    )
-
-    private fun successResponseFields() = responseFields(
-        fieldWithPath("success").type(JsonFieldType.BOOLEAN).description("성공 여부"),
-        fieldWithPath("status").type(JsonFieldType.NUMBER).description("응답 상태"),
-        fieldWithPath("message").type(JsonFieldType.STRING).description("응답 메시지"),
-        fieldWithPath("data.id").type(JsonFieldType.STRING).description("생성된 멤버 ID"),
-    )
-
-    private fun errorResponseFields() = responseFields(
-        fieldWithPath("success").type(JsonFieldType.BOOLEAN).description("성공 여부"),
-        fieldWithPath("status").type(JsonFieldType.NUMBER).description("응답 상태"),
-        fieldWithPath("message").type(JsonFieldType.STRING).description("에러 메시지")
-    )
 }

@@ -1,92 +1,50 @@
 package lotto.controller
 
 import config.AcceptanceTest
-import io.restassured.RestAssured
-import io.restassured.http.ContentType
+import docs.*
+import docs.field.*
+import docs.request.body
 import org.junit.jupiter.api.Test
-import org.springframework.restdocs.payload.JsonFieldType
-import org.springframework.restdocs.payload.PayloadDocumentation.*
-import org.springframework.restdocs.payload.RequestFieldsSnippet
-import org.springframework.restdocs.payload.ResponseFieldsSnippet
-import org.springframework.restdocs.restassured.RestAssuredRestDocumentation
 
 @AcceptanceTest(["/acceptance/lottoCancel.json"])
 class LottoPurchaseCancelTest {
     @Test
     fun `결제취소를 한다`() {
-        val request = createRequest(
-            billId = 1
-        )
-
-        sendRequest(
-            request,
-            "cancel-success",
-            commonRequestFields(),
-            successResponseFields(),
-            200
-        )
+        DocsApiBuilder("cancel-success")
+            .setRequest("/api/cancel", HttpMethod.POST) {
+                body {
+                    field { "billId" type DocsFieldType.NUMBER means "구매했던 영수증 ID" value 1 }
+                    field {
+                        "sample" type DocsFieldType.OBJECT means "샘플 객체" withChildren {
+                            field { "id" type DocsFieldType.STRING means "취소된 결제의 고유 식별자" value "ID" optional true }
+                            field { "amount" type DocsFieldType.NUMBER means "취소된 결제 금액" value 1 }
+                        }
+                    }
+                }
+            }
+            .setResponse {
+                body {
+                    field {
+                        "purchaseResponse" type DocsFieldType.OBJECT means "응답 데이터" withChildren {
+                            field { "id" type DocsFieldType.STRING means "취소된 결제의 고유 식별자" }
+                            field { "amount" type DocsFieldType.NUMBER means "취소된 결제 금액" }
+                        }
+                    }
+                }
+            }
+            .execute()
+            .statusCode(200)
     }
 
     @Test
     fun `결제취소 실패를 한다`() {
-        val request = createRequest(
-            billId = 2
-        )
-
-        sendRequest(
-            request,
-            "cancel-failure",
-            commonRequestFields(),
-            errorResponseFields(),
-            400
-        )
+        DocsApiBuilder("cancel-failure")
+            .setRequest("/api/cancel", HttpMethod.POST) {
+                body {
+                    field { "billId" type DocsFieldType.NUMBER means "구매했던 영수증 ID" value 2 }
+                }
+            }
+            .execute()
+            .statusCode(400)
     }
-
-    private fun createRequest(
-        billId: Long
-    ): Map<String, Any> {
-        return mapOf(
-            "billId" to billId
-        )
-    }
-
-    private fun sendRequest(
-        request: Map<String, Any>,
-        documentName: String,
-        requestFields: RequestFieldsSnippet,
-        responseFields: ResponseFieldsSnippet,
-        expectedStatus: Int
-    ) {
-        RestAssured.given().log().all()
-            .contentType(ContentType.JSON)
-            .body(request)
-            .filter(
-                RestAssuredRestDocumentation.document(
-                    documentName,
-                    requestFields,
-                    responseFields
-                )
-            )
-            .post("/api/cancel").then().log().all().statusCode(expectedStatus).extract()
-    }
-
-    private fun commonRequestFields() = requestFields(
-        fieldWithPath("billId").type(JsonFieldType.NUMBER)
-            .description("구매했던 영수증 ID"),
-    )
-
-    private fun successResponseFields() = responseFields(
-        fieldWithPath("success").type(JsonFieldType.BOOLEAN).description("성공 여부"),
-        fieldWithPath("status").type(JsonFieldType.NUMBER).description("응답 상태"),
-        fieldWithPath("message").type(JsonFieldType.STRING).description("응답 메시지"),
-        fieldWithPath("data.purchaseResponse").type(JsonFieldType.OBJECT).description("응답 데이터"),
-        fieldWithPath("data.purchaseResponse.id").type(JsonFieldType.STRING).description("취소된 결제의 고유 식별자"),
-        fieldWithPath("data.purchaseResponse.amount").type(JsonFieldType.NUMBER).description("취소된 결제 금액")
-    )
-
-    private fun errorResponseFields() = responseFields(
-        fieldWithPath("success").type(JsonFieldType.BOOLEAN).description("성공 여부"),
-        fieldWithPath("status").type(JsonFieldType.NUMBER).description("응답 상태"),
-        fieldWithPath("message").type(JsonFieldType.STRING).description("에러 메시지")
-    )
 }
