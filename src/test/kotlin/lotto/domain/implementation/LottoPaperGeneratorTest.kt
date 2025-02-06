@@ -1,4 +1,4 @@
-package lotto.domain
+package lotto.domain.implementation
 
 import config.FixtureLottoNumberGenerator
 import config.ImplementationTest
@@ -6,8 +6,6 @@ import config.LottoRepositoryImpl
 import lotto.domain.entity.IssueStatus
 import lotto.domain.entity.IssuedLotto
 import lotto.domain.entity.Lotto
-import lotto.domain.implementation.LottoNumberGenerator
-import lotto.domain.implementation.LottoPaperGenerator
 import lotto.domain.vo.LottoNumbers
 import org.assertj.core.api.Assertions.assertThat
 import org.springframework.beans.factory.annotation.Autowired

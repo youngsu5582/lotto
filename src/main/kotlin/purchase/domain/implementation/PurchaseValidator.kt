@@ -4,7 +4,6 @@ import common.business.Implementation
 import purchase.domain.PurchaseException
 import purchase.domain.PurchaseExceptionCode
 import purchase.domain.entity.Purchase
-import java.math.BigDecimal
 
 @Implementation
 class PurchaseValidator {
