@@ -57,26 +57,30 @@ class DocsApiBuilder(private val documentName: String) {
         if (log) {
             printLog()
         }
-        var requestSpec: RequestSpecification = RestAssured.given().log().all()
-            .contentType(ContentType.JSON)
-            .headers(requestContainer.convertHeaders())
-            .queryParams(requestContainer.convertQueryParams())
-            .body(requestContainer.convertBody())
-        val response = requestSpec
-            .filter(
-                RestAssuredRestDocumentation.document(
-                    documentName,
-                    HeaderDocumentation.requestHeaders(requestContainer.convertHeadersDescriptors()),
-                    HeaderDocumentation.responseHeaders(responseContainer.convertHeadersDescriptors()),
-                    PayloadDocumentation.requestFields(requestContainer.convertBodyDescriptors()),
-                    SUCCESS_SNIPPET.andWithPrefix("data.", responseContainer.convertBodyDescriptors())
+        try {
+            var requestSpec: RequestSpecification = RestAssured.given().log().all()
+                .contentType(ContentType.JSON)
+                .headers(requestContainer.convertHeaders())
+                .queryParams(requestContainer.convertQueryParams())
+                .body(requestContainer.convertBody())
+            val response = requestSpec
+                .filter(
+                    RestAssuredRestDocumentation.document(
+                        documentName,
+                        HeaderDocumentation.requestHeaders(requestContainer.convertHeadersDescriptors()),
+                        HeaderDocumentation.responseHeaders(responseContainer.convertHeadersDescriptors()),
+                        PayloadDocumentation.requestFields(requestContainer.convertBodyDescriptors()),
+                        SUCCESS_SNIPPET.andWithPrefix("data.", responseContainer.convertBodyDescriptors())
+                    )
                 )
-            )
-            .request(method.toMethod(), endpoint)
-            .then().log().all()
-            .extract()
+                .request(method.toMethod(), endpoint)
+                .then().log().all()
+                .extract()
+            return DocsApiValidator(response)
+        } catch (e: Exception) {
+            throw IllegalStateException("API 문서화 중 오류가 발생했습니다: ${e.message}", e)
+        }
 
-        return DocsApiValidator(response)
     }
 
     private fun printLog() {

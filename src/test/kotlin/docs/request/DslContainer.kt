@@ -46,7 +46,7 @@ class DslContainer {
 }
 
 // 컨테이너 확장 함수
-fun DslContainer.header(block: DslBuilder.() -> Unit) {
+fun DslContainer.headers(block: DslBuilder.() -> Unit) {
     headers.apply(block)
 }
 
@@ -54,6 +54,6 @@ fun DslContainer.body(block: DslBuilder.() -> Unit) {
     body.apply(block)
 }
 
-fun DslContainer.queryParam(block: DslBuilder.() -> Unit) {
+fun DslContainer.params(block: DslBuilder.() -> Unit) {
     queryParams.apply(block)
 }

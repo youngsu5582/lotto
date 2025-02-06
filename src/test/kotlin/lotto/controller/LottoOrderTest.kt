@@ -24,8 +24,8 @@ class LottoOrderTest {
             }
             .setResponse {
                 body {
-                    field { "lottoPublishId" type DocsFieldType.NUMBER means "취소된 결제의 고유 식별자" }
-                    field { "orderId" type DocsFieldType.STRING means "취소된 결제 금액" }
+                    field { "lottoPublishId" type DocsFieldType.NUMBER means "승인할 로또 발행의 고유 식별자" }
+                    field { "orderId" type DocsFieldType.STRING means "승인할 주문 번호" }
                 }
             }
             .execute()

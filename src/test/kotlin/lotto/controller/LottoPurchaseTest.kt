@@ -5,7 +5,7 @@ import docs.*
 import docs.field.*
 import docs.request.DslContainer
 import docs.request.body
-import docs.request.header
+import docs.request.headers
 import lotto.domain.vo.Currency
 import lotto.domain.vo.PurchaseType
 import org.junit.jupiter.api.Test
@@ -141,7 +141,7 @@ class LottoPurchaseTest {
                     }
                 }
             }
-            header {
+            headers {
                 if (paymentErrorCode.isNotBlank()) field { "Payment-Error-Header" type DocsFieldType.STRING means "토스 임의 에러 코드" value paymentErrorCode optional true }
             }
         }
