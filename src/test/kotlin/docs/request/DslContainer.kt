@@ -1,17 +1,18 @@
 package docs.request
 
 import docs.field.ApiField
+import docs.field.toConvertValue
 import docs.field.toFieldDescriptors
 import docs.field.toHeadDescriptors
 import org.springframework.restdocs.headers.HeaderDescriptor
 import org.springframework.restdocs.payload.FieldDescriptor
 
 class DslContainer {
-    val headers = DslBuilder()
-    val body = DslBuilder()
-    val queryParams = DslBuilder()
+    private val headers = DslBuilder()
+    private val body = DslBuilder()
+    private val queryParams = DslBuilder()
 
-    fun convertBody(): Map<String, Any> = convertFields(body.fields)
+    fun convertBody(): Map<String, Any> = body.fields.toConvertValue()
     fun convertHeaders(): Map<String, Any> = convertFields(headers.fields)
     fun convertQueryParams(): Map<String, Any> = convertFields(queryParams.fields)
 
@@ -40,20 +41,25 @@ class DslContainer {
     }
 
     private fun printApiField(field: ApiField, indent: String) {
-        println("$indent- ${field.name} (${field.docsFieldType::class.simpleName}): ${field.description} ${field.value}")
+        val output = buildString {
+            append("$indent- 경로(${field.name}) 타입(${field.docsFieldType::class.simpleName}): 설명(${field.description})")
+            field.value.takeIf { it.toString().isNotBlank() }?.let { append(" 값($it)") }
+        }
+        println(output)
+
+
         field.children.forEach { printApiField(it, "$indent  ") }
     }
-}
 
-// 컨테이너 확장 함수
-fun DslContainer.headers(block: DslBuilder.() -> Unit) {
-    headers.apply(block)
-}
+    fun DslContainer.headers(block: DslBuilder.() -> Unit) {
+        headers.apply(block)
+    }
 
-fun DslContainer.body(block: DslBuilder.() -> Unit) {
-    body.apply(block)
-}
+    fun DslContainer.body(block: DslBuilder.() -> Unit) {
+        body.apply(block)
+    }
 
-fun DslContainer.params(block: DslBuilder.() -> Unit) {
-    queryParams.apply(block)
+    fun DslContainer.params(block: DslBuilder.() -> Unit) {
+        queryParams.apply(block)
+    }
 }

@@ -4,14 +4,12 @@ import config.AcceptanceTest
 import docs.DocsApiBuilder
 import docs.HttpMethod
 import docs.field.DocsFieldType
-import docs.field.means
-import docs.field.value
 import docs.request.DslContainer
-import docs.request.body
 import kotlin.test.Test
 
 @AcceptanceTest(["/acceptance/member.json"])
 class MemberLoginTest {
+
     @Test
     fun `로그인을 해 토큰을 받는다`() {
         DocsApiBuilder("login-success")

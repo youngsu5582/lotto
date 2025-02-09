@@ -14,32 +14,39 @@ data class ApiField(
     var description: String,
     var optional: Boolean,
     var children: List<ApiField> = emptyList()
-)
+) {
+    infix fun means(description: String): ApiField {
+        this.description = description
+        return this
+    }
 
-infix fun String.type(docsFieldType: DocsFieldType): ApiField =
-    ApiField(name = this, docsFieldType = docsFieldType, value = "", description = "", optional = false)
+    infix fun value(value: Any): ApiField {
+        this.value = value
+        return this
+    }
 
-infix fun ApiField.means(description: String): ApiField {
-    this.description = description
-    return this
+    infix fun optional(flag: Boolean): ApiField {
+        this.optional = flag
+        return this
+    }
+
+    infix fun withChildren(block: DslBuilder.() -> Unit): ApiField {
+        val childBuilder = DslBuilder()
+        childBuilder.block()
+        this.children = childBuilder.fields
+        return this
+    }
 }
 
-infix fun ApiField.value(value: Any): ApiField {
-    this.value = value
-    return this
-}
-
-infix fun ApiField.optional(flag: Boolean): ApiField {
-    this.optional = flag
-    return this
-}
-
-// 하위 필드를 추가할 때, 여러 ApiField를 반환하도록 하기 위해 블록은 List<ApiField>를 반환합니다.
-infix fun ApiField.withChildren(block: DslBuilder.() -> Unit): ApiField {
-    val childBuilder = DslBuilder()
-    childBuilder.block()
-    this.children = childBuilder.fields
-    return this
+fun List<ApiField>.toConvertValue(): Map<String, Any> {
+    fun processField(field: ApiField): Any {
+        return if (field.children.isNotEmpty()) {
+            field.children.associate { it.name to processField(it) }
+        } else {
+            field.value
+        }
+    }
+    return this.associate { it.name to processField(it) }
 }
 
 fun List<ApiField>.toFieldDescriptors(): List<FieldDescriptor> {
@@ -69,7 +76,6 @@ fun List<ApiField>.toFieldDescriptors(): List<FieldDescriptor> {
             )
 
         descriptors.add(descriptor)
-
         field.children.forEach { processField(it, formattedPath) }
     }
 
@@ -88,7 +94,6 @@ fun getArrayTypeString(type: DocsFieldType): String {
         else -> "Unknown"
     }
 }
-
 
 fun List<ApiField>.toHeadDescriptors(): List<HeaderDescriptor> {
     val descriptors = mutableListOf<HeaderDescriptor>()

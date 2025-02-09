@@ -4,12 +4,6 @@ import config.AcceptanceTest
 import docs.DocsApiBuilder
 import docs.HttpMethod
 import docs.field.DocsFieldType
-import docs.field.means
-import docs.field.value
-import docs.field.withChildren
-import docs.request.body
-import docs.request.headers
-import docs.request.params
 import org.junit.jupiter.api.Test
 
 @AcceptanceTest
@@ -44,7 +38,7 @@ class SampleTestControllerTest {
             .setResponse {
                 body {
                     "headers.authorization" type DocsFieldType.STRING means "Authorization 헤더 값"
-                            "headers.custom-header" type DocsFieldType.STRING means "Custom 헤더 값"
+                    "headers.custom-header" type DocsFieldType.STRING means "Custom 헤더 값"
                     "headers.accept" type DocsFieldType.STRING means "Accept 헤더 값"
                     "headers.content-type" type DocsFieldType.STRING means "Content-Type 헤더 값"
                     "headers.content-length" type DocsFieldType.STRING means "Content-Length 헤더 값"

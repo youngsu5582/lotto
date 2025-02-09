@@ -3,10 +3,8 @@ package lotto.controller
 import config.AcceptanceTest
 import docs.DocsApiBuilder
 import docs.HttpMethod
-import docs.field.*
+import docs.field.DocsFieldType.*
 import docs.request.DslContainer
-import docs.request.body
-import docs.request.headers
 import lotto.domain.vo.Currency
 import lotto.domain.vo.PurchaseType
 import org.junit.jupiter.api.Test
@@ -16,21 +14,25 @@ class LottoPurchaseTest {
     @Test
     fun `결제승인을 통해 성공적으로 결제를 진행한다`() {
         DocsApiBuilder("purchase-ticket-success")
-            .setRequestContainer("/api/tickets", HttpMethod.POST) {
-                createRequest(
-                    amount = 1000,
-                    paymentKey = "paymentKey-id-1",
-                    orderId = "order-id-1",
-                    lottoPublishId = 1
-                )
-            }.setResponse {
+            .setRequest("/api/tickets", HttpMethod.POST) {
                 body {
-                    "purchaseResponse" type DocsFieldType.OBJECT means "응답 데이터" withChildren {
-                        "id" type DocsFieldType.STRING means "취소된 결제의 고유 식별자"
-                        "amount" type DocsFieldType.NUMBER means "취소된 결제 금액"
+                    "lottoPublishId" type NUMBER means "주문한 영수증 ID" value 1
+                    "purchaseHttpRequest" type OBJECT means "결제 승인 HTTP 객체" withChildren {
+                        "purchaseType" type ENUM.of<PurchaseType>() means "구매 유형" value PurchaseType.CARD
+                        "currency" type ENUM.of<Currency>() means "결제할 통화 유형" value Currency.KRW
+                        "amount" type NUMBER means "취소할 결제 금액" value 1000
+                        "orderId" type STRING means "취소할 주문 번호" value "order-id-1"
+                        "paymentKey" type STRING means "취소할 결제 식별자 - 결제 시스템 제공" value "paymentKey-id-1"
                     }
                 }
-            }.execute()
+            }.setResponse {
+                body {
+                    "purchaseResponse" type OBJECT means "응답 데이터" withChildren {
+                        "id" type STRING means "취소된 결제의 고유 식별자"
+                        "amount" type NUMBER means "취소된 결제 금액"
+                    }
+                }
+            }.execute(true)
             .statusCode(200)
     }
 
@@ -84,6 +86,7 @@ class LottoPurchaseTest {
             orderId = "order-id-2",
             lottoPublishId = 1
         )
+
         DocsApiBuilder("purchase-ticket-failure-purchase-provider-invalid")
             .setRequestContainer("/api/tickets", HttpMethod.POST) {
                 createRequest(
@@ -129,19 +132,17 @@ class LottoPurchaseTest {
     ): DslContainer {
         return DslContainer().apply {
             body {
-                "lottoPublishId" type DocsFieldType.NUMBER means "주문한 영수증 ID" value lottoPublishId
-
-                "purchaseHttpRequest" type DocsFieldType.OBJECT means "결제 승인 HTTP 객체" withChildren {
-                    "purchaseType" type DocsFieldType.ENUM.of<PurchaseType>() means "구매 유형" value purchaseType
-                    "currency" type DocsFieldType.ENUM.of<Currency>() means "결제할 통화 유형" value currency
-                    "amount" type DocsFieldType.NUMBER means "취소할 결제 금액" value amount
-                    "orderId" type DocsFieldType.STRING means "취소할 주문 번호" value orderId
-                    "paymentKey" type DocsFieldType.STRING means "취소할 결제 식별자 - 결제 시스템 제공" value paymentKey
-
+                "lottoPublishId" type NUMBER means "주문한 영수증 ID" value lottoPublishId
+                "purchaseHttpRequest" type OBJECT means "결제 승인 HTTP 객체" withChildren {
+                    "purchaseType" type ENUM.of<PurchaseType>() means "구매 유형" value purchaseType
+                    "currency" type ENUM.of<Currency>() means "결제할 통화 유형" value currency
+                    "amount" type NUMBER means "취소할 결제 금액" value amount
+                    "orderId" type STRING means "취소할 주문 번호" value orderId
+                    "paymentKey" type STRING means "취소할 결제 식별자 - 결제 시스템 제공" value paymentKey
                 }
             }
             headers {
-                if (paymentErrorCode.isNotBlank()) "Payment-Error-Header" type DocsFieldType.STRING means "토스 임의 에러 코드" value paymentErrorCode optional true
+                if (paymentErrorCode.isNotBlank()) "Payment-Error-Header" type STRING means "토스 임의 에러 코드" value paymentErrorCode optional true
             }
         }
     }

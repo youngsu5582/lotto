@@ -4,10 +4,6 @@ import config.AcceptanceTest
 import docs.DocsApiBuilder
 import docs.HttpMethod
 import docs.field.DocsFieldType
-import docs.field.means
-import docs.field.value
-import docs.field.withChildren
-import docs.request.body
 import org.junit.jupiter.api.Test
 
 @AcceptanceTest(["/acceptance/lottoCancel.json"])

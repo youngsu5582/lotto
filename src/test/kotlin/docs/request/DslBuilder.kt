@@ -11,10 +11,9 @@ class DslBuilder {
             name = this, docsFieldType = docsFieldType,
             value = "",
             description = "",
-            optional =false,
+            optional = false,
         )
         fields.add(field)
-        fields.forEach { println(it) }
         return field
     }
 }

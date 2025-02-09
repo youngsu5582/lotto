@@ -4,9 +4,6 @@ import config.AcceptanceTest
 import docs.DocsApiBuilder
 import docs.HttpMethod
 import docs.field.DocsFieldType
-import docs.field.means
-import docs.field.value
-import docs.request.body
 import org.junit.jupiter.api.Test
 
 @AcceptanceTest(["/acceptance/lottoOrder.json"])

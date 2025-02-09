@@ -5,14 +5,15 @@ import org.springframework.restdocs.payload.JsonFieldType
 sealed class DocsFieldType(val type: JsonFieldType) {
     open val format: String? = null
 
-    object NUMBER : DocsFieldType(JsonFieldType.NUMBER)
-    object STRING : DocsFieldType(JsonFieldType.STRING)
-    object BOOLEAN : DocsFieldType(JsonFieldType.BOOLEAN)
-    object OBJECT : DocsFieldType(JsonFieldType.OBJECT)
-    object DATE : DocsFieldType(JsonFieldType.STRING) {
+    data object NUMBER : DocsFieldType(JsonFieldType.NUMBER)
+    data object STRING : DocsFieldType(JsonFieldType.STRING)
+    data object BOOLEAN : DocsFieldType(JsonFieldType.BOOLEAN)
+    data object OBJECT : DocsFieldType(JsonFieldType.OBJECT)
+    data object DATE : DocsFieldType(JsonFieldType.STRING) {
         override val format = "yyyy-MM-dd"
     }
-    object DATETIME : DocsFieldType(JsonFieldType.STRING) {
+
+    data object DATETIME : DocsFieldType(JsonFieldType.STRING) {
         override val format = "yyyy-MM-dd HH:mm:ss"
     }
 

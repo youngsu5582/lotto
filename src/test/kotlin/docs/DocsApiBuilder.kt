@@ -47,7 +47,6 @@ class DocsApiBuilder(private val documentName: String) {
         return this
     }
 
-
     fun setResponse(block: DslContainer.() -> Unit): DocsApiBuilder {
         this.responseContainer = DslContainer().apply(block)
         return this
@@ -80,16 +79,15 @@ class DocsApiBuilder(private val documentName: String) {
         } catch (e: Exception) {
             throw IllegalStateException("API 문서화 중 오류가 발생했습니다: ${e.message}", e)
         }
-
     }
 
     private fun printLog() {
         println("=== DocsApiBuilder ===")
         println("Document: $documentName")
         println("Endpoint: $endpoint")
-        println("Request:")
+        println("Request: =================================")
         requestContainer.printRequestInfo()
-        println("Response:")
+        println("Response: =================================")
         responseContainer.printRequestInfo()
     }
 }
