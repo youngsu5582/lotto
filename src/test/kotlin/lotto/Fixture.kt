@@ -1,5 +1,6 @@
 package lotto
 
+import TestConstant
 import lotto.domain.entity.LottoRoundInfo
 import lotto.domain.entity.LottoStatus
 import java.time.LocalDateTime
@@ -24,4 +25,19 @@ class Fixture {
             )
         }
     }
+
+    object LottoRoundFixture {
+        fun createOngoingLottoRoundInfo(dateTime: LocalDateTime = TestConstant.DATE_TIME): LottoRoundInfo {
+            return LottoRoundInfo(
+                id = null,
+                round = 1,
+                startDate = dateTime.minusHours(1),
+                endDate = dateTime.plusHours(1),
+                drawDate = dateTime.plusHours(2),
+                paymentDeadline = dateTime.plusYears(1)
+            )
+        }
+    }
+
+
 }

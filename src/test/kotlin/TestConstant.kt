@@ -10,14 +10,5 @@ object TestConstant {
     const val EXPIRED_TOKEN =
         "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJkZmMzYWQ4Mi1lM2JhLTQ1MjAtYTk2OS0wYjRhMjkzYzlhOGIiLCJpYXQiOjE3Mzg4NTMxMDksImV4cCI6MTczODg1MzEwOX0.I3ej_tEDUKtDpp7C2DowJGI6EI_F3RIRPhmwUhRYMmU"
 
-    val DATE_TIME = LocalDateTime.now()
-
-    val ONGOING_LOTTO_ROUND = LottoRoundInfo(
-        null,
-        round = 1,
-        startDate = DATE_TIME.minusHours(1),
-        endDate = DATE_TIME.plusHours(1),
-        drawDate = DATE_TIME.plusHours(2),
-        paymentDeadline = DATE_TIME.plusYears(1),
-    )
+    val DATE_TIME: LocalDateTime = LocalDateTime.now()
 }

@@ -2,6 +2,7 @@ package lotto.domain.implementation
 
 import TestConstant
 import config.ImplementationTest
+import lotto.Fixture.LottoRoundFixture.createOngoingLottoRoundInfo
 import lotto.domain.entity.LottoBill
 import lotto.domain.entity.LottoPublish
 import lotto.domain.repository.LottoBillRepository
@@ -47,7 +48,7 @@ class LottoReaderTest {
                 memberId = "memberID",
                 lottoPublish = lottoPublishRepository.save(
                     LottoPublish(
-                        lottoRoundInfo = lottoRoundInfoRepository.save(TestConstant.ONGOING_LOTTO_ROUND),
+                        lottoRoundInfo = lottoRoundInfoRepository.save(createOngoingLottoRoundInfo()),
                         issuedAt = TestConstant.DATE_TIME,
                     )
                 ),
