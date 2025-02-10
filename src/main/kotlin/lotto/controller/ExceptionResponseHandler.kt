@@ -9,9 +9,7 @@ import purchase.domain.PurchaseException
 private val logger = KotlinLogging.logger {}
 
 @ControllerAdvice
-class ExceptionResponseHandler {
-    companion object
-
+class LottoExceptionHandler {
     @ExceptionHandler(PurchaseException::class)
     fun handlePurchaseException(ex: PurchaseException): ApiResponse<Void> {
         logger.warn { ex.stackTraceToString() }

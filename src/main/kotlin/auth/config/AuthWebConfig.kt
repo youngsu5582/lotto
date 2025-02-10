@@ -1,19 +1,19 @@
 package auth.config
 
-import org.springframework.context.annotation.Bean
+import auth.service.TokenService
+import member.service.MemberService
 import org.springframework.context.annotation.Configuration
 import org.springframework.web.method.support.HandlerMethodArgumentResolver
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer
 
 @Configuration
-class WebMvcConfig : WebMvcConfigurer {
-
-    @Bean
-    fun accessTokenArgumentResolver(): AccessTokenArgumentResolver {
-        return AccessTokenArgumentResolver()
-    }
+class WebMvcConfig(
+    private val tokenService: TokenService,
+    private val memberService: MemberService
+) : WebMvcConfigurer {
 
     override fun addArgumentResolvers(resolvers: MutableList<HandlerMethodArgumentResolver>) {
-        resolvers.add(accessTokenArgumentResolver())
+        resolvers.add(AccessTokenArgumentResolver())
+        resolvers.add(AuthenticatedMemberArgumentResolver(tokenService, memberService))
     }
 }
