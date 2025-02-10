@@ -15,11 +15,12 @@ class LottoWriter(
 
     @Transaction
     @Write
-    fun saveBill(purchase: Purchase, lottoPublish: LottoPublish): LottoBill {
+    fun saveBill(purchase: Purchase, lottoPublish: LottoPublish, memberId: String): LottoBill {
         return lottoBillRepository.save(
             LottoBill(
                 purchase = purchase,
-                lottoPublish = lottoPublish
+                lottoPublish = lottoPublish,
+                memberId = memberId
             )
         )
     }

@@ -35,11 +35,11 @@ class MemberController(
     }
 
     @Get("/api/auth")
-    fun info(accessToken: AccessToken): ApiResponse<InfoHttpResponse> {
+    fun info(accessToken: AccessToken): ApiResponse<MemberInfoHttpResponse> {
         val memberId = tokenService.decodeToken(accessToken)
         val memberData = memberService.readMember(memberId)
         return apiResponse {
-            data = InfoHttpResponse(
+            data = MemberInfoHttpResponse(
                 id = memberData.id,
                 email = memberData.email
             )

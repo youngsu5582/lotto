@@ -1,5 +1,6 @@
 package lotto.controller
 
+import auth.domain.vo.AuthenticatedMember
 import common.dto.ApiResponse
 import common.web.Body
 import common.web.HttpController
@@ -15,11 +16,13 @@ class LottoPurchaseController(
     @Post("/api/tickets")
     fun purchase(
         @Body lottoPurchaseHttpRequest: LottoPurchaseHttpRequest,
+        authenticatedMember: AuthenticatedMember
     ): ApiResponse<LottoPurchaseHttpResponse> {
         val lottoPurchaseData =
             lottoPurchaseService.purchase(
                 lottoPurchaseHttpRequest.toPurchaseRequest(),
-                lottoPurchaseHttpRequest.lottoPublishId
+                lottoPurchaseHttpRequest.lottoPublishId,
+                authenticatedMember
             )
         return ApiResponse.ok(
             data = LottoPurchaseHttpResponse.from(lottoPurchaseData)
@@ -28,11 +31,13 @@ class LottoPurchaseController(
 
     @Post("/api/cancel")
     fun cancel(
-        @Body lottoCancelHttpRequest: LottoCancelHttpRequest
+        @Body lottoCancelHttpRequest: LottoCancelHttpRequest,
+        authenticatedMember: AuthenticatedMember
     ): ApiResponse<LottoPurchaseHttpResponse> {
         val lottoPurchaseData =
             lottoPurchaseService.cancel(
-                lottoCancelHttpRequest.billId
+                lottoCancelHttpRequest.billId,
+                authenticatedMember
             )
         return ApiResponse.ok(
             data = LottoPurchaseHttpResponse.from(lottoPurchaseData)

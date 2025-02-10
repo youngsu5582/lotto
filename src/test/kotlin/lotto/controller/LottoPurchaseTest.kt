@@ -1,5 +1,6 @@
 package lotto.controller
 
+import TestConstant
 import config.AcceptanceTest
 import docs.DocsApiBuilder
 import docs.HttpMethod
@@ -9,22 +10,34 @@ import lotto.domain.vo.Currency
 import lotto.domain.vo.PurchaseType
 import org.junit.jupiter.api.Test
 
-@AcceptanceTest(["/acceptance/lottoPurchase.json"])
+@AcceptanceTest(["/acceptance/lottoPurchase.json", "/acceptance/member.json"])
 class LottoPurchaseTest {
+    @Test
+    fun `인증된 사용자가 아니면 결제를 실패 한다`() {
+        DocsApiBuilder("purchase-ticket-failure-not-authenticated")
+            .setRequestContainer("/api/tickets", HttpMethod.POST) {
+                createRequest(
+                    amount = 1000,
+                    paymentKey = "paymentKey-id-1",
+                    orderId = "order-id-1",
+                    lottoPublishId = 1,
+                    token = "notValidToken"
+                )
+            }.setResponse {
+            }.execute(true)
+            .statusCode(401)
+    }
+
     @Test
     fun `결제승인을 통해 성공적으로 결제를 진행한다`() {
         DocsApiBuilder("purchase-ticket-success")
-            .setRequest("/api/tickets", HttpMethod.POST) {
-                body {
-                    "lottoPublishId" type NUMBER means "주문한 영수증 ID" value 1
-                    "purchaseHttpRequest" type OBJECT means "결제 승인 HTTP 객체" withChildren {
-                        "purchaseType" type ENUM.of<PurchaseType>() means "구매 유형" value PurchaseType.CARD
-                        "currency" type ENUM.of<Currency>() means "결제할 통화 유형" value Currency.KRW
-                        "amount" type NUMBER means "취소할 결제 금액" value 1000
-                        "orderId" type STRING means "취소할 주문 번호" value "order-id-1"
-                        "paymentKey" type STRING means "취소할 결제 식별자 - 결제 시스템 제공" value "paymentKey-id-1"
-                    }
-                }
+            .setRequestContainer("/api/tickets", HttpMethod.POST) {
+                createRequest(
+                    amount = 1000,
+                    paymentKey = "paymentKey-id-1",
+                    orderId = "order-id-1",
+                    lottoPublishId = 1
+                )
             }.setResponse {
                 body {
                     "purchaseResponse" type OBJECT means "응답 데이터" withChildren {
@@ -128,9 +141,14 @@ class LottoPurchaseTest {
         paymentKey: String,
         orderId: String,
         lottoPublishId: Long,
-        paymentErrorCode: String = ""
+        paymentErrorCode: String = "",
+        token: String = TestConstant.TOKEN
+
     ): DslContainer {
         return DslContainer().apply {
+            headers {
+                "Authorization" type STRING value "Bearer $token" means "인증을 위한 토큰"
+            }
             body {
                 "lottoPublishId" type NUMBER means "주문한 영수증 ID" value lottoPublishId
                 "purchaseHttpRequest" type OBJECT means "결제 승인 HTTP 객체" withChildren {

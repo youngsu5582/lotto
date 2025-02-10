@@ -17,8 +17,10 @@ class LottoBill(
     private val purchase: Purchase,
     @OneToOne
     private val lottoPublish: LottoPublish,
-){
+    private val memberId:String
+) {
     fun getId() = id
     fun getPurchase() = purchase
     fun getLottoPublish() = lottoPublish
+    fun isOwner(memberId: String) = this.memberId ==memberId
 }
