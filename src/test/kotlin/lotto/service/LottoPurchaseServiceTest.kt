@@ -1,14 +1,18 @@
 package lotto.service
 
+import TestConstant
 import app.TestConfig
+import auth.domain.vo.AuthenticatedMember
 import config.ImplementationTest
-import lotto.domain.entity.*
+import lotto.domain.entity.LottoBill
+import lotto.domain.entity.LottoPublish
 import lotto.domain.repository.LottoBillRepository
 import lotto.domain.repository.LottoPublishRepository
 import lotto.domain.repository.LottoRoundInfoRepository
 import lotto.domain.vo.Currency
 import lotto.domain.vo.LottoPurchaseRequest
 import lotto.domain.vo.PurchaseType
+import order.domain.entity.Order
 import order.domain.repository.OrderRepository
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Nested
@@ -16,7 +20,6 @@ import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertDoesNotThrow
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.context.annotation.Import
-import order.domain.entity.Order
 import purchase.domain.entity.Purchase
 import purchase.domain.entity.PurchaseInfo
 import purchase.domain.repository.PurchaseRepository
@@ -40,21 +43,12 @@ class LottoPurchaseServiceTest {
 
     private var lottoPublishId: Long = 0
 
-    private val dateTime = LocalDateTime.now()
-
     @Nested
     inner class PurchaseCase {
         @BeforeEach
         fun setUp() {
             val roundInfo = lottoRoundInfoRepository.save(
-                LottoRoundInfo(
-                    null,
-                    round = 1,
-                    startDate = dateTime.minusHours(1),
-                    endDate = dateTime.plusHours(1),
-                    drawDate = dateTime.plusHours(2),
-                    paymentDeadline = dateTime.plusYears(1),
-                ),
+                TestConstant.ONGOING_LOTTO_ROUND
             )
             orderRepository.save(
                 Order(
@@ -81,7 +75,8 @@ class LottoPurchaseServiceTest {
                         paymentKey = "paymentKey",
                         orderId = "orderId"
                     ),
-                    lottoPublishId = lottoPublishId
+                    lottoPublishId = lottoPublishId,
+                    authenticated = AuthenticatedMember("ID", "user@email.com")
                 )
             }
         }
@@ -105,16 +100,9 @@ class LottoPurchaseServiceTest {
             val publish = lottoPublishRepository.save(
                 LottoPublish(
                     lottoRoundInfo = lottoRoundInfoRepository.save(
-                        LottoRoundInfo(
-                            null,
-                            round = 1,
-                            startDate = dateTime.minusHours(1),
-                            endDate = dateTime.plusHours(1),
-                            drawDate = dateTime.plusHours(2),
-                            paymentDeadline = dateTime.plusYears(1),
-                        ),
+                        TestConstant.ONGOING_LOTTO_ROUND
                     ),
-                    issuedAt = dateTime,
+                    issuedAt = TestConstant.DATE_TIME,
                 )
             )
             val purchase = purchaseRepository.save(
@@ -127,7 +115,7 @@ class LottoPurchaseServiceTest {
                 )
             )
             bill = lottoBillRepository.save(
-                LottoBill(lottoPublish = publish, purchase = purchase)
+                LottoBill(lottoPublish = publish, purchase = purchase, memberId = "ID")
             )
         }
 
@@ -135,7 +123,8 @@ class LottoPurchaseServiceTest {
         fun `취소가 성공적으로 진행된다`() {
             assertDoesNotThrow {
                 lottoPurchaseService.cancel(
-                    billId = bill.getId()!!
+                    billId = bill.getId()!!,
+                    authenticated = AuthenticatedMember("ID", "user@email.com")
                 )
             }
         }
