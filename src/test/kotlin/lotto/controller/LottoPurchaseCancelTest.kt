@@ -11,7 +11,7 @@ import org.junit.jupiter.api.Test
 class LottoPurchaseCancelTest {
     @Test
     fun `인증된 사용자가 아니면 결제 취소를 실패 한다`() {
-        DocsApiBuilder("cancel-fail-not-authenticated")
+        DocsApiBuilder("cancel-failure-not-authenticated")
             .setRequest("/api/cancel", HttpMethod.POST) {
                 headers {
                     "Authorization" type DocsFieldType.STRING value "Bearer notValidToken"
