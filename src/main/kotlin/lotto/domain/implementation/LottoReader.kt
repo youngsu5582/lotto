@@ -10,9 +10,11 @@ class LottoReader(
     private val lottoBillRepository: LottoBillRepository
 ) {
     @Read
-    fun findBill(billId: Long): LottoBill {
-        return lottoBillRepository
-            .findById(billId)
+    fun findBill(billId: Long, memberId: String): LottoBill =
+        lottoBillRepository.findById(billId)
+            .map { bill ->
+                bill.takeIf { it.isOwner(memberId) }
+                    ?: throw IllegalArgumentException("$memberId is Not Owner")
+            }
             .orElseThrow { IllegalArgumentException("Not Exist Bill") }
-    }
 }
