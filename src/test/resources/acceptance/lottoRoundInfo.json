@@ -1,0 +1,13 @@
+{
+  "lotto_round_info": [
+    {
+      "id": 1,
+      "round": 1034,
+      "start_date": "2025-01-18T10:00:00",
+      "end_date": "2025-02-20T20:00:00",
+      "draw_date": "2025-02-24T21:00:00",
+      "payment_deadline": "2026-01-16T23:59:59",
+      "status": "ONGOING"
+    }
+  ]
+}

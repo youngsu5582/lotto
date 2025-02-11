@@ -21,5 +21,5 @@ class PublishedLotto(
     @Convert(converter = IssueStatusConverter::class)
     private val status: IssueStatus
 ) {
-
+    fun getLottoes() = lotto.toIntList()
 }
