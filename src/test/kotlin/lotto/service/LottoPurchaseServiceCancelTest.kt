@@ -1,5 +1,6 @@
 package lotto.service
 
+import TestConstant
 import app.TestConfig
 import auth.domain.vo.AuthenticatedMember
 import config.ImplementationTest
@@ -63,7 +64,7 @@ class LottoPurchaseServiceCancelTest {
             )
         )
         bill = lottoBillRepository.save(
-            LottoBill(lottoPublish = publish, purchase = purchase, memberId = "ID")
+            LottoBill(lottoPublishId = publish.getId(), purchaseId = purchase.getId().toString(), memberId = "ID")
         )
     }
 

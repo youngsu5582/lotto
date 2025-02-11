@@ -47,22 +47,8 @@ class LottoReaderTest {
         val bill = lottoBillRepository.save(
             LottoBill(
                 memberId = "memberID",
-                lottoPublish = lottoPublishRepository.save(
-                    LottoPublish(
-                        lottoRoundInfo = lottoRoundInfoRepository.save(createOngoingLottoRoundInfo()),
-                        issuedAt = TestConstant.DATE_TIME,
-                        status = LottoPublishStatus.WAITING
-                    )
-                ),
-                purchase = purchaseRepository.save(
-                    Purchase(
-                        paymentKey = "paymentKey",
-                        orderId = "orderId",
-                        status = "SUCCESS",
-                        purchaseProvider = PurchaseProvider.TOSS,
-                        purchaseInfo = PurchaseInfo(totalAmount = BigDecimal(1000), method = PaymentMethod.CARD)
-                    )
-                ),
+                lottoPublishId = 1,
+                purchaseId = "purchaseID",
             )
         )
         assertThrows<IllegalArgumentException> {

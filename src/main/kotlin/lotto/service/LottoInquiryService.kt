@@ -7,10 +7,12 @@ import lotto.domain.implementation.LottoReader
 import lotto.service.dto.LottoBillData
 import lotto.service.dto.LottoPublishData
 import lotto.service.dto.PurchaseData
+import purchase.domain.implementation.PurchaseReader
 
 @BusinessService
 class LottoInquiryService(
     private val lottoReader: LottoReader,
+    private val purchaseReader: PurchaseReader,
 ) {
     @Transaction
     @Read
@@ -20,11 +22,11 @@ class LottoInquiryService(
             LottoBillData(
                 it.getId()!!,
                 PurchaseData.from(
-                    it.getPurchase()
+                    purchaseReader.findPurchase(purchaseId = it.getPurchaseId())
                 ),
                 LottoPublishData.from(
-                    it.getLottoPublish(),
-                    lottoReader.findPublishedLotto(it.getLottoPublish().getId())
+                    lottoReader.findLottoPublish(lottoPublishId = it.getLottoPublishId()),
+                    lottoReader.findPublishedLotto(publishId = it.getLottoPublishId())
                 )
             )
         }

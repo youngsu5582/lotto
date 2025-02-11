@@ -25,41 +25,44 @@ class LottoPurchaseProcessorTest(
     extensions(listOf(SpringExtension))
 
     context("결제 취소") {
-        val failPurchase = purchaseRepository.save(
-            Purchase(
-                purchaseProvider = PurchaseProvider.TOSS,
-                orderId = "orderId",
-                paymentKey = "failPaymentKey",
-                status = "FAIL",
-                purchaseInfo = PurchaseInfo(
-                    totalAmount = BigDecimal(1000),
-                    method = PaymentMethod.CARD
-                )
-            )
-        )
-        val purchase = purchaseRepository.save(
-            Purchase(
-                purchaseProvider = PurchaseProvider.TOSS,
-                orderId = "orderId",
-                paymentKey = "paymentKey",
-                status = "SUCCESS",
-                purchaseInfo = PurchaseInfo(
-                    totalAmount = BigDecimal(1000),
-                    method = PaymentMethod.CARD
-                )
-            )
-        )
         test("결제 상태를 검증한다.") {
             assertDoesNotThrow {
+                val purchase = purchaseRepository.save(
+                    Purchase(
+                        purchaseProvider = PurchaseProvider.TOSS,
+                        orderId = "orderId",
+                        paymentKey = "paymentKey",
+                        status = "SUCCESS",
+                        purchaseInfo = PurchaseInfo(
+                            totalAmount = BigDecimal(1000),
+                            method = PaymentMethod.CARD
+                        )
+                    )
+                )
+
                 purchaseProcessor.cancel(
-                    purchase,
+                    purchase.getId().toString(),
                 )
             }
         }
         test("결제가 성공 상태가 아니면 예외를 발생한다.") {
             shouldThrow<PurchaseException> {
+                val failPurchase = purchaseRepository.save(
+                    Purchase(
+                        purchaseProvider = PurchaseProvider.TOSS,
+                        orderId = "orderId",
+                        paymentKey = "failPaymentKey",
+                        status = "FAIL",
+                        purchaseInfo = PurchaseInfo(
+                            totalAmount = BigDecimal(1000),
+                            method = PaymentMethod.CARD
+                        )
+                    )
+                )
+
+
                 purchaseProcessor.cancel(
-                    failPurchase,
+                    failPurchase.getId().toString(),
                 )
             }
         }

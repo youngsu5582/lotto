@@ -16,14 +16,14 @@ class PurchaseProcessor(
         const val DEFAULT_REASON = "단순 변심"
     }
 
-        fun purchase(purchaseRequest: PurchaseRequest): Purchase {
-            val purchaseData = paymentProcessor.purchase(purchaseRequest, PurchaseProvider.TOSS)
-            val purchase = purchaseWriter.savePurchase(purchaseData)
-            return purchase
-        }
+    fun purchase(purchaseRequest: PurchaseRequest): Purchase {
+        val purchaseData = paymentProcessor.purchase(purchaseRequest, PurchaseProvider.TOSS)
+        val purchase = purchaseWriter.savePurchase(purchaseData)
+        return purchase
+    }
 
-    fun cancel(purchase: Purchase, provider: PurchaseProvider = PurchaseProvider.TOSS): Purchase {
-        purchaseValidator.checkCancelValid(purchase)
+    fun cancel(purchaseId: String, provider: PurchaseProvider = PurchaseProvider.TOSS): Purchase {
+        val purchase = purchaseValidator.checkCancelValid(purchaseId)
         val cancelData = paymentProcessor.cancel(purchase.toCancelRequest(), provider)
         return purchaseWriter.cancelPurchase(cancelData, purchase)
     }

@@ -1,6 +1,5 @@
 package lotto.service.dto
 
-import lotto.domain.entity.LottoBill
 import lotto.domain.entity.LottoPublish
 import lotto.domain.entity.PublishedLotto
 import purchase.domain.entity.Purchase
@@ -12,17 +11,7 @@ class LottoBillData(
     val id: Long,
     val purchase: PurchaseData,
     val lottoPublish: LottoPublishData
-) {
-    companion object {
-        fun from(lottoBill: LottoBill): LottoBillData {
-            return LottoBillData(
-                id = lottoBill.getId() ?: -1,
-                purchase = PurchaseData.from(lottoBill.getPurchase()),
-                lottoPublish = LottoPublishData.from(lottoBill.getLottoPublish()),
-            )
-        }
-    }
-}
+)
 
 data class PurchaseData(
     val id: UUID,

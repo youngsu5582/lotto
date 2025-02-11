@@ -13,7 +13,6 @@ import lotto.service.dto.LottoPublishData
 import lotto.service.dto.PurchaseData
 import order.domain.implementation.OrderValidator
 import purchase.domain.implementation.PurchaseProcessor
-import java.util.concurrent.ConcurrentHashMap
 
 @BusinessService
 class LottoPurchaseService(
@@ -31,7 +30,12 @@ class LottoPurchaseService(
         orderValidator.checkOrderValid(lottoPurchaseRequest.toOrderDataRequest())
         val purchase = purchaseProcessor.purchase(lottoPurchaseRequest.toPurchaseRequest())
         val lottoPublish = lottoPublisher.complete(lottoPublishId)
-        return LottoBillData.from(lottoWriter.saveBill(purchase.getId(), lottoPublish.getId(), authenticated.memberId))
+        val bill = lottoWriter.saveBill(purchase.getId(), lottoPublish.getId(), authenticated.memberId)
+        return LottoBillData(
+            id = bill.getId()!!,
+            purchase = PurchaseData.from(purchase),
+            lottoPublish = LottoPublishData.from(lottoPublish)
+        )
     }
 
     fun cancel(
@@ -39,8 +43,8 @@ class LottoPurchaseService(
         authenticated: Authenticated
     ): LottoBillData {
         val bill = lottoReader.findBill(billId, authenticated.memberId)
-        val purchase = purchaseProcessor.cancel(bill.getPurchase())
-        val lottoPublish = lottoPublisher.unPublish(bill.getLottoPublish().getId())
+        val purchase = purchaseProcessor.cancel(bill.getPurchaseId())
+        val lottoPublish = lottoPublisher.unPublish(bill.getLottoPublishId())
         return LottoBillData(
             id = billId,
             purchase = PurchaseData.from(purchase),

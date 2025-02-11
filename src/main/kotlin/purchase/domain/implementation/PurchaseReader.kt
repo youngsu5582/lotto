@@ -29,6 +29,7 @@ class PurchaseReader(
         }
     }
 
-    fun findPurchase(purchaseId: UUID): Purchase = purchaseRepository.findById(purchaseId)
+    @Read
+    fun findPurchase(purchaseId: String): Purchase = purchaseRepository.findById(UUID.fromString(purchaseId))
         .orElseThrow { NoSuchElementException("결제가 존재하지 않습니다") }
 }
