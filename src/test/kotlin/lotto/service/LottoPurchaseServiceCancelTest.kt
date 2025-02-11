@@ -6,6 +6,7 @@ import config.ImplementationTest
 import lotto.Fixture.LottoRoundFixture.createOngoingLottoRoundInfo
 import lotto.domain.entity.LottoBill
 import lotto.domain.entity.LottoPublish
+import lotto.domain.entity.LottoPublishStatus
 import lotto.domain.repository.LottoBillRepository
 import lotto.domain.repository.LottoPublishRepository
 import lotto.domain.repository.LottoRoundInfoRepository
@@ -49,6 +50,7 @@ class LottoPurchaseServiceCancelTest {
                     createOngoingLottoRoundInfo()
                 ),
                 issuedAt = TestConstant.DATE_TIME,
+                status = LottoPublishStatus.COMPLETE
             )
         )
         val purchase = purchaseRepository.save(
