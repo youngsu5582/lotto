@@ -15,6 +15,11 @@ export class PaymentApiService extends BaseApiService {
       currency?: 'KRW';
     }
   ) {
+    const token = localStorage.getItem('accessToken');
+    if (!token) {
+      throw new Error('인증 토큰이 없습니다.');
+    }
+
     // 결제 금액 검증
     if (params.amount <= 0) {
       throw new Error('결제 금액은 0보다 커야 합니다.');
@@ -33,13 +38,24 @@ export class PaymentApiService extends BaseApiService {
 
     return this.fetchJson('/api/tickets', {
       method: 'POST',
+      headers: {
+        'Authorization': `Bearer ${token}`,
+      },
       body: JSON.stringify(requestBody),
     });
   }
 
   async createTemporaryOrder(data: OrderDataRequest): Promise<OrderDataResponse> {
+    const token = localStorage.getItem('accessToken');
+    if (!token) {
+      throw new Error('인증 토큰이 없습니다.');
+    }
+
     return this.fetchJson('/api/orders', {
       method: 'POST',
+      headers: {
+        'Authorization': `Bearer ${token}`,
+      },
       body: JSON.stringify(data),
     });
   }
