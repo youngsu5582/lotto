@@ -503,8 +503,9 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">POST /api/tickets HTTP/1.1
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJkZmMzYWQ4Mi1lM2JhLTQ1MjAtYTk2OS0wYjRhMjkzYzlhOGIiLCJpYXQiOjE3Mzg4NTIyMzIsImV4cCI6MTYwMDE3Mzg4NTIyMzJ9.bzacSBSyi3gakhKau6-m2fZTY-VllRzq0m5Crf0-ZGs
 Content-Type: application/json; charset=UTF-8
-Host: localhost:32823
+Host: localhost:39201
 Content-Length: 200
 
 {
@@ -527,7 +528,7 @@ Vary: Access-Control-Request-Method
 Vary: Access-Control-Request-Headers
 Content-Type: application/json
 Transfer-Encoding: chunked
-Date: Sun, 09 Feb 2025 15:07:27 GMT
+Date: Tue, 11 Feb 2025 04:00:31 GMT
 Keep-Alive: timeout=60
 Connection: keep-alive
 Content-Length: 184
@@ -538,7 +539,7 @@ Content-Length: 184
   "message" : "",
   "data" : {
     "purchaseResponse" : {
-      "id" : "2306274a-961f-4e9f-916c-c648f5bca99f",
+      "id" : "8f7fe3f5-9467-4f8a-8bba-173a06d7c312",
       "amount" : 1000
     }
   }
@@ -646,7 +647,16 @@ Content-Length: 184
 <div class="sect2">
 <h3 id="_로또_결제_실패">1.2. 로또 결제 실패</h3>
 <div class="sect3">
-<h4 id="_결제_임시_데이터_미존재">1.2.1. 결제 임시 데이터 미존재</h4>
+<h4 id="_사용자_인증_실패">1.2.1. 사용자 인증 실패</h4>
+<div class="paragraph">
+<p><code>Authorization Bearer &#8230;&#8203;</code> 형식의 토큰이 아니면 실패한다.</p>
+</div>
+<div class="paragraph">
+<p>Unresolved directive in index.adoc - include::/home/runner/work/lotto/lotto/build/generated-snippets/purchase-ticket-failure-not-authenticated/index.adoc[]</p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_결제_임시_데이터_미존재">1.2.2. 결제 임시 데이터 미존재</h4>
 <div class="paragraph">
 <p>결제 임시 데이터가 없으면 실패한다.<br>
 결제의 정합성을 보장하기 위해서 임시 데이터를 저장 후 프론트엔드에서 작업을 수행한다.<br>
@@ -655,8 +665,9 @@ Content-Length: 184
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">POST /api/tickets HTTP/1.1
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJkZmMzYWQ4Mi1lM2JhLTQ1MjAtYTk2OS0wYjRhMjkzYzlhOGIiLCJpYXQiOjE3Mzg4NTIyMzIsImV4cCI6MTYwMDE3Mzg4NTIyMzJ9.bzacSBSyi3gakhKau6-m2fZTY-VllRzq0m5Crf0-ZGs
 Content-Type: application/json; charset=UTF-8
-Host: localhost:32823
+Host: localhost:39201
 Content-Length: 210
 
 {
@@ -679,7 +690,7 @@ Vary: Access-Control-Request-Method
 Vary: Access-Control-Request-Headers
 Content-Type: application/json
 Transfer-Encoding: chunked
-Date: Sun, 09 Feb 2025 15:07:27 GMT
+Date: Tue, 11 Feb 2025 04:00:32 GMT
 Connection: close
 Content-Length: 77
 
@@ -723,7 +734,7 @@ Content-Length: 77
 </table>
 </div>
 <div class="sect3">
-<h4 id="_결제_임시_데이터_정합성_오류">1.2.2. 결제 임시 데이터 정합성 오류</h4>
+<h4 id="_결제_임시_데이터_정합성_오류">1.2.3. 결제 임시 데이터 정합성 오류</h4>
 <div class="paragraph">
 <p>결제 임시 데이터와 다른 금액을 보내면 실패한다.<br>
 주문 번호에 해당하는 금액이 다를시 정합성이 깨진 것으로 판단한다.</p>
@@ -731,8 +742,9 @@ Content-Length: 77
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">POST /api/tickets HTTP/1.1
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJkZmMzYWQ4Mi1lM2JhLTQ1MjAtYTk2OS0wYjRhMjkzYzlhOGIiLCJpYXQiOjE3Mzg4NTIyMzIsImV4cCI6MTYwMDE3Mzg4NTIyMzJ9.bzacSBSyi3gakhKau6-m2fZTY-VllRzq0m5Crf0-ZGs
 Content-Type: application/json; charset=UTF-8
-Host: localhost:32823
+Host: localhost:39201
 Content-Length: 212
 
 {
@@ -755,7 +767,7 @@ Vary: Access-Control-Request-Method
 Vary: Access-Control-Request-Headers
 Content-Type: application/json
 Transfer-Encoding: chunked
-Date: Sun, 09 Feb 2025 15:07:27 GMT
+Date: Tue, 11 Feb 2025 04:00:32 GMT
 Connection: close
 Content-Length: 77
 
@@ -799,7 +811,7 @@ Content-Length: 77
 </table>
 </div>
 <div class="sect3">
-<h4 id="_결제_금액과_로또_구매_금액_미일치">1.2.3. 결제 금액과 로또 구매 금액 미일치</h4>
+<h4 id="_결제_금액과_로또_구매_금액_미일치">1.2.4. 결제 금액과 로또 구매 금액 미일치</h4>
 <div class="paragraph">
 <p>로또 결제 금액 단위와 다르게 보내면 실패한다.<br>
 현재, 로또 금액은 1000원 단위로 되어있다. ( 이는, 당장 변할 가능성이 없다고 생각해 DB 가 아닌 서버 단에서 검증한다. )</p>
@@ -807,8 +819,9 @@ Content-Length: 77
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">POST /api/tickets HTTP/1.1
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJkZmMzYWQ4Mi1lM2JhLTQ1MjAtYTk2OS0wYjRhMjkzYzlhOGIiLCJpYXQiOjE3Mzg4NTIyMzIsImV4cCI6MTYwMDE3Mzg4NTIyMzJ9.bzacSBSyi3gakhKau6-m2fZTY-VllRzq0m5Crf0-ZGs
 Content-Type: application/json; charset=UTF-8
-Host: localhost:32823
+Host: localhost:39201
 Content-Length: 200
 
 {
@@ -831,7 +844,7 @@ Vary: Access-Control-Request-Method
 Vary: Access-Control-Request-Headers
 Content-Type: application/json
 Transfer-Encoding: chunked
-Date: Sun, 09 Feb 2025 15:07:27 GMT
+Date: Tue, 11 Feb 2025 04:00:32 GMT
 Connection: close
 Content-Length: 77
 
@@ -875,7 +888,7 @@ Content-Length: 77
 </table>
 </div>
 <div class="sect3">
-<h4 id="_결제_제공수단_오류">1.2.4. 결제 제공수단 오류</h4>
+<h4 id="_결제_제공수단_오류">1.2.5. 결제 제공수단 오류</h4>
 <div class="paragraph">
 <p>결제 제공 수단에 문제가 생길시 실패한다.<br>
 이는, 토스 API 서버 및 결제 제공자(카드,카카오페이 등등)의 오류와 사용자(잔액 부족,한도 초과)를 포괄적으로 처리한다.</p>
@@ -883,9 +896,10 @@ Content-Length: 77
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">POST /api/tickets HTTP/1.1
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJkZmMzYWQ4Mi1lM2JhLTQ1MjAtYTk2OS0wYjRhMjkzYzlhOGIiLCJpYXQiOjE3Mzg4NTIyMzIsImV4cCI6MTYwMDE3Mzg4NTIyMzJ9.bzacSBSyi3gakhKau6-m2fZTY-VllRzq0m5Crf0-ZGs
 Payment-Error-Header: EXCEED_MAX_ONE_DAY_AMOUNT
 Content-Type: application/json; charset=UTF-8
-Host: localhost:32823
+Host: localhost:39201
 Content-Length: 200
 
 {
@@ -908,7 +922,7 @@ Vary: Access-Control-Request-Method
 Vary: Access-Control-Request-Headers
 Content-Type: application/json
 Transfer-Encoding: chunked
-Date: Sun, 09 Feb 2025 15:07:27 GMT
+Date: Tue, 11 Feb 2025 04:00:32 GMT
 Connection: close
 Content-Length: 95
 
@@ -965,8 +979,9 @@ Content-Length: 95
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">POST /api/cancel HTTP/1.1
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJkZmMzYWQ4Mi1lM2JhLTQ1MjAtYTk2OS0wYjRhMjkzYzlhOGIiLCJpYXQiOjE3Mzg4NTIyMzIsImV4cCI6MTYwMDE3Mzg4NTIyMzJ9.bzacSBSyi3gakhKau6-m2fZTY-VllRzq0m5Crf0-ZGs
 Content-Type: application/json; charset=UTF-8
-Host: localhost:43703
+Host: localhost:34281
 Content-Length: 18
 
 {
@@ -982,7 +997,7 @@ Vary: Access-Control-Request-Method
 Vary: Access-Control-Request-Headers
 Content-Type: application/json
 Transfer-Encoding: chunked
-Date: Sun, 09 Feb 2025 15:07:26 GMT
+Date: Tue, 11 Feb 2025 04:00:30 GMT
 Keep-Alive: timeout=60
 Connection: keep-alive
 Content-Length: 186
@@ -1018,6 +1033,24 @@ Content-Length: 186
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>billId</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>Number</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">구매했던 영수증 ID</p></td>
+</tr>
+</tbody>
+</table>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 50%;">
+<col style="width: 50%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Name</th>
+<th class="tableblock halign-left valign-top">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Authorization</code></p></td>
+<td class="tableblock halign-left valign-top"></td>
 </tr>
 </tbody>
 </table>
@@ -1070,18 +1103,30 @@ Content-Length: 186
 </div>
 <div class="sect2">
 <h3 id="_로또_결제_취소_실패">2.2. 로또 결제 취소 실패</h3>
+<div class="sect3">
+<h4 id="_사용자_인증_실패_2">2.2.1. 사용자 인증 실패</h4>
+<div class="paragraph">
+<p><code>Authorization Bearer &#8230;&#8203;</code> 형식의 토큰이 아니면 실패한다.</p>
+</div>
+<div class="paragraph">
+<p>Unresolved directive in index.adoc - include::/home/runner/work/lotto/lotto/build/generated-snippets/purchase-ticket-failure-not-authenticated/index.adoc[]</p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_영수증_미존재">2.2.2. 영수증 미존재</h4>
 <div class="paragraph">
 <p>영수증이 존재하지 않으면 실패한다.</p>
 </div>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">POST /api/cancel HTTP/1.1
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJkZmMzYWQ4Mi1lM2JhLTQ1MjAtYTk2OS0wYjRhMjkzYzlhOGIiLCJpYXQiOjE3Mzg4NTIyMzIsImV4cCI6MTYwMDE3Mzg4NTIyMzJ9.bzacSBSyi3gakhKau6-m2fZTY-VllRzq0m5Crf0-ZGs
 Content-Type: application/json; charset=UTF-8
-Host: localhost:43703
+Host: localhost:34281
 Content-Length: 18
 
 {
-  "billId" : 2
+  "billId" : 3
 }</code></pre>
 </div>
 </div>
@@ -1093,7 +1138,7 @@ Vary: Access-Control-Request-Method
 Vary: Access-Control-Request-Headers
 Content-Type: application/json
 Transfer-Encoding: chunked
-Date: Sun, 09 Feb 2025 15:07:26 GMT
+Date: Tue, 11 Feb 2025 04:00:30 GMT
 Connection: close
 Content-Length: 73
 
@@ -1138,6 +1183,7 @@ Content-Length: 73
 </div>
 </div>
 </div>
+</div>
 <div class="sect1">
 <h2 id="_로또_주문">3. 로또 주문</h2>
 <div class="sectionbody">
@@ -1150,7 +1196,7 @@ Content-Length: 73
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">POST /api/orders HTTP/1.1
 Content-Type: application/json; charset=UTF-8
-Host: localhost:44411
+Host: localhost:46391
 Content-Length: 47
 
 {
@@ -1166,7 +1212,7 @@ Vary: Access-Control-Request-Method
 Vary: Access-Control-Request-Headers
 Content-Type: application/json
 Transfer-Encoding: chunked
-Date: Sun, 09 Feb 2025 15:07:25 GMT
+Date: Tue, 11 Feb 2025 04:00:29 GMT
 Keep-Alive: timeout=60
 Connection: keep-alive
 Content-Length: 157
@@ -1177,7 +1223,7 @@ Content-Length: 157
   "message" : "",
   "data" : {
     "lottoPublishId" : 1,
-    "orderId" : "313a2df0-c78c-46bd-8d94-19e6dc27ba0c"
+    "orderId" : "d8a709ff-ed8f-49a5-94fb-602d733137b2"
   }
 }</code></pre>
 </div>
@@ -1259,7 +1305,7 @@ Content-Length: 157
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">POST /api/auth/login HTTP/1.1
 Content-Type: application/json; charset=UTF-8
-Host: localhost:39257
+Host: localhost:40949
 Content-Length: 69
 
 {
@@ -1276,7 +1322,7 @@ Vary: Access-Control-Request-Method
 Vary: Access-Control-Request-Headers
 Content-Type: application/json
 Transfer-Encoding: chunked
-Date: Sun, 09 Feb 2025 15:07:28 GMT
+Date: Tue, 11 Feb 2025 04:00:33 GMT
 Keep-Alive: timeout=60
 Connection: keep-alive
 Content-Length: 273
@@ -1286,7 +1332,7 @@ Content-Length: 273
   "status" : 200,
   "message" : "ok",
   "data" : {
-    "accessToken" : "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJkZmMzYWQ4Mi1lM2JhLTQ1MjAtYTk2OS0wYjRhMjkzYzlhOGIiLCJpYXQiOjE3MzkxMTM2NDgsImV4cCI6MTczOTEyOTY0OH0.1g7kFS-afhaC_Ros2tFu2LyjsD9XU9jGVmdILslTpaQ"
+    "accessToken" : "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJkZmMzYWQ4Mi1lM2JhLTQ1MjAtYTk2OS0wYjRhMjkzYzlhOGIiLCJpYXQiOjE3MzkyNDY0MzMsImV4cCI6MTczOTI2MjQzM30.CMk518Q9e8WDf3WvBCDZPve3WUKXKVOkeeSCGy3P754"
   }
 }</code></pre>
 </div>
@@ -1368,7 +1414,7 @@ Content-Length: 273
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">POST /api/auth/login HTTP/1.1
 Content-Type: application/json; charset=UTF-8
-Host: localhost:39257
+Host: localhost:40949
 Content-Length: 67
 
 {
@@ -1385,7 +1431,7 @@ Vary: Access-Control-Request-Method
 Vary: Access-Control-Request-Headers
 Content-Type: application/json
 Transfer-Encoding: chunked
-Date: Sun, 09 Feb 2025 15:07:28 GMT
+Date: Tue, 11 Feb 2025 04:00:33 GMT
 Connection: close
 Content-Length: 138
 
@@ -1437,7 +1483,7 @@ Content-Length: 138
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">POST /api/auth/login HTTP/1.1
 Content-Type: application/json; charset=UTF-8
-Host: localhost:39257
+Host: localhost:40949
 Content-Length: 73
 
 {
@@ -1454,7 +1500,7 @@ Vary: Access-Control-Request-Method
 Vary: Access-Control-Request-Headers
 Content-Type: application/json
 Transfer-Encoding: chunked
-Date: Sun, 09 Feb 2025 15:07:28 GMT
+Date: Tue, 11 Feb 2025 04:00:33 GMT
 Connection: close
 Content-Length: 100
 
@@ -1512,7 +1558,7 @@ Content-Length: 100
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">POST /api/auth/register HTTP/1.1
 Content-Type: application/json; charset=UTF-8
-Host: localhost:39257
+Host: localhost:40949
 Content-Length: 68
 
 {
@@ -1529,7 +1575,7 @@ Vary: Access-Control-Request-Method
 Vary: Access-Control-Request-Headers
 Content-Type: application/json
 Transfer-Encoding: chunked
-Date: Sun, 09 Feb 2025 15:07:29 GMT
+Date: Tue, 11 Feb 2025 04:00:33 GMT
 Keep-Alive: timeout=60
 Connection: keep-alive
 Content-Length: 163
@@ -1539,7 +1585,7 @@ Content-Length: 163
   "status" : 201,
   "message" : "회원가입이 완료되었습니다",
   "data" : {
-    "id" : "4c24c504-9337-4bb6-8b3b-14d9c008cbdc"
+    "id" : "54f82611-a540-45fe-82bf-c1f3db5c1fd7"
   }
 }</code></pre>
 </div>
@@ -1664,7 +1710,7 @@ Content-Length: 163
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">$ curl 'http://localhost:40899/api/test?queryKey1=queryValue1&amp;queryKey2=queryValue2' -i -X GET \
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">$ curl 'http://localhost:44707/api/test?queryKey1=queryValue1&amp;queryKey2=queryValue2' -i -X GET \
     -H 'Authorization: Bearer test-token' \
     -H 'Custom-Header: CustomValue' \
     -H 'Content-Type: application/json; charset=UTF-8' \
@@ -1685,7 +1731,7 @@ Content-Length: 163
 Authorization: Bearer test-token
 Custom-Header: CustomValue
 Content-Type: application/json; charset=UTF-8
-Host: localhost:40899
+Host: localhost:44707
 Content-Length: 157
 
 {
@@ -1707,7 +1753,7 @@ Vary: Access-Control-Request-Method
 Vary: Access-Control-Request-Headers
 Content-Type: application/json
 Transfer-Encoding: chunked
-Date: Sun, 09 Feb 2025 15:07:23 GMT
+Date: Tue, 11 Feb 2025 04:00:28 GMT
 Keep-Alive: timeout=60
 Connection: keep-alive
 Content-Length: 768
@@ -1723,7 +1769,7 @@ Content-Length: 768
       "accept" : "*/*",
       "content-type" : "application/json; charset=UTF-8",
       "content-length" : "117",
-      "host" : "localhost:40899",
+      "host" : "localhost:44707",
       "connection" : "Keep-Alive",
       "user-agent" : "Apache-HttpClient/4.5.13 (Java/21.0.6)",
       "accept-encoding" : "gzip,deflate"
@@ -1942,7 +1988,7 @@ Content-Length: 768
 <div id="footer">
 <div id="footer-text">
 Version 0.0.1-SNAPSHOT<br>
-Last updated 2025-02-09 15:05:39 UTC
+Last updated 2025-02-11 03:58:43 UTC
 </div>
 </div>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.18.3/highlight.min.js"></script>
