@@ -15,7 +15,7 @@
       "id": 1,
       "lotto_round_info_id": 1,
       "issued_at": "2025-01-19T10:00:00",
-      "canceled": false
+      "status": "WAITING"
     }
   ],
   "lotto": [

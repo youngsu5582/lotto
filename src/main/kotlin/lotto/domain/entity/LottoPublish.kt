@@ -8,16 +8,39 @@ data class LottoPublish(
     @Id
     @GeneratedValue
     private val id: Long? = null,
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     private val lottoRoundInfo: LottoRoundInfo,
     private val issuedAt: LocalDateTime,
-    private var canceled: Boolean = false,
+    @Enumerated(EnumType.STRING)
+    private var status: LottoPublishStatus
 ) {
     fun getId() = id ?: throw IllegalArgumentException("Not Exist Id")
     fun getLottoRoundInfo() = lottoRoundInfo
     fun getIssuedAt() = issuedAt
-    fun getCanceled() = canceled
+    fun status() = status.name
+    fun isCancel() = status == LottoPublishStatus.CANCELED
+    fun isStatus(status: LottoPublishStatus) = this.status == status
+
     fun cancel() {
-        this.canceled = true
+        if (this.status != LottoPublishStatus.COMPLETE) {
+            throw IllegalStateException("결제 완료 상태에서만 취소가 가능합니다")
+        }
+        this.status = LottoPublishStatus.CANCELED
     }
+
+    fun complete() {
+        if (this.status != LottoPublishStatus.WAITING) {
+            throw IllegalStateException("결제 대기 상태에서만 완료가 가능합니다")
+        }
+        this.status = LottoPublishStatus.COMPLETE
+    }
+}
+
+/**
+ * CANCELED : 취소된 상태
+ * WAITING : 결제 대기중인 상태
+ * COMPLETE : 결제 완료된 상태
+ */
+enum class LottoPublishStatus {
+    CANCELED, COMPLETE, WAITING
 }
