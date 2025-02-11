@@ -1,5 +1,6 @@
 package lotto.service
 
+import auth.domain.vo.Authenticated
 import common.business.BusinessService
 import lotto.domain.implementation.LottoPublisher
 import lotto.domain.implementation.LottoReader
@@ -21,18 +22,20 @@ class LottoPurchaseService(
 ) {
     fun purchase(
         lottoPurchaseRequest: LottoPurchaseRequest,
-        lottoPublishId: Long
+        lottoPublishId: Long,
+        authenticated: Authenticated
     ): LottoPurchaseData {
         orderValidator.checkOrderValid(lottoPurchaseRequest.toOrderDataRequest())
         val lottoPublish = lottoPublisher.findPublish(lottoPublishId)
         val purchase = purchaseProcessor.purchase(lottoPurchaseRequest.toPurchaseRequest())
-        return LottoPurchaseData.from(lottoWriter.saveBill(purchase, lottoPublish))
+        return LottoPurchaseData.from(lottoWriter.saveBill(purchase, lottoPublish,authenticated.memberId))
     }
 
     fun cancel(
-        billId: Long
+        billId: Long,
+        authenticated: Authenticated
     ): LottoPurchaseData {
-        val bill = lottoReader.findBill(billId)
+        val bill = lottoReader.findBill(billId,authenticated.memberId)
         val purchase = purchaseProcessor.cancel(bill.getPurchase())
         val lottoPublish = lottoPublisher.unPublish(bill.getLottoPublish())
         return LottoPurchaseData(

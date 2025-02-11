@@ -10,8 +10,8 @@ import java.util.*
 class TokenService(
     private val tokenGenerator: TokenGenerator
 ) {
-    fun createToken(id: UUID): Token {
-        return Token(tokenGenerator.generateAccessToken(id.toString()))
+    fun createToken(id: String): Token {
+        return Token(tokenGenerator.generateAccessToken(id))
     }
 
     fun decodeToken(token: AccessToken): String {
