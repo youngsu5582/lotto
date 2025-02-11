@@ -3,6 +3,8 @@ package lotto
 import lotto.domain.entity.LottoRoundInfo
 import lotto.domain.entity.LottoStatus
 import lotto.domain.repository.LottoRoundInfoRepository
+import member.domain.vo.MemberIdentifier
+import member.service.MemberService
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.CommandLineRunner
@@ -24,6 +26,9 @@ class LottoInitializer : CommandLineRunner {
     @Autowired
     private lateinit var jdbcTemplate: JdbcTemplate
 
+    @Autowired
+    private lateinit var memberService: MemberService
+
     override fun run(vararg args: String?) {
         log.info("Server Setting Start")
         val time = LocalDateTime.now()
@@ -38,6 +43,7 @@ class LottoInitializer : CommandLineRunner {
                 paymentDeadline = time.plusYears(1).plusHours(1)
             )
         )
+         memberService.registerMember(MemberIdentifier("test@example.com","password"))
         val sqlFilePath = "script/lotto_combinations_batched.sql"
         val sqlContent = Files.readString(Paths.get(sqlFilePath))
         try {
