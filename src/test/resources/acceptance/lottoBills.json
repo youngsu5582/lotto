@@ -1,0 +1,98 @@
+{
+  "lotto_round_info": [
+    {
+      "id": 1,
+      "round": 1034,
+      "start_date": "2025-01-18T10:00:00",
+      "end_date": "2025-02-20T20:00:00",
+      "draw_date": "2025-02-24T21:00:00",
+      "payment_deadline": "2026-01-16T23:59:59",
+      "status": "ONGOING"
+    }
+  ],
+  "lotto_publish": [
+    {
+      "id": 1,
+      "lotto_round_info_id": 1,
+      "issued_at": "now()",
+      "status": "COMPLETE"
+    },
+    {
+      "id": 2,
+      "lotto_round_info_id": 1,
+      "issued_at": "now()",
+      "status ": "COMPLETE"
+    }
+  ],
+  "purchase": [
+    {
+      "id": "dfb3ad82-e2ba-4220-a969-0b4a293c9a8b",
+      "order_id": "order-success-1",
+      "payment_key": "paymentKey-success-1",
+      "purchase_info_id": "b4386e47-8555-437c-bcd9-164262a9a3ba",
+      "purchase_provider": "TOSS",
+      "status": "SUCCESS"
+    },
+    {
+      "id": "abf3ad82-ab2d-4220-a969-0b4a293c9a8b",
+      "order_id": "order-success-2",
+      "payment_key": "paymentKey-success-2",
+      "purchase_info_id": "a4386e47-8555-437c-bcd9-164262a9a3ba",
+      "purchase_provider": "TOSS",
+      "status": "SUCCESS"
+    }
+  ],
+  "purchase_info": [
+    {
+      "id": "b4386e47-8555-437c-bcd9-164262a9a3ba",
+      "total_amount": 1000,
+      "method": "CARD"
+    },
+    {
+      "id": "a4386e47-8555-437c-bcd9-164262a9a3ba",
+      "total_amount": 2000,
+      "method": "CARD"
+    }
+  ],
+  "lotto_bill": [
+    {
+      "id": 1,
+      "purchase_id": "dfb3ad82-e2ba-4220-a969-0b4a293c9a8b",
+      "lotto_publish_id": 1,
+      "member_id": "dfc3ad82-e3ba-4520-a969-0b4a293c9a8b"
+    },
+    {
+      "id": 2,
+      "purchase_id": "abf3ad82-ab2d-4220-a969-0b4a293c9a8b",
+      "lotto_publish_id": 2,
+      "member_id": "dfc3ad82-e3ba-4520-a969-123b4qcdb8db"
+    }
+  ],
+  "lotto": [
+    {
+      "id": 1,
+      "numbers": "1,10,11,14,15,17"
+    },
+    {
+      "id": 2,
+      "numbers": "1,20,34,35,37,39"
+    }
+  ],
+  "published_lotto": [
+    {
+      "lotto_id": 1,
+      "lotto_publish_id": 1,
+      "status": "MANUAL"
+    },
+    {
+      "lotto_id": 2,
+      "lotto_publish_id": 2,
+      "status": "MANUAL"
+    },
+    {
+      "lotto_id": 2,
+      "lotto_publish_id": 2,
+      "status": "MANUAL"
+    }
+  ]
+}
