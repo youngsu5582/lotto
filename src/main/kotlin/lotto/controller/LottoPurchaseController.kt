@@ -46,9 +46,9 @@ class LottoPurchaseController(
 
     @Post("/api/orders")
     fun saveOrder(
-        @Body lottoRequest: LottoRequest
+        @Body lottoNumberHttpRequest: LottoNumberHttpRequest
     ): ApiResponse<LottoOrderDataHttpResponse> {
-        val lottoOrderData = lottoOrderService.saveLottoOrder(lottoRequest.toLottoNumbers())
+        val lottoOrderData = lottoOrderService.saveLottoOrder(lottoNumberHttpRequest.toLottoNumbers())
         return ApiResponse.ok(
             data = LottoOrderDataHttpResponse.from(lottoOrderData)
         )

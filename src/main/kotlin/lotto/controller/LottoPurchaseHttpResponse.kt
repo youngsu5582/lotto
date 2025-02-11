@@ -1,6 +1,6 @@
 package lotto.controller
 
-import lotto.service.dto.LottoPurchaseData
+import lotto.service.dto.LottoBillData
 import lotto.service.dto.PurchaseData
 import java.math.BigDecimal
 import java.util.*
@@ -9,9 +9,9 @@ data class LottoPurchaseHttpResponse(
     val purchaseResponse: PurchaseResponse,
 ) {
     companion object {
-        fun from(lottoPurchaseData: LottoPurchaseData): LottoPurchaseHttpResponse {
+        fun from(lottoBillData: LottoBillData): LottoPurchaseHttpResponse {
             return LottoPurchaseHttpResponse(
-                purchaseResponse = PurchaseResponse.from(lottoPurchaseData.purchase),
+                purchaseResponse = PurchaseResponse.from(lottoBillData.purchase),
             )
         }
     }

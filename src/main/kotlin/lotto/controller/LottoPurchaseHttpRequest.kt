@@ -22,7 +22,7 @@ data class LottoPurchaseHttpRequest @JsonCreator constructor(
     }
 }
 
-data class LottoRequest @JsonCreator constructor(
+data class LottoNumberHttpRequest @JsonCreator constructor(
     val numbers: List<List<Int>>
 ) {
     fun toLottoNumbers(): LottoNumbers {
