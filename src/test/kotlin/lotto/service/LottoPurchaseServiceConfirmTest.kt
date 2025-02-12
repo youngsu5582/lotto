@@ -6,6 +6,7 @@ import auth.domain.vo.AuthenticatedMember
 import config.ImplementationTest
 import lotto.Fixture.LottoRoundFixture.createOngoingLottoRoundInfo
 import lotto.domain.entity.LottoPublish
+import lotto.domain.entity.LottoPublishStatus
 import lotto.domain.repository.LottoPublishRepository
 import lotto.domain.repository.LottoRoundInfoRepository
 import lotto.domain.vo.Currency
@@ -57,6 +58,7 @@ class LottoPurchaseServiceConfirmTest {
                 LottoPublish(
                     lottoRoundInfo = roundInfo,
                     issuedAt = LocalDateTime.now(),
+                    status = LottoPublishStatus.WAITING
                 )
             ).getId()
         }

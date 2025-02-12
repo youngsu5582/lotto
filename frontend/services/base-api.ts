@@ -24,6 +24,10 @@ export abstract class BaseApiService {
       }
 
       if (!response.ok) {
+        if (response.status === 401) {
+          localStorage.removeItem('accessToken'); // 인증 실패시 토큰 제거
+          throw new Error('인증이 만료되었습니다. 다시 로그인해주세요.');
+        }
         const errorMessage = data?.message || response.statusText || 'API call failed';
         console.error('API Error:', {
           status: response.status,

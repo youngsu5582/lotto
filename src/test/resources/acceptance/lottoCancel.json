@@ -45,13 +45,13 @@
       "id": 1,
       "lotto_round_info_id": 1,
       "issued_at": "now()",
-      "canceled": false
+      "status": "COMPLETE"
     },
     {
       "id": 2,
       "lotto_round_info_id": 1,
       "issued_at": "now()",
-      "canceled": false
+      "status ": "COMPLETE"
     }
   ],
   "lotto_bill": [

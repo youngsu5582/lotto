@@ -1,11 +1,13 @@
 package lotto.service
 
+import TestConstant
 import app.TestConfig
 import auth.domain.vo.AuthenticatedMember
 import config.ImplementationTest
 import lotto.Fixture.LottoRoundFixture.createOngoingLottoRoundInfo
 import lotto.domain.entity.LottoBill
 import lotto.domain.entity.LottoPublish
+import lotto.domain.entity.LottoPublishStatus
 import lotto.domain.repository.LottoBillRepository
 import lotto.domain.repository.LottoPublishRepository
 import lotto.domain.repository.LottoRoundInfoRepository
@@ -49,6 +51,7 @@ class LottoPurchaseServiceCancelTest {
                     createOngoingLottoRoundInfo()
                 ),
                 issuedAt = TestConstant.DATE_TIME,
+                status = LottoPublishStatus.COMPLETE
             )
         )
         val purchase = purchaseRepository.save(
@@ -61,7 +64,7 @@ class LottoPurchaseServiceCancelTest {
             )
         )
         bill = lottoBillRepository.save(
-            LottoBill(lottoPublish = publish, purchase = purchase, memberId = "ID")
+            LottoBill(lottoPublishId = publish.getId(), purchaseId = purchase.getId().toString(), memberId = "ID")
         )
     }
 

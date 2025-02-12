@@ -5,6 +5,7 @@ import common.business.Read
 import common.business.Transaction
 import common.business.Write
 import lotto.domain.entity.LottoPublish
+import lotto.domain.entity.LottoPublishStatus
 import lotto.domain.entity.LottoRoundInfo
 import lotto.domain.entity.PublishedLotto
 import lotto.domain.repository.LottoPublishRepository
@@ -21,9 +22,14 @@ class LottoPublisher(
 ) {
     @Transaction
     @Read
-    fun findPublish(publishId: Long): LottoPublish {
-        return lottoPublishRepository.findById(publishId)
-            .orElseThrow { IllegalArgumentException("Not Exist Publish") }
+    fun findPublish(publishId: Long): LottoPublish = getLottoPublish(publishId)
+
+    @Transaction
+    @Write
+    fun complete(publishId: Long): LottoPublish {
+        val lottoPublish = getLottoPublish(publishId)
+        lottoPublish.complete()
+        return lottoPublish
     }
 
     @Transaction
@@ -35,6 +41,7 @@ class LottoPublisher(
                 LottoPublish(
                     lottoRoundInfo = lottoInfo,
                     issuedAt = issuedAt,
+                    status = LottoPublishStatus.WAITING
                 ),
             )
         publishedLottoRepository.saveAll(lottoPaper.getLottoes().map {
@@ -49,10 +56,17 @@ class LottoPublisher(
 
     @Transaction
     @Write
-    fun unPublish(lottoPublish: LottoPublish): LottoPublish {
+    fun unPublish(publishId: Long): LottoPublish {
+        val lottoPublish = getLottoPublish(publishId)
         lottoPublish.cancel()
         return lottoPublish
     }
+
+    private fun getLottoPublish(publishId: Long): LottoPublish {
+        return lottoPublishRepository.findById(publishId)
+            .orElseThrow { IllegalArgumentException("Not Exist Publish") }
+    }
+
 
     private fun getLottoInfo(issuedAt: LocalDateTime): LottoRoundInfo {
         return lottoRoundInfoRepository.findTopByIssueDateLessThanEqualAndDrawDateGreaterThanEqual(issuedAt)

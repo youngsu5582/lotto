@@ -22,8 +22,8 @@ class PurchaseProcessor(
         return purchase
     }
 
-    fun cancel(purchase: Purchase, provider: PurchaseProvider = PurchaseProvider.TOSS): Purchase {
-        purchaseValidator.checkCancelValid(purchase)
+    fun cancel(purchaseId: String, provider: PurchaseProvider = PurchaseProvider.TOSS): Purchase {
+        val purchase = purchaseValidator.checkCancelValid(purchaseId)
         val cancelData = paymentProcessor.cancel(purchase.toCancelRequest(), provider)
         return purchaseWriter.cancelPurchase(cancelData, purchase)
     }

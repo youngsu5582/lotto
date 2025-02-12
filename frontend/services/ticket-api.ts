@@ -1,22 +1,33 @@
 import { BaseApiService } from './base-api';
-import { TicketListResponse } from '../types/ticket';
+import { BillsResponse } from '../types/ticket';
 
 export class TicketApiService extends BaseApiService {
-  async getMyTickets(page: number = 1): Promise<TicketListResponse> {
-    return this.fetchJson(`/api/tickets/my?page=${page}`, {
+  async getMyTickets(): Promise<BillsResponse> {
+    const token = localStorage.getItem('accessToken');
+    if (!token) {
+      throw new Error('인증 토큰이 없습니다.');
+    }
+
+    return this.fetchJson('/api/lottoes', {
       method: 'GET',
       headers: {
-        'Authorization': `Bearer ${localStorage.getItem('accessToken')}`,
+        'Authorization': `Bearer ${token}`,
       },
     });
   }
 
-  async cancelTicket(ticketId: number): Promise<void> {
-    return this.fetchJson(`/api/tickets/${ticketId}/cancel`, {
+  async cancelTicket(billId: number): Promise<void> {
+    const token = localStorage.getItem('accessToken');
+    if (!token) {
+      throw new Error('인증 토큰이 없습니다.');
+    }
+
+    return this.fetchJson(`/api/cancel`, {
       method: 'POST',
       headers: {
-        'Authorization': `Bearer ${localStorage.getItem('accessToken')}`,
+        'Authorization': `Bearer ${token}`,
       },
+      body: JSON.stringify({ billId })
     });
   }
 } 
