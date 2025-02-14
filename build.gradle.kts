@@ -43,6 +43,10 @@ dependencies {
     //암호화
     implementation("org.mindrot:jbcrypt:0.4")
 
+    // 모니터링 및 로키 로그
+    implementation ("io.micrometer:micrometer-registry-prometheus")
+    implementation ("com.github.loki4j:loki-logback-appender:1.4.0")
+
     // Test 및 REST Docs 의존성
     testImplementation("org.springframework.boot:spring-boot-starter-test") {
         exclude(group = "org.junit.vintage") // JUnit 5 전용
@@ -134,5 +138,3 @@ tasks.named("asciidoctor", org.asciidoctor.gradle.jvm.AsciidoctorTask::class.jav
         backends("html")
     }
 }
-
-
