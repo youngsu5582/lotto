@@ -16,7 +16,7 @@ import java.nio.file.Paths
 import java.time.LocalDateTime
 
 @Component
-@Profile("local")
+@Profile("!prod & !test")
 class LottoInitializer : CommandLineRunner {
     private val log = LoggerFactory.getLogger(LottoInitializer::class.java)
 
@@ -32,6 +32,10 @@ class LottoInitializer : CommandLineRunner {
     override fun run(vararg args: String?) {
         log.info("Server Setting Start")
         val time = LocalDateTime.now()
+        if(lottoRoundInfoRepository.findTopByIssueDateLessThanEqualAndDrawDateGreaterThanEqual(LocalDateTime.now())!=null){
+            log.info("Already Setting")
+            return
+        }
 
         lottoRoundInfoRepository.save(
             LottoRoundInfo(
@@ -43,6 +47,7 @@ class LottoInitializer : CommandLineRunner {
                 paymentDeadline = time.plusYears(1).plusHours(1)
             )
         )
+
          memberService.registerMember(MemberIdentifier("test@example.com","password"))
         val sqlFilePath = "script/lotto_combinations_batched.sql"
         val sqlContent = Files.readString(Paths.get(sqlFilePath))

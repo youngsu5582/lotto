@@ -13,7 +13,11 @@ class LottoWebConfig {
     @Bean
     fun corsFilter(environment: Environment): CorsFilter {
         val config = CorsConfiguration()
-        config.allowedOrigins = listOf(environment.getProperty("cors.allowed-origins"))
+        val allowedOrigins = listOf(
+            "http://localhost:3000",
+            "http://front-lotto:3000"
+        )
+        config.allowedOrigins = allowedOrigins
         config.allowedMethods = listOf("GET", "POST", "PUT", "DELETE", "OPTIONS")
         config.allowedHeaders = listOf("Authorization", "Content-Type", "Accept")
         config.allowCredentials = true

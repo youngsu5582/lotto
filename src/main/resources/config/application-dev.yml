@@ -16,9 +16,17 @@ spring:
 
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://localhost:3306/lotto?allowPublicKeyRetrieval=true&useSSL=false&serverTimezone=UTC&useUnicode=true&characterEncoding=UTF-8
+    url: jdbc:mysql://lotto-mysql:3306/lotto?allowPublicKeyRetrieval=true&useSSL=false&serverTimezone=UTC&useUnicode=true&characterEncoding=UTF-8
     username: lotto
     password: 4321
+
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,prometheus
+        exclude: threaddump, heapdump
 
 toss:
   client:
@@ -28,3 +36,5 @@ jwt:
   access-token-expiry: 16000000
   secret: justkeyfortestkeyisThisKeyWithOverall256bits
 
+loki:
+  url: http://lotto-loki:3100/loki/api/v1/push
