@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<configuration>
+    <property name="FILE_LOG_PATTERN"
+              value="[%d{yyyy-MM-dd HH:mm:ss}:%-4relative] [%thread] %-5level - [%X{requestId}] - %msg %ex{5}%n"/>
+    <property name="CONSOLE_LOG_PATTERN"
+              value="[%d{yyyy-MM-dd HH:mm:ss}:%-4relative] %green([%thread]) %highlight(%-5level) %boldWhite([%C.%M:%yellow(%L)]) - %msg %ex{5}%n"/>
+
+    <springProperty scope="context" name="APP_NAME" source="spring.application.name"/>
+    <springProperty scope="context" name="LOKI_URL" source="loki.url"/>
+    <springProperty scope="context" name="PROFILE" source="spring.profiles.active"/>
+
+    <springProfile name="local">
+        <include resource="logs/console-appender.xml"/>
+
+        <logger name="lotto" level="DEBUG" additivity="true">
+            <appender-ref ref="CONSOLE"/>
+        </logger>
+
+        <root level="INFO" additivity="false">
+            <appender-ref ref="CONSOLE"/>
+        </root>
+    </springProfile>
+
+    <springProfile name="dev">
+        <include resource="logs/loki-appender.xml"/>
+        <include resource="logs/console-appender.xml"/>
+
+        <logger name="lotto" level="DEBUG" additivity="false">
+            <appender-ref ref="CONSOLE"/>
+            <appender-ref ref="LOKI"/>
+        </logger>
+
+        <root level="WARN">
+            <appender-ref ref="CONSOLE"/>
+            <appender-ref ref="LOKI"/>
+        </root>
+    </springProfile>
+
+
+    <logger name="org.springframework" level="WARN"/>
+    <logger name="org.hibernate" level="WARN"/>
+    <logger name="org.apache" level="WARN"/>
+</configuration>

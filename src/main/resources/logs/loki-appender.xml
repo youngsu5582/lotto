@@ -1,0 +1,25 @@
+<included>
+    <appender name="LOKI" class="com.github.loki4j.logback.Loki4jAppender">
+        <http>
+            <url>${LOKI_URL}</url>
+        </http>
+        <format>
+            <label>
+                <pattern>app=lotto,host=${HOSTNAME},profile=${PROFILE},level=%level</pattern>
+                <readMarkers>true</readMarkers>
+            </label>
+            <message>
+                <pattern>
+                    {
+                    "level":"%level",
+                    "class":"%logger{36}",
+                    "requestId":"%X{requestId}",
+                    "time":"%date{yyyy-MM-dd'T'HH:mm:ss.SSSZ}",
+                    "thread":"%thread",
+                    "message": "%message"
+                    }
+                </pattern>
+            </message>
+        </format>
+    </appender>
+</included>
