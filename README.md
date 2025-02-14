@@ -25,3 +25,18 @@
 2024년 12월 14일 ~ (진행 중)
 
 - [API 문서 링크](https://youngsu5582.github.io/lotto/)
+
+## 구동방법
+
+### 개발
+
+```bash
+cd docker
+docker-compose up -d
+```
+
+### 로컬
+
+```bash
+단순 LottoApplication 구동
+```

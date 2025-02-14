@@ -16,7 +16,7 @@ import java.nio.file.Paths
 import java.time.LocalDateTime
 
 @Component
-@Profile("!prod")
+@Profile("!prod & !test")
 class LottoInitializer : CommandLineRunner {
     private val log = LoggerFactory.getLogger(LottoInitializer::class.java)
 
