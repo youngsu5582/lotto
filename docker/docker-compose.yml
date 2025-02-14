@@ -5,9 +5,9 @@ networks:
     driver: bridge
 
 services:
-  mysql:
+  lotto-mysql:
     image: mysql:8.0
-    container_name: mysql-lotto
+    container_name: lotto-mysql
     environment:
       MYSQL_ROOT_PASSWORD: 4321
       MYSQL_DATABASE: lotto
@@ -33,9 +33,9 @@ services:
       timeout: 5s
       retries: 3
 
-  promtail:
+  lotto-promtail:
     image: grafana/promtail:latest
-    container_name: promtail
+    container_name: lotto-promtail
     volumes:
       - ./mysql/logs:/var/log/mysql
       - ./promtail/promtail-config.yml:/etc/promtail/config.yml
@@ -44,10 +44,10 @@ services:
     command: -config.file=/etc/promtail/config.yml
 
 
-  spring-lotto:
+  lotto-back:
     build:
       context: ../
-    container_name: spring-lotto
+    container_name: lotto-back
     ports:
       - "8080:8080"
 #    deploy:
@@ -56,16 +56,16 @@ services:
 #          cpus: "2"
 #          memory: 4g
     depends_on:  # Spring 애플리케이션 시작 순서 지정
-      mysql:
+      lotto-mysql:
         condition: service_healthy
     volumes:
       - ../build/libs/spring-lotto-0.0.1-SNAPSHOT.jar:/app/app.jar
     environment:
       SPRING_PROFILES_ACTIVE: dev
 
-  influxdb:
+  lotto-influx:
     image: influxdb:2.7
-    container_name: influxdb
+    container_name: lotto-influx
     ports:
       - "8086:8086"
     volumes:
@@ -74,32 +74,34 @@ services:
       DOCKER_INFLUXDB_INIT_MODE: setup
       DOCKER_INFLUXDB_INIT_USERNAME: admin
       DOCKER_INFLUXDB_INIT_PASSWORD: password
-      DOCKER_INFLUXDB_INIT_ORG: example-org
-      DOCKER_INFLUXDB_INIT_BUCKET: k6-bucket
+      DOCKER_INFLUXDB_INIT_ORG: dev-org
+      DOCKER_INFLUXDB_INIT_BUCKET: lotto-bucket
       DOCKER_INFLUXDB_INIT_ADMIN_TOKEN: adminToken1234
     command:
       - influxd
 
-  prom:
+  lotto-prometheus:
     image: prom/prometheus
     restart: unless-stopped
+    container_name: lotto-prometheus
     volumes:
       - prom:/prometheus
       - ./prometheus/prometheus.yml:/etc/prometheus/prometheus.yml
     ports:
       - "9090:9090"
     links:
-      - spring-lotto
-      - influxdb
+      - lotto-back
+      - lotto-influx
 
-  loki:
+  lotto-loki:
     image: grafana/loki:latest
-    container_name: loki
+    container_name: lotto-loki
     ports:
       - "3100:3100"
 
-  grafana:
+  lotto-grafana:
     image: grafana/grafana
+    container_name: lotto-grafana
     restart: unless-stopped
     volumes:
       - grafana:/var/lib/grafana
@@ -112,11 +114,11 @@ services:
       - GF_AUTH_ANONYMOUS_ORG_ROLE=Admin
     ports:
       - "3500:3000"
-  front-lotto:
+  lotto-front:
     build:
       context: ../frontend
       dockerfile: Dockerfile
-    container_name: front-lotto
+    container_name: lotto-front
     ports:
       - "3000:3000"
     volumes:
@@ -125,7 +127,7 @@ services:
     environment:
       - NODE_ENV=development
     depends_on:
-      - spring-lotto
+      - lotto-back
 
     networks:
       - app-network
@@ -136,3 +138,5 @@ volumes:
   influxdb:
   mysql-data:
   loki-data:
+
+

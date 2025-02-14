@@ -4,43 +4,39 @@ datasources:
     type: loki
     access: proxy
     orgId: 1
-    url: http://loki:3100
+    url: http://lotto-loki:3100
     basicAuth: false
     isDefault: true
     version: 1
     editable: false
 
+  - name: InfluxDB
+    type: influxdb
+    access: proxy
+    url: http://lotto-influx:8086
+    jsonData:
+      version: Flux
+      organization: dev-org
+      defaultBucket: lotto-bucket
+      tlsSkipVerify: true
+    secureJsonData:
+      token: adminToken1234
+
+
   - name: Prometheus
     type: prometheus
     access: proxy
     orgId: 1
-    url: http://prom:9090
+    url: http://lotto-prometheus:9090
     basicAuth: false
     isDefault: false
     editable: false
-
-  - name: InfluxDB
-    type: influxdb
-    access: proxy
-    orgId: 1
-    url: http://influxdb:8086
-    basicAuth: false
-    database: k6-bucket
-    user: admin
-    password: password
-    jsonData:
-      httpMode: POST
-      organization: example-org
-      defaultBucket: k6-bucket
-      version: Flux
-    secureJsonData:
-      token: adminToken1234
 
   - name: MySQL
     type: mysql
     access: proxy
     orgId: 1
-    url: mysql:3306
+    url: lotto-mysql:3306
     user: lotto
     secureJsonData:
       password: "4321"
