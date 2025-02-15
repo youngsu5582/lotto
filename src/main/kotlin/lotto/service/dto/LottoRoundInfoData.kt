@@ -16,14 +16,14 @@ class LottoRoundInfoData(
     val status: LottoStatus = LottoStatus.ONGOING,
 ) {
     companion object {
-        fun from(lottoPublish: LottoRoundInfo): LottoRoundInfoData {
+        fun from(lottoRoundInfo: LottoRoundInfo): LottoRoundInfoData {
             return LottoRoundInfoData(
-                startDate = lottoPublish.startDate,
-                endDate = lottoPublish.endDate,
-                drawDate = lottoPublish.drawDate,
-                status = lottoPublish.status,
-                paymentDeadline = lottoPublish.paymentDeadline,
-                round = lottoPublish.round
+                startDate = lottoRoundInfo.startDate,
+                endDate = lottoRoundInfo.endDate,
+                drawDate = lottoRoundInfo.drawDate,
+                status = lottoRoundInfo.status,
+                paymentDeadline = lottoRoundInfo.paymentDeadline,
+                round = lottoRoundInfo.round
             )
         }
     }
