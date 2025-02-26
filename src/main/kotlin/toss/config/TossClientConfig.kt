@@ -5,24 +5,34 @@ import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule
 import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
+import org.springframework.context.annotation.Profile
+import org.springframework.jdbc.core.JdbcTemplate
 import org.springframework.web.client.RestClient
+import purchase.domain.PaymentClient
 import toss.TossPaymentClient
+import toss.TossPaymentFakeClient
 import toss.TossResponseErrorHandler
 
 @Configuration
 @EnableConfigurationProperties(TossClientProperties::class)
 class TossClientConfig {
-    fun restClient(): RestClient {
-        return RestClient.builder().baseUrl("https://api.tosspayments.com")
-            .build()
-    }
 
-    fun objectMapper(): ObjectMapper {
-        return ObjectMapper().registerModule(JavaTimeModule())
+    @Bean
+    @Profile("prod")
+    fun tossPaymentClient(tossClientProperties: TossClientProperties): PaymentClient {
+        val restClient = RestClient.builder().baseUrl("https://api.tosspayments.com").build()
+        val objectMapper = ObjectMapper().registerModule(JavaTimeModule())
+
+        return TossPaymentClient(
+            restClient,
+            tossClientProperties,
+            TossResponseErrorHandler(objectMapper)
+        )
     }
 
     @Bean
-    fun tossPaymentClient(tossClientProperties: TossClientProperties): TossPaymentClient {
-        return TossPaymentClient(restClient(), tossClientProperties, TossResponseErrorHandler(objectMapper()))
+    @Profile("dev", "local")
+    fun tossPaymentClientFake(jdbcTemplate: JdbcTemplate): PaymentClient {
+        return TossPaymentFakeClient(jdbcTemplate)
     }
 }
