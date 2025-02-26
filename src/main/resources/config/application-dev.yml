@@ -19,7 +19,10 @@ spring:
     url: jdbc:mysql://lotto-mysql:3306/lotto?allowPublicKeyRetrieval=true&useSSL=false&serverTimezone=UTC&useUnicode=true&characterEncoding=UTF-8
     username: lotto
     password: 4321
-
+  data:
+    redis:
+      host: lotto-redis
+      port: 6379
 
 management:
   endpoints:
