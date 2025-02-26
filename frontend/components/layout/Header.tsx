@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation';
 import { authApi } from '../../services';
 import AuthModal from '../auth/AuthModal';
 import { User } from '../../types/auth';
+import RoundInfoBanner from '../RoundInfoBanner';
 
 interface HeaderProps {
   onAuthStateChange?: (isLoggedIn: boolean) => void;
@@ -51,35 +52,38 @@ export default function Header({ onAuthStateChange }: HeaderProps) {
   };
 
   return (
-    <header className="bg-neutral-800 py-4">
-      <div className="max-w-7xl mx-auto px-4 flex justify-between items-center">
-        <h1 className="text-white text-xl font-bold cursor-pointer" onClick={() => router.push('/')}>로또</h1>
-        <div className="flex items-center gap-4">
-          {user ? (
-            <>
+    <>
+      <RoundInfoBanner />
+      <header className="bg-neutral-800 py-4">
+        <div className="max-w-7xl mx-auto px-4 flex justify-between items-center">
+          <h1 className="text-white text-xl font-bold cursor-pointer" onClick={() => router.push('/')}>로또</h1>
+          <div className="flex items-center gap-4">
+            {user ? (
+              <>
+                <button
+                  onClick={() => router.push('/my-tickets')}
+                  className="px-4 py-2 bg-neutral-700 text-white rounded hover:bg-neutral-600"
+                >
+                  구매 내역
+                </button>
+                <button
+                  onClick={handleLogout}
+                  className="px-4 py-2 bg-neutral-700 text-white rounded hover:bg-neutral-600"
+                >
+                  로그아웃
+                </button>
+              </>
+            ) : (
               <button
-                onClick={() => router.push('/my-tickets')}
-                className="px-4 py-2 bg-neutral-700 text-white rounded hover:bg-neutral-600"
+                onClick={() => setShowAuthModal(true)}
+                className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700"
               >
-                구매 내역
+                로그인
               </button>
-              <button
-                onClick={handleLogout}
-                className="px-4 py-2 bg-neutral-700 text-white rounded hover:bg-neutral-600"
-              >
-                로그아웃
-              </button>
-            </>
-          ) : (
-            <button
-              onClick={() => setShowAuthModal(true)}
-              className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700"
-            >
-              로그인
-            </button>
-          )}
+            )}
+          </div>
         </div>
-      </div>
+      </header>
 
       {showAuthModal && (
         <AuthModal
@@ -90,6 +94,6 @@ export default function Header({ onAuthStateChange }: HeaderProps) {
           }}
         />
       )}
-    </header>
+    </>
   );
 } 
