@@ -6,7 +6,7 @@ import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Primary
 import purchase.domain.implementation.PaymentProcessor
 import purchase.domain.implementation.PurchaseKeyManager
-import purchase.domain.implementation.TestPaymentClient
+import toss.TossPaymentFakeClient
 
 @TestConfiguration
 class AcceptanceConfig {
@@ -16,7 +16,7 @@ class AcceptanceConfig {
     fun paymentProcessor(): PaymentProcessor {
         return PaymentProcessor(
             paymentClients = listOf(
-                TestPaymentClient()
+                TossPaymentFakeClient()
             )
         )
     }

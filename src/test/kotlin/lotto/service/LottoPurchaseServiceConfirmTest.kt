@@ -72,7 +72,7 @@ class LottoPurchaseServiceConfirmTest {
                         purchaseType = PurchaseType.CARD,
                         currency = Currency.KRW,
                         amount = BigDecimal(1000),
-                        paymentKey = "paymentKey",
+                        paymentKey = "success-paymentkey",
                         orderId = "orderId"
                     ),
                     lottoPublishId = lottoPublishId,
@@ -96,6 +96,7 @@ class LottoPurchaseServiceConfirmTest {
                     authenticated = AuthenticatedMember("ID", "user@email.com")
                 )
             }
+            println(results.getErrorMessage())
             results.successCount() shouldBe 1
             results.failureCount() shouldBe 9
         }
