@@ -14,8 +14,12 @@ class FakePurchaseKeyManager : PurchaseKeyManager {
         if (currentStatus != null) {
             return currentStatus
         }
-        val previous = map.putIfAbsent(key, PaymentStatus.IN_PROGRESS)
-        return if (previous == null) PaymentStatus.ALREADY_PROGRESS else PaymentStatus.IN_PROGRESS
+        if (map[key] == null) {
+            map.putIfAbsent(key, PaymentStatus.IN_PROGRESS)
+            return PaymentStatus.IN_PROGRESS
+        }
+
+        return PaymentStatus.ALREADY_PROGRESS
     }
 
     override fun markAsStatus(paymentKey: String, paymentStatus: PaymentStatus) {

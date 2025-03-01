@@ -6,7 +6,6 @@ import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.context.annotation.Profile
-import org.springframework.jdbc.core.JdbcTemplate
 import org.springframework.web.client.RestClient
 import purchase.domain.PaymentClient
 import toss.TossPaymentClient
@@ -31,8 +30,8 @@ class TossClientConfig {
     }
 
     @Bean
-    @Profile("dev", "local")
-    fun tossPaymentClientFake(jdbcTemplate: JdbcTemplate): PaymentClient {
-        return TossPaymentFakeClient(jdbcTemplate)
+    @Profile("dev", "local", "test")
+    fun tossPaymentClientFake(): PaymentClient {
+        return TossPaymentFakeClient()
     }
 }

@@ -1,6 +1,5 @@
 package toss
 
-import org.springframework.jdbc.core.JdbcTemplate
 import org.springframework.web.context.request.RequestContextHolder
 import org.springframework.web.context.request.ServletRequestAttributes
 import purchase.domain.PaymentClient
@@ -18,12 +17,10 @@ import kotlin.random.Random
  */
 
 class TossPaymentFakeClient(
-    private val jdbcTemplate: JdbcTemplate
 ) : PaymentClient {
     override fun process(request: PurchaseRequest): PurchaseData {
         ifCustomHeaderThrowException()
         Thread.sleep(Random.nextLong(100, 500))
-        jdbcTemplate.update("INSERT INTO purchase_key (payment_key) VALUES (?)", request.paymentKey)
         return PurchaseData(
             totalAmount = request.amount,
             paymentKey = request.paymentKey,

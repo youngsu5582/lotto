@@ -17,7 +17,7 @@ class RedisPurchaseKeyManager(
             return PaymentStatus.from(currentStatus)
         }
         val isFirstRequest = ops.setIfAbsent(key, PaymentStatus.IN_PROGRESS.name, 5, TimeUnit.MINUTES) ?: false
-        if (!isFirstRequest) return PaymentStatus.IN_PROGRESS
+        if (isFirstRequest) return PaymentStatus.IN_PROGRESS
         return PaymentStatus.ALREADY_PROGRESS
     }
 

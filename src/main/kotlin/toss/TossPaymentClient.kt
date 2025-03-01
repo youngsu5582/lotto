@@ -1,6 +1,5 @@
 package toss
 
-import common.business.Implementation
 import org.springframework.http.HttpHeaders
 import org.springframework.web.client.ResourceAccessException
 import org.springframework.web.client.RestClient
