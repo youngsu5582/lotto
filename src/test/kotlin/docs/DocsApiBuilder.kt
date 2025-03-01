@@ -2,13 +2,16 @@ package docs
 
 import docs.request.DslContainer
 import io.restassured.RestAssured
+import io.restassured.filter.Filter
 import io.restassured.http.ContentType
+import io.restassured.response.Response
 import io.restassured.specification.RequestSpecification
 import org.springframework.restdocs.headers.HeaderDocumentation
 import org.springframework.restdocs.payload.JsonFieldType
 import org.springframework.restdocs.payload.PayloadDocumentation
 import org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath
 import org.springframework.restdocs.restassured.RestAssuredRestDocumentation
+import org.springframework.restdocs.snippet.SnippetException
 
 class DocsApiBuilder(private val documentName: String) {
 
@@ -23,6 +26,14 @@ class DocsApiBuilder(private val documentName: String) {
             fieldWithPath("status").type(JsonFieldType.NUMBER).description("응답 상태 코드"),
             fieldWithPath("message").type(JsonFieldType.STRING).description("응답 메시지")
         )
+    }
+
+    private val capturedResponse: ThreadLocal<Response> = ThreadLocal()
+
+    private val capturingFilter = Filter { requestSpec, responseSpec, ctx ->
+        val response = ctx.next(requestSpec, responseSpec)
+        capturedResponse.set(response)
+        response
     }
 
     fun setRequest(
@@ -59,6 +70,13 @@ class DocsApiBuilder(private val documentName: String) {
         try {
             var requestSpec: RequestSpecification = RestAssured.given().log().all()
                 .contentType(ContentType.JSON)
+                .filter(
+                    RestAssuredRestDocumentation.document(
+                        documentName,
+                        HeaderDocumentation.requestHeaders(requestContainer.convertHeadersDescriptors()),
+                        PayloadDocumentation.requestFields(requestContainer.convertBodyDescriptors()),
+                    )
+                )
                 .headers(requestContainer.convertHeaders())
                 .queryParams(requestContainer.convertQueryParams())
                 .body(requestContainer.convertBody())
@@ -66,18 +84,21 @@ class DocsApiBuilder(private val documentName: String) {
                 .filter(
                     RestAssuredRestDocumentation.document(
                         documentName,
-                        HeaderDocumentation.requestHeaders(requestContainer.convertHeadersDescriptors()),
                         HeaderDocumentation.responseHeaders(responseContainer.convertHeadersDescriptors()),
-                        PayloadDocumentation.requestFields(requestContainer.convertBodyDescriptors()),
                         SUCCESS_SNIPPET.andWithPrefix("data.", responseContainer.convertBodyDescriptors())
                     )
                 )
+                .filter(capturingFilter)
                 .request(method.toMethod(), endpoint)
-                .then().log().all()
+                .then()
                 .extract()
             return DocsApiValidator(response)
+        } catch (snippetException: SnippetException) {
+            val captured = capturedResponse.get()?.asString() ?: "No response captured."
+            println("Captured Response: $captured")
+            throw IllegalArgumentException("API 문서화 중 오류가 발생했습니다: ${snippetException.message}", snippetException)
         } catch (e: Exception) {
-            throw IllegalStateException("API 문서화 중 오류가 발생했습니다: ${e.message}", e)
+            throw IllegalStateException("실행중 요류가 발생했습니다 : ${e.message}", e)
         }
     }
 

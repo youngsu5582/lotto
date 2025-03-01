@@ -7,7 +7,7 @@ import docs.HttpMethod
 import docs.field.DocsFieldType
 import org.junit.jupiter.api.Test
 
-@AcceptanceTest(["/acceptance/lottoCancel.json", "acceptance/member.json"])
+@AcceptanceTest(["/acceptance/lottoCancel.json", "/acceptance/member.json", "/acceptance/lottoRoundInfo.json"])
 class LottoPurchaseCancelTest {
     @Test
     fun `인증된 사용자가 아니면 결제 취소를 실패 한다`() {

@@ -1,6 +1,7 @@
 package lotto.controller
 
 import common.dto.ApiResponse
+import common.dto.apiResponse
 import io.github.oshai.kotlinlogging.KotlinLogging
 import org.springframework.web.bind.annotation.ControllerAdvice
 import org.springframework.web.bind.annotation.ExceptionHandler
@@ -26,5 +27,14 @@ class LottoExceptionHandler {
     fun handleNoSuchElementException(ex: NoSuchElementException): ApiResponse<Void> {
         logger.warn { ex.stackTraceToString() }
         return ApiResponse.fail(message = ex.message)
+    }
+
+    @ExceptionHandler(Exception::class)
+    fun handleException(ex: Exception): ApiResponse<Void> {
+        logger.warn { ex.stackTraceToString() }
+        return apiResponse {
+            status = 500
+            message = ex.message
+        }
     }
 }

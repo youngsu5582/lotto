@@ -5,7 +5,8 @@ import org.springframework.boot.test.context.TestConfiguration
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Primary
 import purchase.domain.implementation.PaymentProcessor
-import purchase.domain.implementation.TestPaymentClient
+import purchase.domain.implementation.PurchaseKeyManager
+import toss.TossPaymentFakeClient
 
 @TestConfiguration
 class AcceptanceConfig {
@@ -14,8 +15,8 @@ class AcceptanceConfig {
     @Primary
     fun paymentProcessor(): PaymentProcessor {
         return PaymentProcessor(
-            paymentClients = mapOf(
-                "TOSS" to TestPaymentClient()
+            paymentClients = listOf(
+                TossPaymentFakeClient()
             )
         )
     }
@@ -24,6 +25,13 @@ class AcceptanceConfig {
     @Primary
     fun passwordEncoder(): PasswordEncoder {
         return TestEncoder()
+    }
+
+    @Bean
+    @Primary
+    fun purchaseKeyManager(): PurchaseKeyManager {
+        return FakePurchaseKeyManager(
+        )
     }
 }
 

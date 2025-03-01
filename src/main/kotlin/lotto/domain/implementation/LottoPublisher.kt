@@ -21,15 +21,41 @@ class LottoPublisher(
     private val publishedLottoRepository: PublishedLottoRepository,
 ) {
     @Transaction
-    @Read
-    fun findPublish(publishId: Long): LottoPublish = getLottoPublish(publishId)
-
-    @Transaction
     @Write
     fun complete(publishId: Long): LottoPublish {
         val lottoPublish = getLottoPublish(publishId)
         lottoPublish.complete()
         return lottoPublish
+    }
+
+    @Transaction
+    @Write
+    fun pending(publishId: Long): LottoPublish {
+        val lottoPublish = getLottoPublish(publishId)
+        lottoPublish.pending()
+        return lottoPublish
+    }
+
+    @Transaction
+    @Write
+    fun cancel(publishId: Long): LottoPublish {
+        val lottoPublish = getLottoPublish(publishId)
+        lottoPublish.cancel()
+        return lottoPublish
+    }
+
+    @Transaction
+    @Write
+    fun waiting(publishId: Long): LottoPublish {
+        val lottoPublish = getLottoPublish(publishId)
+        lottoPublish.waiting()
+        return lottoPublish
+    }
+
+    @Transaction
+    @Read
+    fun read(publishId: Long): LottoPublish = lottoPublishRepository.findById(publishId).orElseThrow {
+        NoSuchElementException("Not Exist LottoPublish")
     }
 
     @Transaction
@@ -64,9 +90,8 @@ class LottoPublisher(
 
     private fun getLottoPublish(publishId: Long): LottoPublish {
         return lottoPublishRepository.findById(publishId)
-            .orElseThrow { IllegalArgumentException("Not Exist Publish") }
+            .orElseThrow { IllegalArgumentException("Not Exist Publish ( 결제 키 : $publishId )") }
     }
-
 
     private fun getLottoInfo(issuedAt: LocalDateTime): LottoRoundInfo {
         return lottoRoundInfoRepository.findTopByIssueDateLessThanEqualAndDrawDateGreaterThanEqual(issuedAt)

@@ -1,15 +1,4 @@
 {
-  "lotto_round_info": [
-    {
-      "id": 1,
-      "round": 1034,
-      "start_date": "2025-01-18T10:00:00",
-      "end_date": "2025-02-20T20:00:00",
-      "draw_date": "2025-02-24T21:00:00",
-      "payment_deadline": "2026-01-16T23:59:59",
-      "status": "ONGOING"
-    }
-  ],
   "purchase": [
     {
       "id": "dfb3ad82-e2ba-4220-a969-0b4a293c9a8b",
@@ -30,13 +19,13 @@
   ],
   "purchase_info": [
     {
-      "id":"b4386e47-8555-437c-bcd9-164262a9a3bd",
-      "total_amount":1000,
+      "id": "b4386e47-8555-437c-bcd9-164262a9a3bd",
+      "total_amount": 1000,
       "method": "CARD"
     },
     {
-      "id":"b4386e47-8555-437c-bcd9-164262a9a3be",
-      "total_amount":1000,
+      "id": "b4386e47-8555-437c-bcd9-164262a9a3be",
+      "total_amount": 1000,
       "method": "CARD"
     }
   ],
