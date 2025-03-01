@@ -33,8 +33,8 @@ class LottoPurchaseService(
             "결제가 이미 진행중입니다. [ 결제 ID : $paymentKey ]"
         }
 
+        orderValidator.checkOrderValid(lottoPurchaseRequest.toOrderDataRequest())
         return runCatching {
-            orderValidator.checkOrderValid(lottoPurchaseRequest.toOrderDataRequest())
             lottoPublisher.pending(lottoPublishId)
 
             val purchase = purchaseProcessor.purchase(lottoPurchaseRequest.toPurchaseRequest())
