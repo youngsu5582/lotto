@@ -8,11 +8,9 @@ class FakePurchaseKeyManager : PurchaseKeyManager {
 
     override fun checkPaymentStatus(paymentKey: String): PaymentStatus {
         val key = paymentKey.getRedisKey()
-        if (map[key] == null) {
-            map.putIfAbsent(key, PaymentStatus.IN_PROGRESS)
-            return PaymentStatus.IN_PROGRESS
-        }
-        return PaymentStatus.ALREADY_PROGRESS
+        val previousStatus = map.putIfAbsent(key, PaymentStatus.IN_PROGRESS)
+        return if (previousStatus == null) PaymentStatus.IN_PROGRESS
+        else return PaymentStatus.ALREADY_PROGRESS
     }
 
     override fun markAsStatus(paymentKey: String, paymentStatus: PaymentStatus) {
