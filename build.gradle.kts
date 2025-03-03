@@ -47,6 +47,9 @@ dependencies {
     implementation ("io.micrometer:micrometer-registry-prometheus")
     implementation ("com.github.loki4j:loki-logback-appender:1.4.0")
 
+    // 레디스
+    implementation ("org.springframework.boot:spring-boot-starter-data-redis")
+
     // Test 및 REST Docs 의존성
     testImplementation("org.springframework.boot:spring-boot-starter-test") {
         exclude(group = "org.junit.vintage") // JUnit 5 전용

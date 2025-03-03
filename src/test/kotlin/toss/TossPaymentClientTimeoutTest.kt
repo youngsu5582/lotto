@@ -14,6 +14,7 @@ import purchase.domain.vo.PurchaseRequest
 import toss.config.TossClientProperties
 import java.math.BigDecimal
 
+@Disabled("외부 주소에 직접적으로 테스트가 의존을 받으므로 비활성화한다.")
 @EnableConfigurationProperties(TossClientProperties::class)
 class TossPaymentClientTimeoutTest {
     private val connectTimeoutUrl = "https://10.255.255.1"

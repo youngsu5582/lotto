@@ -9,7 +9,7 @@ import lotto.domain.entity.LottoPublishStatus
 import lotto.domain.entity.LottoStatus
 import org.junit.jupiter.api.Test
 
-@AcceptanceTest(["/acceptance/member.json", "/acceptance/lottoBills.json"])
+@AcceptanceTest(["/acceptance/member.json", "/acceptance/lottoBills.json","/acceptance/lottoRoundInfo.json"])
 class LottoInquiryTest {
     @Test
     fun `자기가 구매한 로또를 조회한다`() {

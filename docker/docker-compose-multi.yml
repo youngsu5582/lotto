@@ -1,0 +1,263 @@
+version: '3.8'
+
+networks:
+  app-network:
+    driver: bridge
+
+services:
+  lotto-mysql:
+    image: mysql:8.0
+    container_name: lotto-mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: 4321
+      MYSQL_DATABASE: lotto
+      MYSQL_USER: lotto
+      MYSQL_PASSWORD: 4321
+      TZ: Asia/Seoul
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql-data:/var/lib/mysql
+      - ./mysql/logs:/var/log/mysql
+      - ./mysql/scripts/lotto_init.sql:/docker-entrypoint-initdb.d/init.sql
+    command: >
+      --general_log=1
+      --general_log_file=/var/log/mysql/general.log
+      --slow_query_log=1
+      --slow_query_log_file=/var/log/mysql/slow.log
+      --long_query_time=1
+    restart: always
+    healthcheck:
+      test: ["CMD-SHELL", "mysqladmin ping -h localhost -u root -p4321 || exit 1"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+    networks:
+      - app-network
+
+  lotto-promtail:
+    image: grafana/promtail:latest
+    container_name: lotto-promtail
+    volumes:
+      - ./mysql/logs:/var/log/mysql
+      - ./promtail/promtail-config.yml:/etc/promtail/config.yml
+    ports:
+      - "9080:9080"
+    command: -config.file=/etc/promtail/config.yml
+    networks:
+      - app-network
+
+  # =========================
+  # lotto-back 서버 1번
+  # =========================
+  lotto-back-1:
+    build:
+      context: ../
+    container_name: lotto-back-1
+    ports:
+      - "8081:8080"
+    depends_on:
+      lotto-mysql:
+        condition: service_healthy
+    volumes:
+      - ../build/libs/spring-lotto-0.0.1-SNAPSHOT.jar:/app/app.jar
+    environment:
+      SERVER_NAME: "lotto-back-1"
+      SPRING_PROFILES_ACTIVE: dev
+    networks:
+      - app-network
+    deploy:
+      resources:
+        limits:
+          cpus: '0.5'
+          memory: '512M'
+
+  # =========================
+  # lotto-back 서버 2번
+  # =========================
+  lotto-back-2:
+    build:
+      context: ../
+    container_name: lotto-back-2
+    ports:
+      - "8082:8080"
+    depends_on:
+      lotto-mysql:
+        condition: service_healthy
+    volumes:
+      - ../build/libs/spring-lotto-0.0.1-SNAPSHOT.jar:/app/app.jar
+    environment:
+      SERVER_NAME: "lotto-back-2"
+      SPRING_PROFILES_ACTIVE: dev
+    networks:
+      - app-network
+    deploy:
+      resources:
+        limits:
+          cpus: '0.5'
+          memory: '512M'
+
+  # =========================
+  # lotto-back 서버 3번
+  # =========================
+  lotto-back-3:
+    build:
+      context: ../
+    container_name: lotto-back-3
+    ports:
+      - "8083:8080"
+    depends_on:
+      lotto-mysql:
+        condition: service_healthy
+    volumes:
+      - ../build/libs/spring-lotto-0.0.1-SNAPSHOT.jar:/app/app.jar
+    environment:
+      SERVER_NAME: "lotto-back-3"
+      SPRING_PROFILES_ACTIVE: dev
+    networks:
+      - app-network
+    deploy:
+      resources:
+        limits:
+          cpus: '0.5'
+          memory: '512M'
+
+  # =========================
+  # lotto-back 서버 4번
+  # =========================
+  lotto-back-4:
+    build:
+      context: ../
+    container_name: lotto-back-4
+    ports:
+      - "8084:8080"
+    depends_on:
+      lotto-mysql:
+        condition: service_healthy
+    volumes:
+      - ../build/libs/spring-lotto-0.0.1-SNAPSHOT.jar:/app/app.jar
+    environment:
+      SERVER_NAME: "lotto-back-4"
+      SPRING_PROFILES_ACTIVE: dev
+    networks:
+      - app-network
+    deploy:
+      resources:
+        limits:
+          cpus: '0.5'
+          memory: '512M'
+
+  # =========================
+  # Nginx 로드 밸런서
+  # =========================
+  lotto-lb:
+    image: nginx:latest
+    container_name: lotto-lb
+    depends_on:
+      - lotto-back-1
+      - lotto-back-2
+      - lotto-back-3
+      - lotto-back-4
+    volumes:
+      - ./nginx/default.conf:/etc/nginx/conf.d/default.conf
+    ports:
+      - "8080:80"
+    networks:
+      - app-network
+
+  lotto-influx:
+    image: influxdb:2.7
+    container_name: lotto-influx
+    ports:
+      - "8086:8086"
+    volumes:
+      - influxdb:/var/lib/influxdb2
+    environment:
+      DOCKER_INFLUXDB_INIT_MODE: setup
+      DOCKER_INFLUXDB_INIT_USERNAME: admin
+      DOCKER_INFLUXDB_INIT_PASSWORD: password
+      DOCKER_INFLUXDB_INIT_ORG: dev-org
+      DOCKER_INFLUXDB_INIT_BUCKET: lotto-bucket
+      DOCKER_INFLUXDB_INIT_ADMIN_TOKEN: adminToken1234
+    command:
+      - influxd
+    networks:
+      - app-network
+
+  lotto-prometheus:
+    image: prom/prometheus
+    restart: unless-stopped
+    container_name: lotto-prometheus
+    volumes:
+      - prom:/prometheus
+      - ./prometheus/prometheus-multi.yml:/etc/prometheus/prometheus.yml
+    ports:
+      - "9090:9090"
+    links:
+      - lotto-back-1
+      - lotto-back-2
+      - lotto-back-3
+      - lotto-back-4
+      - lotto-influx
+    networks:
+      - app-network
+
+  lotto-loki:
+    image: grafana/loki:latest
+    container_name: lotto-loki
+    ports:
+      - "3100:3100"
+    networks:
+      - app-network
+
+  lotto-grafana:
+    image: grafana/grafana
+    container_name: lotto-grafana
+    restart: unless-stopped
+    volumes:
+      - grafana:/var/lib/grafana
+      - ./grafana/datasource:/etc/grafana/provisioning/datasources
+      - ./grafana/dashboards:/var/lib/grafana/dashboards
+      - ./grafana/dashboard/dashboard.yaml:/etc/grafana/provisioning/dashboards/main.yaml
+    environment:
+      - GF_AUTH_ANONYMOUS_ENABLED=true
+      - GF_AUTH_ANONYMOUS_ORG_ROLE=Admin
+    ports:
+      - "3500:3000"
+    networks:
+      - app-network
+
+  lotto-front:
+    build:
+      context: ../frontend
+      dockerfile: Dockerfile
+    container_name: lotto-front
+    ports:
+      - "3000:3000"
+    volumes:
+      - ../frontend:/app
+      - /app/node_modules
+    environment:
+      - NODE_ENV=development
+    depends_on:
+      - lotto-back-1
+      - lotto-back-2
+      - lotto-back-3
+      - lotto-back-4
+    networks:
+      - app-network
+  lotto-redis:
+    image: redis:latest
+    container_name: lotto-redis
+    ports:
+      - "6379:6379"
+    networks:
+      - app-network
+    command: ["redis-server", "--appendonly", "yes"]
+
+volumes:
+  grafana:
+  prom:
+  influxdb:
+  mysql-data:
+  loki-data:

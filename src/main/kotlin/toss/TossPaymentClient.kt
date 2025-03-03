@@ -1,6 +1,5 @@
 package toss
 
-import common.business.Implementation
 import org.springframework.http.HttpHeaders
 import org.springframework.web.client.ResourceAccessException
 import org.springframework.web.client.RestClient
@@ -18,7 +17,6 @@ import toss.dto.TossPaymentConfirmRequest
 import toss.dto.TossPaymentConfirmResponse
 import java.util.*
 
-@Implementation
 class TossPaymentClient(
     private val restClient: RestClient,
     private val tossClientProperties: TossClientProperties,
@@ -55,6 +53,10 @@ class TossPaymentClient(
             )
         }
         return response.toCancelData()
+    }
+
+    override fun support(provider: String): Boolean {
+        return provider == "TOSS"
     }
 
     private fun <T> executeWithRetry(block: () -> T): T {

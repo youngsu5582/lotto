@@ -1,9 +1,10 @@
 package lotto.service
 
-import TestConstant
+import ConcurrentTestUtil
 import app.TestConfig
 import auth.domain.vo.AuthenticatedMember
 import config.ImplementationTest
+import io.kotest.matchers.shouldBe
 import lotto.Fixture.LottoRoundFixture.createOngoingLottoRoundInfo
 import lotto.domain.entity.LottoPublish
 import lotto.domain.entity.LottoPublishStatus
@@ -71,6 +72,23 @@ class LottoPurchaseServiceConfirmTest {
                         purchaseType = PurchaseType.CARD,
                         currency = Currency.KRW,
                         amount = BigDecimal(1000),
+                        paymentKey = "success-paymentkey",
+                        orderId = "orderId"
+                    ),
+                    lottoPublishId = lottoPublishId,
+                    authenticated = AuthenticatedMember("ID", "user@email.com")
+                )
+            }
+        }
+
+        @Test
+        fun `동시에 여러개의 요청이 오면 하나만 성공한다`() {
+            val results = ConcurrentTestUtil.concurrent(numberOfRequests = 10, wait = 1000L) {
+                lottoPurchaseService.purchase(
+                    lottoPurchaseRequest = LottoPurchaseRequest(
+                        purchaseType = PurchaseType.CARD,
+                        currency = Currency.KRW,
+                        amount = BigDecimal(1000),
                         paymentKey = "paymentKey",
                         orderId = "orderId"
                     ),
@@ -78,6 +96,9 @@ class LottoPurchaseServiceConfirmTest {
                     authenticated = AuthenticatedMember("ID", "user@email.com")
                 )
             }
+            println(results.getErrorMessage())
+            results.successCount() shouldBe 1
+            results.failureCount() shouldBe 9
         }
     }
 }

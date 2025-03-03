@@ -9,4 +9,6 @@ interface PaymentClient {
     fun process(request: PurchaseRequest): PurchaseData
 
     fun cancel(request: CancelRequest): CancelData
+
+    fun support(provider: String): Boolean
 }

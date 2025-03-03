@@ -19,7 +19,7 @@ import org.springframework.test.context.support.AbstractTestExecutionListener
 import org.springframework.util.StreamUtils
 import java.nio.charset.Charset
 import java.nio.charset.StandardCharsets
-import java.util.UUID
+import java.util.*
 
 class AcceptanceTestExecutionListener : AbstractTestExecutionListener() {
 
@@ -78,11 +78,13 @@ class AcceptanceTestExecutionListener : AbstractTestExecutionListener() {
             StreamUtils.copyToString(ClassPathResource(filePath).inputStream, Charset.defaultCharset()),
             Map::class.java
         ) as Map<String, List<Map<String, String>>>
+        jdbcTemplate.execute("SET REFERENTIAL_INTEGRITY FALSE")
 
         createInsertQueries(parsedJsonSql).forEach { query ->
             log.info({ "$query Execute" })
             jdbcTemplate.execute(query)
         }
+        jdbcTemplate.execute("SET REFERENTIAL_INTEGRITY TRUE")
     }
 
     private fun createInsertQueries(parsedJsonSql: Map<String, List<Map<String, Any>>>): List<String> {
