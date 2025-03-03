@@ -1,7 +1,5 @@
-package config
+package purchase.domain.implementation
 
-import purchase.domain.implementation.PaymentStatus
-import purchase.domain.implementation.PurchaseKeyManager
 import java.util.concurrent.ConcurrentHashMap
 
 class FakePurchaseKeyManager : PurchaseKeyManager {
@@ -10,15 +8,10 @@ class FakePurchaseKeyManager : PurchaseKeyManager {
 
     override fun checkPaymentStatus(paymentKey: String): PaymentStatus {
         val key = paymentKey.getRedisKey()
-        val currentStatus = map[key]
-        if (currentStatus != null) {
-            return currentStatus
-        }
         if (map[key] == null) {
             map.putIfAbsent(key, PaymentStatus.IN_PROGRESS)
             return PaymentStatus.IN_PROGRESS
         }
-
         return PaymentStatus.ALREADY_PROGRESS
     }
 

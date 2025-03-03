@@ -4,6 +4,7 @@ import member.domain.implementation.PasswordEncoder
 import org.springframework.boot.test.context.TestConfiguration
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Primary
+import purchase.domain.implementation.FakePurchaseKeyManager
 import purchase.domain.implementation.PaymentProcessor
 import purchase.domain.implementation.PurchaseKeyManager
 import toss.TossPaymentFakeClient

@@ -1,6 +1,6 @@
 package app
 
-import config.FakePurchaseKeyManager
+import purchase.domain.implementation.FakePurchaseKeyManager
 import config.FixtureLottoNumberGenerator
 import config.LottoRepositoryImpl
 import config.MockingClock
