@@ -43,7 +43,7 @@ class MemberInfoTest {
 
     @Test
     fun `만료된 토큰을 담을시 실패한다`() {
-        DocsApiBuilder("info-fail-not-valid-token")
+        DocsApiBuilder("info-fail-expired-token")
             .setRequest("/api/auth", HttpMethod.GET) {
                 headers {
                     "Authorization" type DocsFieldType.STRING means "인증 토큰" value "Bearer ${TestConstant.EXPIRED_TOKEN}"
