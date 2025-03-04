@@ -23,6 +23,12 @@ class LottoExceptionHandler {
         return ApiResponse.fail(message = ex.message)
     }
 
+    @ExceptionHandler(IllegalStateException::class)
+    fun handleIllegalStateException(ex: IllegalStateException): ApiResponse<Void> {
+        logger.warn { ex.stackTraceToString() }
+        return ApiResponse.fail(message = ex.message)
+    }
+
     @ExceptionHandler(NoSuchElementException::class)
     fun handleNoSuchElementException(ex: NoSuchElementException): ApiResponse<Void> {
         logger.warn { ex.stackTraceToString() }
@@ -31,10 +37,10 @@ class LottoExceptionHandler {
 
     @ExceptionHandler(Exception::class)
     fun handleException(ex: Exception): ApiResponse<Void> {
-        logger.warn { ex.stackTraceToString() }
+        logger.error { ex.stackTraceToString() }
         return apiResponse {
-            status = 500
             message = ex.message
+            status = 500
         }
     }
 }
