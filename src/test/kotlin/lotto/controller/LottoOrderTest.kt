@@ -6,7 +6,7 @@ import docs.HttpMethod
 import docs.field.DocsFieldType
 import org.junit.jupiter.api.Test
 
-@AcceptanceTest(["/acceptance/lottoOrder.json"])
+@AcceptanceTest(["/acceptance/lottoOrder.json","/acceptance/lottoRoundInfo.json"])
 class LottoOrderTest {
     @Test
     fun `결제승인을 통해 성공적으로 결제를 진행한다`() {

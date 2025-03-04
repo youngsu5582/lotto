@@ -11,8 +11,8 @@ import java.math.BigDecimal
 @ImplementationTest
 class PaymentProcessorTest {
     private val paymentProcessor = PaymentProcessor(
-        paymentClients = mapOf(
-            PurchaseProvider.TOSS.name to TestPaymentClient()
+        paymentClients = listOf(
+            TestPaymentClient()
         )
     )
 
