@@ -1,5 +1,6 @@
 package app
 
+import purchase.domain.implementation.FakePurchaseKeyManager
 import config.FixtureLottoNumberGenerator
 import config.LottoRepositoryImpl
 import config.MockingClock
@@ -8,6 +9,7 @@ import org.springframework.boot.test.context.TestConfiguration
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Primary
 import purchase.domain.implementation.PaymentProcessor
+import purchase.domain.implementation.PurchaseKeyManager
 import purchase.domain.implementation.TestPaymentClient
 
 @TestConfiguration
@@ -34,9 +36,16 @@ class TestConfig {
     @Primary
     fun paymentProcessor(): PaymentProcessor {
         return PaymentProcessor(
-            paymentClients = mapOf(
-                "TOSS" to TestPaymentClient()
+            paymentClients = listOf(
+                TestPaymentClient()
             )
+        )
+    }
+
+    @Bean
+    @Primary
+    fun purchaseKeyManager(): PurchaseKeyManager {
+        return FakePurchaseKeyManager(
         )
     }
 }

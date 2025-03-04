@@ -1,6 +1,11 @@
 spring:
   application:
     name: spring-lotto
+  data:
+    redis:
+      host: lotto-redis
+      port: 6379
+
   config:
     activate:
       on-profile: local
@@ -29,5 +34,7 @@ cors:
   allowed-origins: http://localhost:3000
 
 jwt:
-  access-token-expiry: 16000000
+  access-token-expiry: 160000000000
   secret: justkeyfortestkeyisThisKeyWithOverall256bits
+server:
+  port: 8085
