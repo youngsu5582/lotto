@@ -1,0 +1,11 @@
+{
+  "lotto_statistics": [
+    {
+      "lotto_round_info_id": 1,
+      "lotto_publish_count": 2,
+      "updated_at": "now()",
+      "member_count": 3,
+      "total_purchase_money": 8000
+    }
+  ]
+}
