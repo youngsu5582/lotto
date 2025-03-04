@@ -48,13 +48,15 @@
       "id": 1,
       "purchase_id": "dfb3ad82-e2ba-4220-a969-0b4a293c9a8b",
       "lotto_publish_id": 1,
-      "member_id": "dfc3ad82-e3ba-4520-a969-0b4a293c9a8b"
+      "member_id": "dfc3ad82-e3ba-4520-a969-0b4a293c9a8b",
+      "lotto_round_info_id": 1
     },
     {
       "id": 2,
       "purchase_id": "abf3ad82-ab2d-4220-a969-0b4a293c9a8b",
       "lotto_publish_id": 2,
-      "member_id": "dfc3ad82-e3ba-4520-a969-123b4qcdb8db"
+      "member_id": "dfc3ad82-e3ba-4520-a969-123b4qcdb8db",
+      "lotto_round_info_id": 1
     }
   ],
   "lotto": [

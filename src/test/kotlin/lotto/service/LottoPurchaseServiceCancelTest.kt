@@ -64,7 +64,7 @@ class LottoPurchaseServiceCancelTest {
             )
         )
         bill = lottoBillRepository.save(
-            LottoBill(lottoPublishId = publish.getId(), purchaseId = purchase.getId().toString(), memberId = "ID")
+            LottoBill(lottoPublishId = publish.getId(), purchaseId = purchase.getId().toString(), memberId = "ID", lottoRoundInfoId = 1)
         )
     }
 

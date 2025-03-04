@@ -49,6 +49,7 @@ class LottoReaderTest {
                 memberId = "memberID",
                 lottoPublishId = 1,
                 purchaseId = "purchaseID",
+                lottoRoundInfoId = 1
             )
         )
         assertThrows<IllegalArgumentException> {
