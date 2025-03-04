@@ -30,6 +30,12 @@ class PurchaseReader(
     }
 
     @Read
-    fun findPurchase(purchaseId: String): Purchase = purchaseRepository.findById(UUID.fromString(purchaseId))
+    fun findPurchase(purchaseId: String): Purchase = purchaseRepository.findById(purchaseId.toUUID())
         .orElseThrow { NoSuchElementException("결제가 존재하지 않습니다") }
+
+    @Read
+    fun findPurchase(purchaseIds: Iterable<String>): List<Purchase> =
+        purchaseRepository.findAllById(purchaseIds.map { it.toUUID() }).toList()
+
+    private fun String.toUUID() = UUID.fromString(this)
 }

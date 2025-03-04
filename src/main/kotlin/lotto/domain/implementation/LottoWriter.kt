@@ -14,12 +14,13 @@ class LottoWriter(
 
     @Transaction
     @Write
-    fun saveBill(purchaseId: UUID, lottoPublishId: Long, memberId: String): LottoBill {
+    fun saveBill(purchaseId: UUID, lottoPublishId: Long, memberId: String, lottoRoundInfoId: Long): LottoBill {
         return lottoBillRepository.save(
             LottoBill(
                 purchaseId = purchaseId.toString(),
                 lottoPublishId = lottoPublishId,
-                memberId = memberId
+                memberId = memberId,
+                lottoRoundInfoId = lottoRoundInfoId
             )
         )
     }
