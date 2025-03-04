@@ -1,12 +1,12 @@
 package lotto.service
 
-import common.web.HttpController
+import common.business.BusinessService
 import lotto.domain.repository.LottoRoundInfoRepository
 import lotto.service.dto.LottoRoundInfoData
 import java.time.Clock
 import java.time.LocalDateTime
 
-@HttpController
+@BusinessService
 class LottoRoundInfoService(
     private val clock: Clock,
     private val lottoRoundInfoRepository: LottoRoundInfoRepository

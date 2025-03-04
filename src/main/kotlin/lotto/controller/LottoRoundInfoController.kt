@@ -14,6 +14,6 @@ class LottoRoundInfoController(
     ) = apiResponse {
         status = 200
         message = "로또 회차 정보 조회"
-        data = lottoRoundInfoService.getCurrentLottoRoundInfo()?.let { LottoRoundInfoResponse.from(it) }
+        data = lottoRoundInfoService.getCurrentLottoRoundInfo().let { LottoRoundInfoResponse.from(it) }
     }
 }
