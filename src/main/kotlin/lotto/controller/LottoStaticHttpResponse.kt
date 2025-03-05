@@ -1,20 +1,23 @@
 package lotto.controller
 
 import lotto.service.dto.LottoStatisticsData
+import java.time.LocalDateTime
 
 data class LottoStaticHttpResponse(
-    val lottoRoundInfoId: Long,
+    val lottoRoundInfo: Long,
     val memberCount: Int,
     val lottoPublishCount: Int,
-    val totalPurchaseMoney: Long
+    val totalPurchaseMoney: Long,
+    val updatedAt: LocalDateTime
 ) {
     companion object {
         fun from(lottoStatisticsData: LottoStatisticsData) = with(lottoStatisticsData) {
             LottoStaticHttpResponse(
-                lottoRoundInfoId = lottoRoundInfoId,
+                lottoRoundInfo = round,
                 memberCount = memberCount,
                 lottoPublishCount = lottoPublishCount,
-                totalPurchaseMoney = totalPurchaseMoney
+                totalPurchaseMoney = totalPurchaseMoney,
+                updatedAt = updatedAt
             )
         }
     }

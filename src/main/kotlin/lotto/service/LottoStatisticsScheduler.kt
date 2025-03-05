@@ -23,7 +23,7 @@ class LottoStatisticsScheduler(
     @PostConstruct
     fun scheduleTask() {
         val batchEnabled = System.getenv("BATCH_ENABLED")?.toBoolean() ?: false
-        if(!batchEnabled){
+        if (!batchEnabled) {
             logger.info { "이 서버에서는 배치 스케줄러를 실행하지 않습니다. (BATCH_ENABLED=false)" }
             return
         }
@@ -33,7 +33,7 @@ class LottoStatisticsScheduler(
             val time = LocalDateTime.now(clock)
             logger.info { "로또 통계 정보 갱신을 시작합니다. 시작 시간 : $time" }
             val result = lottoStatisticsService.updateStaticInfoWithCurrentLottoRoundInfo(time)
-            logger.info { "로또 통계 정보 갱신 완료. 회차번호 : ${result.lottoRoundInfoId}" }
+            logger.info { "로또 통계 정보 갱신 완료. 회차번호 : ${result.round}" }
         }, trigger)
     }
 }

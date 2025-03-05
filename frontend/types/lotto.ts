@@ -18,10 +18,11 @@ export interface LottoRoundInfoResponse {
 }
 
 export interface LottoStatistics {
-  lottoRoundInfoId: number;
+  lottoRoundInfo: number;
   memberCount: number;
   lottoPublishCount: number;
   totalPurchaseMoney: number;
+  updatedAt: string;
 }
 
 export interface LottoStatisticsResponse {

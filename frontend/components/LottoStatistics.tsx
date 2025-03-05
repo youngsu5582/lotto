@@ -27,6 +27,23 @@ export default function LottoStatistics() {
     return () => clearInterval(intervalId);
   }, []);
 
+  const formatToKoreanTime = (dateString: string) => {
+    // UTC 시간을 Date 객체로 파싱
+    const date = new Date(dateString);
+    
+    // UTC 시간을 한국 시간으로 변환 (UTC+9)
+    const koreanDate = new Date(date.getTime() + (9 * 60 * 60 * 1000));
+    
+    return koreanDate.toLocaleString('ko-KR', {
+      year: 'numeric',
+      month: '2-digit',
+      day: '2-digit',
+      hour: '2-digit',
+      minute: '2-digit',
+      hour12: false
+    }).replace(/\./g, '.') + ' KST';
+  };
+
   const StatCard = ({ 
     index, 
     title, 
@@ -35,7 +52,7 @@ export default function LottoStatistics() {
   }: { 
     index: number;
     title: string;
-    value: number;
+    value: number | undefined;
     unit: string;
   }) => (
     <motion.div
@@ -51,7 +68,7 @@ export default function LottoStatistics() {
     >
       <div className="text-sm text-neutral-400 mb-1">{title}</div>
       <div className="text-2xl font-bold text-white">
-        {value.toLocaleString()}
+        {value !== undefined ? value.toLocaleString() : '-'}
         <span className="text-sm text-neutral-400 ml-1">{unit}</span>
       </div>
     </motion.div>
@@ -60,12 +77,12 @@ export default function LottoStatistics() {
   if (loading || !statistics) return null;
 
   return (
-    <div className="mb-8">
+    <div className="mb-8 relative">
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
         <StatCard
           index={0}
           title="회차"
-          value={statistics.lottoRoundInfoId}
+          value={statistics.lottoRoundInfo}
           unit="회"
         />
         <StatCard
@@ -87,6 +104,13 @@ export default function LottoStatistics() {
           unit="원"
         />
       </div>
+      <motion.div 
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        className="absolute bottom-0 right-0 -mb-6 text-xs text-neutral-500"
+      >
+        마지막 업데이트: {formatToKoreanTime(statistics.updatedAt)}
+      </motion.div>
     </div>
   );
 } 

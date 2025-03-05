@@ -24,22 +24,22 @@ class LottoStatisticsService(
     @Transaction
     @Write
     fun updateStaticInfoWithCurrentLottoRoundInfo(time: LocalDateTime): LottoStatisticsData {
-        val lottoRoundInfoId = getLottoRoundInfo(time).id!!
-        val lottoBills = LottoBills(lottoBillRepository.findAllByLottoRoundInfoId(lottoRoundInfoId))
+        val lottoRoundInfo = getLottoRoundInfo(time)
+        val lottoBills = LottoBills(lottoBillRepository.findAllByLottoRoundInfoId(lottoRoundInfo.id!!))
         val purchases = Purchases(
-            purchaseReader.findPurchase(lottoBillRepository.findPurchaseIdsByLottoRoundInfo(lottoRoundInfoId))
+            purchaseReader.findPurchase(lottoBillRepository.findPurchaseIdsByLottoRoundInfo(lottoRoundInfo.id!!))
         )
 
         val statistics = lottoStatisticsRepository.save(
             LottoStatistics(
-                lottoRoundInfoId = lottoRoundInfoId,
+                lottoRoundInfoId = lottoRoundInfo.id!!,
                 memberCount = lottoBills.memberCount(),
                 lottoPublishCount = lottoBills.publishCount(),
                 totalPurchaseMoney = purchases.sumOfAmount(),
                 updatedAt = time
             )
         )
-        return LottoStatisticsData.from(statistics)
+        return LottoStatisticsData.from(statistics, lottoRoundInfo.round)
     }
 
     @Read
@@ -47,7 +47,7 @@ class LottoStatisticsService(
         return getLottoRoundInfo(time).let {
             lottoStatisticsRepository.findByLottoRoundInfoId(it.id).let { lottoStatistics ->
                 if (lottoStatistics != null) {
-                    return LottoStatisticsData.from(lottoStatistics)
+                    return LottoStatisticsData.from(lottoStatistics, it.round)
                 }
                 throw IllegalArgumentException("$time 에 해당하는 통계정보가 없습니다 ( 회차 정보 : ${it.id} )")
             }
