@@ -3,6 +3,7 @@ package purchase.domain.entity
 import jakarta.persistence.*
 import purchase.domain.vo.PurchaseProvider
 import java.math.BigDecimal
+import java.time.LocalDateTime
 import java.util.*
 
 @Entity
@@ -19,6 +20,9 @@ class Purchase(
 
     @Enumerated(EnumType.STRING)
     private val purchaseProvider: PurchaseProvider,
+
+    private val createdAt: LocalDateTime = LocalDateTime.now(),
+    private val updatedAt: LocalDateTime = LocalDateTime.now(),
 ) {
     fun getId() = id ?: throw IllegalArgumentException("Not Exist Id")
     fun getOrderId() = orderId
