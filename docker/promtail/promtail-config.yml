@@ -15,17 +15,3 @@ scrape_configs:
         labels:
           job: mysql
           __path__: /var/log/mysql/general.log
-
-    pipeline_stages:
-      - regex:
-          expression: ^(?P<ts>\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}\.\d+Z)\s+(?P<thread>\d+)\s+Query\s+(?P<query>.+)$
-      - labels:
-          thread: ""
-          ts: ""
-          query: ""
-
-      - regex:
-          expression: ^(?P<type>select|update|delete|insert)\b
-          source: query
-      - labels:
-          type: ""

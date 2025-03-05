@@ -8,8 +8,10 @@ import lotto.domain.entity.LottoStatistics
 import lotto.domain.repository.LottoBillRepository
 import lotto.domain.repository.LottoRoundInfoRepository
 import lotto.domain.repository.LottoStatisticsRepository
+import lotto.domain.vo.LottoBills
 import lotto.service.dto.LottoStatisticsData
 import purchase.domain.implementation.PurchaseReader
+import purchase.domain.vo.Purchases
 import java.time.LocalDateTime
 
 @BusinessService
@@ -23,18 +25,17 @@ class LottoStatisticsService(
     @Write
     fun updateStaticInfoWithCurrentLottoRoundInfo(time: LocalDateTime): LottoStatisticsData {
         val lottoRoundInfoId = getLottoRoundInfo(time).id!!
-        val lottoBills = lottoBillRepository.findAllByLottoRoundInfoId(lottoRoundInfoId)
-        val lottoPublishCount = lottoBills.count()
-        val memberCount = lottoBills.groupBy { it.getMemberId() }.count()
-        val totalPurchaseMoney =
+        val lottoBills = LottoBills(lottoBillRepository.findAllByLottoRoundInfoId(lottoRoundInfoId))
+        val purchases = Purchases(
             purchaseReader.findPurchase(lottoBillRepository.findPurchaseIdsByLottoRoundInfo(lottoRoundInfoId))
-                .map { it.getTotalAmount() }.sumOf { it }
+        )
+
         val statistics = lottoStatisticsRepository.save(
             LottoStatistics(
                 lottoRoundInfoId = lottoRoundInfoId,
-                memberCount = memberCount,
-                lottoPublishCount = lottoPublishCount,
-                totalPurchaseMoney = totalPurchaseMoney,
+                memberCount = lottoBills.memberCount(),
+                lottoPublishCount = lottoBills.publishCount(),
+                totalPurchaseMoney = purchases.sumOfAmount(),
                 updatedAt = time
             )
         )
