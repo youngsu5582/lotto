@@ -16,6 +16,7 @@ import org.springframework.test.context.bean.override.mockito.MockitoBean
 import java.time.LocalDateTime
 
 @ImplementationTest
+// TODO 해당 부분 역시, 배치로 분리되면 제거되어야 한다
 @Import(TestConfig::class)
 class LottoStatisticsSchedulerTest {
     @Autowired
