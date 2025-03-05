@@ -8,6 +8,8 @@ import { LottoTickets } from '../types/lotto';
 import { FaShoppingCart } from 'react-icons/fa';
 import { motion } from 'framer-motion';
 import Header from '../components/layout/Header';
+import PageHeader from '../components/layout/PageHeader';
+import LottoStatistics from '../components/LottoStatistics';
 
 export default function Home() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -32,29 +34,32 @@ export default function Home() {
   };
 
   return (
-    <div className="min-h-screen bg-neutral-900 p-8">
+    <div className="min-h-screen bg-neutral-900">
       <Header onAuthStateChange={handleAuthStateChange} />
       
-      <main className="max-w-4xl mx-auto">
-        <div className="text-center mb-12">
-          <h1 className="text-4xl font-bold text-white mb-4">로또 번호 선택기</h1>
-          <p className="text-neutral-400">
-            행운의 번호를 선택하고 당신의 꿈을 이루세요!
-          </p>
-        </div>
-
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-          <div className="lg:col-span-2">
-            <NumberSelector 
-              onAddToCart={handleAddToCart} 
-              cartCount={tickets.length} 
-            />
-          </div>
-          <div>
-            <Cart 
-              tickets={tickets} 
-              onPurchase={handlePurchase}
-            />
+      <PageHeader
+        title="로또 번호 선택기"
+        subtitle="행운의 번호를 선택하고 당신의 꿈을 이루세요!"
+        rightContent="최대 5개까지 구매 가능"
+      />
+      
+      <main className="max-w-4xl mx-auto px-4 pb-8">
+        <div className="bg-neutral-800/50 rounded-2xl p-6 shadow-lg border border-neutral-700">
+          <LottoStatistics />
+          
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+            <div className="lg:col-span-2">
+              <NumberSelector 
+                onAddToCart={handleAddToCart} 
+                cartCount={tickets.length} 
+              />
+            </div>
+            <div className="lg:sticky lg:top-4">
+              <Cart 
+                tickets={tickets} 
+                onPurchase={handlePurchase}
+              />
+            </div>
           </div>
         </div>
       </main>
