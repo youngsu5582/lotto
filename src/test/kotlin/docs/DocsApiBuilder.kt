@@ -68,30 +68,30 @@ class DocsApiBuilder(private val documentName: String) {
             printLog()
         }
         try {
-            var requestSpec: RequestSpecification = RestAssured.given().log().all()
-                .contentType(ContentType.JSON)
-                .filter(
-                    RestAssuredRestDocumentation.document(
-                        documentName,
-                        HeaderDocumentation.requestHeaders(requestContainer.convertHeadersDescriptors()),
-                        PayloadDocumentation.requestFields(requestContainer.convertBodyDescriptors()),
-                    )
+        var requestSpec: RequestSpecification = RestAssured.given().log().all()
+            .contentType(ContentType.JSON)
+            .filter(
+                RestAssuredRestDocumentation.document(
+                    documentName,
+                    HeaderDocumentation.requestHeaders(requestContainer.convertHeadersDescriptors()),
+                    PayloadDocumentation.requestFields(requestContainer.convertBodyDescriptors()),
                 )
-                .headers(requestContainer.convertHeaders())
-                .queryParams(requestContainer.convertQueryParams())
-                .body(requestContainer.convertBody())
-            val response = requestSpec
-                .filter(
-                    RestAssuredRestDocumentation.document(
-                        documentName,
-                        HeaderDocumentation.responseHeaders(responseContainer.convertHeadersDescriptors()),
-                        SUCCESS_SNIPPET.andWithPrefix("data.", responseContainer.convertBodyDescriptors())
-                    )
+            )
+            .headers(requestContainer.convertHeaders())
+            .queryParams(requestContainer.convertQueryParams())
+            .body(requestContainer.convertBody())
+        val response = requestSpec
+            .filter(
+                RestAssuredRestDocumentation.document(
+                    documentName,
+                    HeaderDocumentation.responseHeaders(responseContainer.convertHeadersDescriptors()),
+                    SUCCESS_SNIPPET.andWithPrefix("data.", responseContainer.convertBodyDescriptors())
                 )
-                .filter(capturingFilter)
-                .request(method.toMethod(), endpoint)
-                .then()
-                .extract()
+            )
+            .filter(capturingFilter)
+            .request(method.toMethod(), endpoint)
+            .then()
+            .extract()
             return DocsApiValidator(response)
         } catch (snippetException: SnippetException) {
             val captured = capturedResponse.get()?.asString() ?: "No response captured."
