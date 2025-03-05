@@ -18,8 +18,16 @@ class LottoStatisticsScheduler(
 ) {
     private val cronExpression = "0 0/5 * * * ?"
 
+    // TODO 해당 부분은 배치 서버가 의도적으로 분리되어 있지 않아서 허나의 서버에서만 처리하게 지정
+    // 차후, 배치 서버만 전담하게 분리해야 한다.
     @PostConstruct
     fun scheduleTask() {
+        val batchEnabled = System.getenv("BATCH_ENABLED")?.toBoolean() ?: false
+        if(!batchEnabled){
+            logger.info { "이 서버에서는 배치 스케줄러를 실행하지 않습니다. (BATCH_ENABLED=false)" }
+            return
+        }
+
         val trigger = CronTrigger(cronExpression)
         taskScheduler.schedule({
             val time = LocalDateTime.now(clock)

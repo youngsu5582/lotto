@@ -64,6 +64,7 @@ services:
     environment:
       SERVER_NAME: "lotto-back-1"
       SPRING_PROFILES_ACTIVE: dev
+      BATCH_ENABLED: "true"
     networks:
       - app-network
     deploy:

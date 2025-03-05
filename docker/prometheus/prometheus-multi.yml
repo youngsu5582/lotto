@@ -3,4 +3,8 @@ scrape_configs:
     metrics_path: '/actuator/prometheus'
     scrape_interval: 15s
     static_configs:
-      - targets: ['lotto-back-1:8080','lotto-back-2:8080']
+      - targets: ['lotto-back-1:8080','lotto-back-2:8080','lotto-back-3:8080','lotto-back-4:8080']
+
+  - job_name: 'jvm-metrics'
+    static_configs:
+      - targets: ['lotto-back-1:8081','lotto-back-2:8081', 'lotto-back-3:8081', 'lotto-back-4:8081']
