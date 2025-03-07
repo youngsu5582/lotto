@@ -1,6 +1,7 @@
 package purchase.domain.entity
 
 import jakarta.persistence.*
+import org.hibernate.annotations.UpdateTimestamp
 import purchase.domain.vo.PurchaseProvider
 import java.math.BigDecimal
 import java.time.LocalDateTime
@@ -22,6 +23,7 @@ class Purchase(
     private val purchaseProvider: PurchaseProvider,
 
     private val createdAt: LocalDateTime = LocalDateTime.now(),
+    @UpdateTimestamp
     private val updatedAt: LocalDateTime = LocalDateTime.now(),
 ) {
     fun getId() = id ?: throw IllegalArgumentException("Not Exist Id")

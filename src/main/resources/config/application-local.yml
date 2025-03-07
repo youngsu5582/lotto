@@ -1,10 +1,8 @@
 spring:
   application:
     name: spring-lotto
-  data:
-    redis:
-      host: lotto-redis
-      port: 6379
+  autoconfigure:
+    exclude: org.springframework.boot.autoconfigure.data.redis.RedisAutoConfiguration
 
   config:
     activate:
@@ -23,6 +21,11 @@ spring:
     console:
       enabled: true
 
+management:
+  endpoints:
+    web:
+      exposure:
+        include: prometheus,env, configprops
 
 toss:
   client:
@@ -37,4 +40,4 @@ jwt:
   access-token-expiry: 160000000000
   secret: justkeyfortestkeyisThisKeyWithOverall256bits
 server:
-  port: 8085
+  port: 8080

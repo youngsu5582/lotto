@@ -32,12 +32,16 @@ class LottoStatisticsScheduler(
             return
         }
 
-        val trigger = CronTrigger(cronExpression)
         taskScheduler.schedule({
-            val time = LocalDateTime.now(clock)
-            logger.info { "로또 통계 정보 갱신을 시작합니다. 시작 시간 : $time" }
-            val result = lottoStatisticsService.updateStaticInfoWithCurrentLottoRoundInfo(time)
-            logger.info { "로또 통계 정보 갱신 완료. 회차번호 : ${result.round}" }
-        }, trigger)
+            runCatching {
+                val time = LocalDateTime.now(clock)
+                logger.info { "로또 통계 정보 갱신을 시작합니다. 시작 시간 : $time" }
+                lottoStatisticsService.updateStaticInfoWithCurrentLottoRoundInfo(time)
+            }.onSuccess {
+                logger.info { "로또 통계 정보 갱신 완료. 회차번호 : ${it.round}" }
+            }.onFailure {
+                logger.error(it) { "로또 통계 정보 갱신 중 오류가 발생했습니다." }
+            }
+        }, CronTrigger(cronExpression))
     }
 }
