@@ -6,7 +6,7 @@ export const options = {
     random_load_test: {
       executor: "ramping-vus",
       stages: [
-        { target: 5, duration: "20s" }, // 0초~20초 동안 VU를 0->5로 점진적 증가
+        { target: 20, duration: "20s" }, // 0초~20초 동안 VU를 0->5로 점진적 증가
       ],
     },
   },
@@ -59,7 +59,7 @@ export default function () {
         headers: {
           "Content-Type": "application/json",
           Authorization:
-            "Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhOTU5ODFiNS1jMDEyLTRmZTYtOTBhNC1lOTE3YjI5NTU5NDIiLCJpYXQiOjE3NDA0OTEwMjMsImV4cCI6MTc0MDUwNzAyM30._KcpWD8LhrnnsHZKrs_7XxVTvA35IsJQZlRW8gkYmUI",
+            "Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhOTU5ODFiNS1jMDEyLTRmZTYtOTBhNC1lOTE3YjI5NTU5NDIiLCJpYXQiOjE3NDA5MzEyNDgsImV4cCI6MTc0MDk0NzI0OH0.vs6MDnyOXIR6QPzYqYMMie0Vvi--RkJbxGDUkyHc0eA",
         },
       },
     ]);

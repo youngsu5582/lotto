@@ -15,4 +15,19 @@ export interface LottoRoundInfoResponse {
   status: number;
   message: string;
   data: LottoRoundInfo;
+}
+
+export interface LottoStatistics {
+  lottoRoundInfo: number;
+  memberCount: number;
+  lottoPublishCount: number;
+  totalPurchaseMoney: number;
+  updatedAt: string;
+}
+
+export interface LottoStatisticsResponse {
+  success: boolean;
+  status: number;
+  message: string;
+  data: LottoStatistics;
 } 

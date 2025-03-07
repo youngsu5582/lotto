@@ -108,6 +108,12 @@ include::{snippets}/order-success/response-fields.adoc[]
 
 include::{snippets}/lotto-round-info-serve/index.adoc[]
 
+== 로또 회차 통계 조회
+
+서버에 요청해, 서버 시간에 맞는 로또 회차 정보의 통계를 조회한다.
+
+include::{snippets}/lotto-round-info-statistics/index.adoc[]
+
 == 멤버 로그인
 === 멤버 로그인 성공
 이메일과 비밀번호가 일치하면 로그인에 성공해 토큰을 반환한다.

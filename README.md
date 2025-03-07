@@ -34,6 +34,8 @@
 cd docker
 docker-compose up -d
 ```
+`docker ps --format '{{.Names}}' | grep 'lotto-back-' | xargs docker restart` : 여러개의 애플리케이션 동시 재시작
+
 
 ### 로컬
 

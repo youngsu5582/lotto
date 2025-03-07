@@ -14,10 +14,13 @@ class LottoBill(
     private val id: Long? = null,
     private val purchaseId: String,
     private val lottoPublishId: Long,
-    private val memberId: String
+    private val memberId: String,
+    private val lottoRoundInfoId: Long
 ) {
     fun getId() = id
     fun getPurchaseId() = purchaseId
     fun getLottoPublishId() = lottoPublishId
+    fun getMemberId() = memberId
     fun isOwner(memberId: String) = this.memberId == memberId
+    fun getLottoRoundInfoId() = lottoRoundInfoId
 }

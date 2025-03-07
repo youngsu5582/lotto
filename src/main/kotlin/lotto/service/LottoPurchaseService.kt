@@ -39,7 +39,12 @@ class LottoPurchaseService(
 
             val purchase = purchaseProcessor.purchase(lottoPurchaseRequest.toPurchaseRequest())
             val lottoPublish = lottoPublisher.complete(lottoPublishId)
-            val bill = lottoWriter.saveBill(purchase.getId(), lottoPublishId, authenticated.memberId)
+            val bill = lottoWriter.saveBill(
+                purchase.getId(),
+                lottoPublishId,
+                authenticated.memberId,
+                lottoPublish.getLottoRoundInfo().id!!
+            )
 
             purchaseKeyManager.markAsStatus(paymentKey, PaymentStatus.DONE)
             LottoBillData(

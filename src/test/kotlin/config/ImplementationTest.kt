@@ -8,7 +8,11 @@ import org.springframework.test.context.jdbc.Sql
 
 @Target(AnnotationTarget.CLASS)
 @Retention(AnnotationRetention.RUNTIME)
-@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.NONE, classes = [LottoApplication::class])
+@SpringBootTest(
+    webEnvironment = SpringBootTest.WebEnvironment.NONE,
+    classes = [LottoApplication::class],
+    properties = ["BATCH_ENABLED=true"]
+)
 @Import(TestConfig::class)
 @Sql(value = ["/clear.sql"], executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
 annotation class ImplementationTest

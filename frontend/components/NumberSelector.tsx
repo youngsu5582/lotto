@@ -50,35 +50,43 @@ export default function NumberSelector({ onAddToCart, cartCount }: NumberSelecto
 
   return (
     <div className="bg-neutral-800 p-6 rounded-lg shadow-lg border border-neutral-700">
-      <div className="flex justify-between items-center mb-4">
-        <div className="text-white">
-          <span className="text-lg">{currentNumbers.length}</span>
-          <span className="text-neutral-400 text-sm">/6 선택됨</span>
+      {/* 선택된 번호 표시 영역 */}
+      <div className="mb-6 p-4 bg-neutral-700 rounded-lg">
+        <div className="flex items-center justify-between mb-3">
+          <span className="text-white text-lg">선택된 번호</span>
+          <button
+            onClick={handleAutoSelect}
+            disabled={cartCount >= 5}
+            className="flex items-center gap-2 px-3 py-1 bg-blue-600 text-white rounded hover:bg-blue-700 disabled:opacity-50 disabled:hover:bg-blue-600"
+          >
+            <FaRandom />
+            <span className="text-sm">자동 선택</span>
+          </button>
         </div>
-        <button
-          onClick={handleAutoSelect}
-          disabled={cartCount >= 5}
-          className="flex items-center gap-2 px-3 py-1 bg-neutral-700 text-white rounded hover:bg-neutral-600 disabled:opacity-50"
-        >
-          <FaRandom />
-          <span className="text-sm">자동 선택</span>
-        </button>
+        <div className="flex gap-2 h-12">
+          {[...Array(6)].map((_, idx) => (
+            <div
+              key={idx}
+              className={`w-12 h-12 rounded-full flex items-center justify-center text-lg font-bold
+                ${currentNumbers[idx] 
+                  ? getNumberColor(currentNumbers[idx])
+                  : 'bg-neutral-600 border-2 border-dashed border-neutral-500'
+                }`}
+            >
+              {currentNumbers[idx] || ''}
+            </div>
+          ))}
+        </div>
       </div>
 
-      <motion.div 
-        className="grid grid-cols-9 gap-2"
-        initial={false}
-        animate={{ scale: currentNumbers.length === 6 ? 1.02 : 1 }}
-        transition={{ duration: 0.2 }}
-      >
+      {/* 번호 선택 그리드 */}
+      <div className="grid grid-cols-7 sm:grid-cols-9 gap-2 mb-6">
         {numbers.map((num) => (
           <motion.button
             key={num}
             whileHover={{ scale: 1.1 }}
             whileTap={{ scale: 0.95 }}
             onClick={() => handleNumberSelect(num)}
-            aria-label={`숫자 ${num} ${currentNumbers.includes(num) ? '선택됨' : ''}`}
-            aria-pressed={currentNumbers.includes(num)}
             className={`w-10 h-10 rounded-full font-semibold text-white transition-colors
               ${currentNumbers.includes(num)
                 ? 'ring-2 ring-white ring-offset-2 ring-offset-neutral-800 ' + getNumberColor(num)
@@ -88,26 +96,19 @@ export default function NumberSelector({ onAddToCart, cartCount }: NumberSelecto
             {num}
           </motion.button>
         ))}
-      </motion.div>
-
-      <div className="mt-6">
-        <button
-          onClick={handleAddToCart}
-          disabled={currentNumbers.length !== 6 || cartCount >= 5}
-          className="w-full px-6 py-3 bg-blue-600 text-white rounded-lg disabled:bg-neutral-700 hover:bg-blue-700 transition-colors relative overflow-hidden"
-        >
-          {currentNumbers.length === 6 ? (
-            <motion.span
-              initial={{ y: 20 }}
-              animate={{ y: 0 }}
-            >
-              장바구니에 추가하기
-            </motion.span>
-          ) : (
-            `${6 - currentNumbers.length}개 더 선택하세요`
-          )}
-        </button>
       </div>
+
+      {/* 장바구니 추가 버튼 */}
+      <button
+        onClick={handleAddToCart}
+        disabled={currentNumbers.length !== 6 || cartCount >= 5}
+        className="w-full px-6 py-3 bg-blue-600 text-white rounded-lg disabled:bg-neutral-700 disabled:text-neutral-400 hover:bg-blue-700 transition-colors"
+      >
+        {currentNumbers.length === 6 
+          ? '장바구니에 추가하기' 
+          : `${6 - currentNumbers.length}개 더 선택하세요`
+        }
+      </button>
     </div>
   );
 } 
