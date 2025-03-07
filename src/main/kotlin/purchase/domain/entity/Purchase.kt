@@ -24,7 +24,7 @@ class Purchase(
 
     private val createdAt: LocalDateTime = LocalDateTime.now(),
     @UpdateTimestamp
-    private val updatedAt: LocalDateTime = LocalDateTime.now(),
+    private var updatedAt: LocalDateTime = LocalDateTime.now(),
 ) {
     fun getId() = id ?: throw IllegalArgumentException("Not Exist Id")
     fun getOrderId() = orderId
