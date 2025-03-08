@@ -1,0 +1,15 @@
+version: 0.0
+os: linux
+files:
+  - source: /build/libs/spring-lotto.jar
+    destination: /home/ubuntu/
+
+hooks:
+  ApplicationStart:
+    - location: deploy/execute.sh
+      timeout: 180
+      runas: ubuntu
+  ValidateService:
+    - location: deploy/healthCheck.sh
+      timeout: 30
+      runas: ubuntu
