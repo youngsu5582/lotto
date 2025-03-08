@@ -1,12 +1,14 @@
 package purchase.domain.implementation
 
 import common.business.Implementation
-import org.hibernate.query.sqm.tree.SqmNode.log
+import io.github.oshai.kotlinlogging.KotlinLogging
+
 import purchase.domain.entity.Purchase
 import purchase.domain.vo.CancelRequest
 import purchase.domain.vo.PurchaseProvider
 import purchase.domain.vo.PurchaseRequest
 
+private val log = KotlinLogging.logger {}
 @Implementation
 class PurchaseProcessor(
     private val paymentProcessor: PaymentProcessor,
