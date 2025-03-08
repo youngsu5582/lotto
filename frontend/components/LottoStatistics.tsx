@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
-import { LottoStatistics } from '../types/lotto';
+import type { LottoStatistics } from '../types/lotto';
 import { lottoApi } from '../services';
 
 export default function LottoStatistics() {

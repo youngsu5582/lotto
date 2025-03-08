@@ -19,10 +19,10 @@ export default function Payment() {
 
   useEffect(() => {
     // localStorage에서 티켓 정보 가져오기
-    const savedTickets = localStorage.getItem('lottoTickets');
+    const savedTickets = localStorage.getItem("lottoTickets");
     if (!savedTickets) {
       // 티켓 정보가 없으면 홈으로 리다이렉트
-      router.push('/');
+      router.push("/");
       return;
     }
     const parsedTickets = JSON.parse(savedTickets);
@@ -31,34 +31,34 @@ export default function Payment() {
 
     // 토스 페이먼츠 위젯 초기화
     const clientKey = process.env.NEXT_PUBLIC_TOSS_CLIENT_KEY;
-    const paymentWidget = window.PaymentWidget(clientKey);
-    setPaymentWidget(paymentWidget);
+    const widget = window.PaymentWidget(clientKey);
+    setPaymentWidget(widget);
   }, [router]);
 
   const handlePayment = async () => {
     try {
       await paymentWidget.requestPayment({
         amount: totalAmount,
-        orderId: `${Date.now()}`,
+        orderId: `${Date.now()}`, // 간단히 현재 시각을 주문번호로 사용
         orderName: `로또 티켓 ${tickets.length}장`,
         customerName: "고객",
         successUrl: `${window.location.origin}/payment/success`,
         failUrl: `${window.location.origin}/payment/fail`,
       });
     } catch (error) {
-        const errorMessage = error instanceof Error ? error.message : '알 수 없는 오류가 발생했습니다.';
-        alert(`결제 중 오류가 발생했습니다: ${errorMessage}`);
-    }
+      const errorMessage =
+        error instanceof Error ? error.message : "알 수 없는 오류가 발생했습니다.";
+      alert(`결제 중 오류가 발생했습니다: ${errorMessage}`);
     }
   };
 
   return (
     <>
-      <Script 
+      <Script
         src="https://js.tosspayments.com/v1/payment-widget"
         strategy="beforeInteractive"
       />
-      
+
       <div className="min-h-screen bg-neutral-900">
         <div className="max-w-540 mx-auto p-8">
           <h1 className="text-3xl font-bold text-white mb-4">결제 확인</h1>
@@ -85,15 +85,15 @@ export default function Payment() {
           </div>
 
           <div className="space-y-4">
-            <button 
+            <button
               className="w-full px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
               onClick={handlePayment}
             >
               결제하기
             </button>
-            <button 
+            <button
               className="w-full px-6 py-3 bg-neutral-700 text-white rounded-lg hover:bg-neutral-600 transition-colors"
-              onClick={() => router.push('/')}
+              onClick={() => router.push("/")}
             >
               취소
             </button>

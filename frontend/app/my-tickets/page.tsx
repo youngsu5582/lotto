@@ -3,7 +3,7 @@
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { ticketApi } from '../../services';
-import { Bill } from '../../types/ticket';
+import { Bill, BillsResponse, TicketListResponse } from '../../types/ticket';
 
 export default function MyTickets() {
   const router = useRouter();
@@ -24,7 +24,7 @@ export default function MyTickets() {
   const loadBills = async () => {
     try {
       setLoading(true);
-      const response = await ticketApi.getMyTickets();
+      const response : BillsResponse = await ticketApi.getMyTickets() as BillsResponse;
       setBills(response.data.response);
     } catch (error) {
       setError('구매 내역을 불러오는데 실패했습니다.');
