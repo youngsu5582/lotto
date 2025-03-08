@@ -19,7 +19,7 @@ services:
     volumes:
       - mysql-data:/var/lib/mysql
       - ./mysql/logs:/var/log/mysql
-      - ./mysql/scripts/lotto_init.sql:/docker-entrypoint-initdb.d/init.sql
+      - ./mysql/scripts/lotto_combinations_batched.sql:/docker-entrypoint-initdb.d/init.sql
     command: >
       --general_log=1
       --general_log_file=/var/log/mysql/general.log

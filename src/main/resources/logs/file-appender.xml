@@ -1,0 +1,22 @@
+<included>
+    <appender name="FILE" class="ch.qos.logback.core.FileAppender">
+        <file>${LOG_PATH}/info.log</file>
+
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <fileNamePattern>logs/app.%d{yyyy-MM-dd}.%i.log.gz</fileNamePattern>
+
+            <maxHistory>7</maxHistory> <!-- 7일치 로그 보관 -->
+
+            <totalSizeCap>100MB</totalSizeCap>
+
+            <timeBasedFileNamingAndTriggeringPolicy
+                    class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
+                <maxFileSize>10MB</maxFileSize>
+            </timeBasedFileNamingAndTriggeringPolicy>
+        </rollingPolicy>
+
+        <encoder>
+            <pattern>"[%d{yyyy-MM-dd HH:mm:ss}:%-4relative] [%thread] %-5level - [%X{requestId}] - %msg %ex{5}%n"</pattern>
+        </encoder>
+    </appender>
+</included>

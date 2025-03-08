@@ -5,6 +5,7 @@ import common.dto.apiResponse
 import io.github.oshai.kotlinlogging.KotlinLogging
 import org.springframework.web.bind.annotation.ControllerAdvice
 import org.springframework.web.bind.annotation.ExceptionHandler
+import org.springframework.web.servlet.resource.NoResourceFoundException
 import purchase.domain.PurchaseException
 
 private val logger = KotlinLogging.logger {}
@@ -34,6 +35,10 @@ class LottoExceptionHandler {
         logger.warn { ex.stackTraceToString() }
         return ApiResponse.fail(message = ex.message)
     }
+
+    @ExceptionHandler(NoResourceFoundException::class)
+    fun handleNoResourceException(ex: NoResourceFoundException): ApiResponse<Void> =
+        ApiResponse.fail(message = ex.message)
 
     @ExceptionHandler(Exception::class)
     fun handleException(ex: Exception): ApiResponse<Void> {

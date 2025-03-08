@@ -6,7 +6,7 @@ import { useRouter, useSearchParams } from "next/navigation";
 import { paymentApi } from "../../../services";
 
 interface PaymentStatus {
-  status: 'loading' | 'success' | 'error';
+  status: 'loading' | 'success' | 'error' | 'expired';
   message?: string;
 }
 
@@ -25,6 +25,20 @@ function PaymentContent() {
 
         if (!paymentKey || !orderId || !amount || !lottoPublishId) {
           throw new Error('Missing payment parameters');
+        }
+
+        // 현재 시간과 마감 시간(오전 9시 45분) 비교
+        const now = new Date();
+        const deadline = new Date();
+        deadline.setHours(9, 45, 0, 0);
+        
+        // 현재 시간이 마감 시간을 지났는지 확인
+        if (now > deadline) {
+          setPaymentStatus({ 
+            status: 'expired', 
+            message: '결제 가능 시간이 지났습니다. 다음 회차에 다시 시도해주세요.' 
+          });
+          return;
         }
 
         await paymentApi.verifyPayment({
@@ -65,6 +79,20 @@ function PaymentContent() {
         <>
           <h1 className="text-3xl font-bold text-white mb-4">결제 성공!</h1>
           <p className="text-neutral-400">잠시 후 메인 페이지로 이동합니다...</p>
+        </>
+      )}
+
+      {paymentStatus.status === 'expired' && (
+        <>
+          <h1 className="text-3xl font-bold text-yellow-500 mb-4">결제 시간 만료</h1>
+          <p className="text-neutral-400">{paymentStatus.message}</p>
+          <p className="text-neutral-400 mt-2">결제 마감 시간: 오전 9시 45분</p>
+          <button
+            className="mt-4 px-6 py-2 bg-neutral-700 text-white rounded-lg hover:bg-neutral-600"
+            onClick={() => router.push('/')}
+          >
+            홈으로 돌아가기
+          </button>
         </>
       )}
 

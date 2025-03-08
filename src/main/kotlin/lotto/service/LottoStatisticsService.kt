@@ -4,6 +4,7 @@ import common.business.BusinessService
 import common.business.Read
 import common.business.Transaction
 import common.business.Write
+import lotto.domain.entity.LottoRoundInfo
 import lotto.domain.entity.LottoStatistics
 import lotto.domain.repository.LottoBillRepository
 import lotto.domain.repository.LottoRoundInfoRepository
@@ -23,8 +24,10 @@ class LottoStatisticsService(
 ) {
     @Transaction
     @Write
-    fun updateStaticInfoWithCurrentLottoRoundInfo(time: LocalDateTime): LottoStatisticsData {
-        val lottoRoundInfo = getLottoRoundInfo(time)
+    fun updateStaticInfoWithCurrentLottoRoundInfo(
+        lottoRoundInfo: LottoRoundInfo,
+        time: LocalDateTime
+    ): LottoStatisticsData {
         val lottoBills = LottoBills(lottoBillRepository.findAllByLottoRoundInfoId(lottoRoundInfo.id!!))
         val purchases = Purchases(
             purchaseReader.findPurchase(lottoBillRepository.findPurchaseIdsByLottoRoundInfo(lottoRoundInfo.id!!))

@@ -25,6 +25,14 @@
 2024년 12월 14일 ~ (진행 중)
 
 - [API 문서 링크](https://youngsu5582.github.io/lotto/)
+- [서비스 링크](https://lotto.web.youngsu5582.life/)
+
+## 인프라 구조도
+
+![img.png](static/prod-infra-free-tier.png)
+
+> 해당 인프라는 의도적으로 프리 티어만 사용하여 구성했습니다.
+> ( micro, 복제 및 레플리카 X )
 
 ## 구동방법
 

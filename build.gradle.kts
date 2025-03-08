@@ -7,8 +7,8 @@ plugins {
     id("org.asciidoctor.jvm.convert") version "4.0.0"
 }
 
-group = "camp.nextstep.edu"
-version = "0.0.1-SNAPSHOT"
+group = "joyson.lotto"
+version = ""
 
 java {
     toolchain {

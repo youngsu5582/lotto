@@ -16,7 +16,7 @@ import java.nio.file.Paths
 import java.time.LocalDateTime
 
 @Component
-@Profile("!prod & !test")
+@Profile("local","dev")
 class LottoInitializer : CommandLineRunner {
     private val log = LoggerFactory.getLogger(LottoInitializer::class.java)
 
@@ -49,7 +49,7 @@ class LottoInitializer : CommandLineRunner {
         )
 
          memberService.registerMember(MemberIdentifier("test@example.com","password"))
-        val sqlFilePath = "script/lotto_combinations_batched.sql"
+        val sqlFilePath = "script/local_lotto.sql"
         val sqlContent = Files.readString(Paths.get(sqlFilePath))
         try {
             jdbcTemplate.execute(sqlContent)
