@@ -25,7 +25,7 @@ class ApiService {
     return response.json();
   }
 
-  async verifyPayment(params: { paymentKey: string; orderId: string; amount: number }, tickets: LottoTickets) {
+  async verifyPayment(params: { paymentKey: string; orderId: string; amount: number }, lottoPublishId:number) {
     if (!params.paymentKey || !params.orderId || params.amount <= 0) {
       throw new Error('잘못된 결제 정보입니다.');
     }
@@ -37,9 +37,7 @@ class ApiService {
         paymentKey: params.paymentKey,
         orderId: params.orderId,
       },
-      lottoRequest: {
-        numbers: tickets,
-      },
+      lottoPublishId : lottoPublishId
     };
 
     return this.fetchJson('/api/tickets', {

@@ -1,5 +1,6 @@
 "use client";
 
+import { Suspense } from "react";
 import { useEffect, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { paymentApi } from "../../../services";
@@ -9,7 +10,7 @@ interface PaymentStatus {
   message?: string;
 }
 
-export default function PaymentSuccess() {
+function PaymentContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const [paymentStatus, setPaymentStatus] = useState<PaymentStatus>({ status: 'loading' });
@@ -55,32 +56,44 @@ export default function PaymentSuccess() {
   }, [router, searchParams]);
 
   return (
-    <div className="min-h-screen bg-neutral-900 flex items-center justify-center">
-      <div className="text-center">
-        {paymentStatus.status === 'loading' && (
-          <h1 className="text-3xl font-bold text-white mb-4">결제 확인 중...</h1>
-        )}
-        
-        {paymentStatus.status === 'success' && (
-          <>
-            <h1 className="text-3xl font-bold text-white mb-4">결제 성공!</h1>
-            <p className="text-neutral-400">잠시 후 메인 페이지로 이동합니다...</p>
-          </>
-        )}
+    <div className="text-center">
+      {paymentStatus.status === 'loading' && (
+        <h1 className="text-3xl font-bold text-white mb-4">결제 확인 중...</h1>
+      )}
+      
+      {paymentStatus.status === 'success' && (
+        <>
+          <h1 className="text-3xl font-bold text-white mb-4">결제 성공!</h1>
+          <p className="text-neutral-400">잠시 후 메인 페이지로 이동합니다...</p>
+        </>
+      )}
 
-        {paymentStatus.status === 'error' && (
-          <>
-            <h1 className="text-3xl font-bold text-red-500 mb-4">결제 확인 실패</h1>
-            <p className="text-neutral-400">{paymentStatus.message}</p>
-            <button
-              className="mt-4 px-6 py-2 bg-neutral-700 text-white rounded-lg hover:bg-neutral-600"
-              onClick={() => router.push('/')}
-            >
-              홈으로 돌아가기
-            </button>
-          </>
-        )}
-      </div>
+      {paymentStatus.status === 'error' && (
+        <>
+          <h1 className="text-3xl font-bold text-red-500 mb-4">결제 확인 실패</h1>
+          <p className="text-neutral-400">{paymentStatus.message}</p>
+          <button
+            className="mt-4 px-6 py-2 bg-neutral-700 text-white rounded-lg hover:bg-neutral-600"
+            onClick={() => router.push('/')}
+          >
+            홈으로 돌아가기
+          </button>
+        </>
+      )}
+    </div>
+  );
+}
+
+export default function PaymentSuccess() {
+  return (
+    <div className="min-h-screen bg-neutral-900 flex items-center justify-center">
+      <Suspense fallback={
+        <div className="text-center">
+          <h1 className="text-3xl font-bold text-white mb-4">로딩 중...</h1>
+        </div>
+      }>
+        <PaymentContent />
+      </Suspense>
     </div>
   );
 } 

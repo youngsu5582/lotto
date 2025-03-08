@@ -15,7 +15,7 @@ export default function LoginModal({ onClose, onSuccess }: LoginModalProps) {
     e.preventDefault();
     try {
       const response = await authApi.localLogin({ email, password });
-      localStorage.setItem('accessToken', response.accessToken);
+      localStorage.setItem('accessToken', response.data.accessToken);
       onSuccess();
     } catch (error) {
       setError('로그인에 실패했습니다.');
