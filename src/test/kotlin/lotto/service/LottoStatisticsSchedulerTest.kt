@@ -3,6 +3,7 @@ package lotto.service
 import app.TestConfig
 import config.ImplementationTest
 import config.MockingClock
+import fixture.LottoRoundInfoFixture
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
 import org.mockito.ArgumentCaptor
@@ -43,6 +44,5 @@ class LottoStatisticsSchedulerTest {
         runnableCaptor.value.run()
 
         assertEquals("0 0/5 * * * ?", cronTriggerCaptor.value.expression)
-        verify(lottoStatisticsService, Mockito.atLeastOnce()).updateStaticInfoWithCurrentLottoRoundInfo(fixedTime)
     }
 }

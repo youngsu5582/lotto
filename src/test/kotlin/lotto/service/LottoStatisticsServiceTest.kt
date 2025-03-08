@@ -56,7 +56,10 @@ class LottoStatisticsServiceTest {
     @Test
     fun `통계 데이터를 업데이트 한다`() {
         val time = LocalDateTime.now()
-        val data = lottoStatisticsService.updateStaticInfoWithCurrentLottoRoundInfo(time)
+        val lottoRoundInfo = lottoRoundInfoRepository.findTopByIssueDateLessThanEqualAndDrawDateGreaterThanEqual(
+            time
+        )!!
+        val data = lottoStatisticsService.updateStaticInfoWithCurrentLottoRoundInfo(lottoRoundInfo, time)
         data.updatedAt shouldBe time
         data.memberCount shouldBe 2
         data.totalPurchaseMoney shouldBe 8000
