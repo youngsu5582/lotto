@@ -17,7 +17,7 @@ class PurchaseConfig {
         return FakePurchaseKeyManager()
     }
 
-    @Profile("dev")
+    @Profile("dev","prod")
     @Bean
     fun purchaseKeyManager(
         redisTemplate: RedisTemplate<String, String>
