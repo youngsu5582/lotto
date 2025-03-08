@@ -15,7 +15,10 @@ class LottoWebConfig {
         val config = CorsConfiguration()
         val allowedOrigins = listOf(
             "http://localhost:3000",
-            "http://front-lotto:3000"
+            "http://front-lotto:3000",
+            "https://www.lotto.web.youngsu5582.life",
+            "https://lotto.web.youngsu5582.life",
+            "https://main.d126n5xa59cq7m.amplifyapp.com"
         )
         config.allowedOrigins = allowedOrigins
         config.allowedMethods = listOf("GET", "POST", "PUT", "DELETE", "OPTIONS")
