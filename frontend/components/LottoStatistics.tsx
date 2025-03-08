@@ -28,19 +28,16 @@ export default function LottoStatistics() {
   }, []);
 
   const formatToKoreanTime = (dateString: string) => {
-    // UTC 시간을 Date 객체로 파싱
     const date = new Date(dateString);
     
-    // UTC 시간을 한국 시간으로 변환 (UTC+9)
-    const koreanDate = new Date(date.getTime() + (9 * 60 * 60 * 1000));
-    
-    return koreanDate.toLocaleString('ko-KR', {
+    return date.toLocaleString('ko-KR', {
       year: 'numeric',
       month: '2-digit',
       day: '2-digit',
       hour: '2-digit',
       minute: '2-digit',
-      hour12: false
+      hour12: false,
+      timeZone: 'Asia/Seoul'
     }).replace(/\./g, '.') + ' KST';
   };
 
