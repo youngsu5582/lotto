@@ -13,10 +13,13 @@ if [ ! -f "$APP_PATH" ]; then
   exit 1
 fi
 
-java \
+# 에러는 별도 로그로 남긴다. 나머지, 입출력은 무시
+
+nohup java \
   -Dspring.profiles.active=prod \
   -Duser.timezone=Asia/Seoul \
   -Dfile.encoding=UTF-8 \
   -Xms${XMS} \
   -Xmx${XMX} \
-  -jar ${APP_PATH} || { echo "Application failed to start"; exit 1; }
+  -jar "${APP_PATH}" \
+  > /dev/null 2> error.log < /dev/null &
