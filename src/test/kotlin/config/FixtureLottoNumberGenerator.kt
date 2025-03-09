@@ -1,7 +1,7 @@
 package config
 
 import lotto.domain.implementation.LottoNumberGenerator
-import lotto.domain.vo.LottoNumbers
+import lotto.domain.vo.LottoNumbersPack
 
 class FixtureLottoNumberGenerator(
     private val numbers: List<List<Int>>,
@@ -12,11 +12,11 @@ class FixtureLottoNumberGenerator(
         return numbers[count++]
     }
 
-    override fun generate(number: Int): LottoNumbers {
+    override fun generate(number: Int): LottoNumbersPack {
         require(number <= numbers.size - count) {
             "생성 가능한 로또 개수를 초과했습니다."
         }
 
-        return LottoNumbers(List(number) { generate() })
+        return LottoNumbersPack(List(number) { generate() })
     }
 }

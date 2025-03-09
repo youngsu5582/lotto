@@ -2,7 +2,7 @@ package lotto.domain.vo
 
 import java.math.BigDecimal
 
-data class LottoNumbers(
+data class LottoNumbersPack(
     private val lottoNumbers: List<List<Int>>,
 ) {
     fun hasSize(size: Int): Boolean {
