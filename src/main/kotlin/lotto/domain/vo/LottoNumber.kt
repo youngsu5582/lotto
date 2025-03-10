@@ -1,7 +1,7 @@
 package lotto.domain.vo
 
 data class LottoNumber(
-    val number: Int
+    val number: Byte
 ) {
     init {
         require(number in 1..45) {
@@ -9,5 +9,5 @@ data class LottoNumber(
         }
     }
 
-    fun toByte() = number.toByte()
+    fun toByte() = number
 }
