@@ -52,9 +52,9 @@ export function StatsModal({ isOpen, onClose, data }: StatsModalProps) {
                   return (
                     <div key={result.round} className="p-3 bg-neutral-700 rounded-md">
                       {/* 회차 / 날짜 */}
-                      <div className="flex justify-between items-center mb-2">
+1                      <div className="flex justify-between items-center mb-2">
                         <span className="font-semibold">{result.round}회차</span>
-                        <span className="text-sm text-neutral-400">{date}</span>
+                        <span className="text-sm text-neutral-400">{date.toDateString()}</span>
                       </div>
 
                       {/* 메인 번호 + 보너스 번호 */}
