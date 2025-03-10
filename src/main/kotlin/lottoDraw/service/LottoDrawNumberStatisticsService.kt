@@ -6,9 +6,9 @@ import common.business.Transaction
 import lotto.domain.vo.LottoNumbers
 import lottoDraw.domain.repository.LottoDrawRepository
 import lottoDraw.domain.repository.LottoNumberCountRepository
-import lottoDraw.domain.vo.LottoResults
+import lottoDraw.domain.vo.LottoDrawResultData
+import lottoDraw.domain.vo.LottoDraws
 import lottoDraw.service.dto.LottoNumberCountData
-import lottoDraw.service.dto.LottoResultData
 
 @BusinessService
 class LottoDrawNumberStatisticsService(
@@ -24,10 +24,10 @@ class LottoDrawNumberStatisticsService(
 
     @Transaction
     @Read
-    fun getLottoDraws(lottoNumbers: LottoNumbers): List<LottoResultData> {
-        val lottoResults = LottoResults(
-            lottoDrawRepository.findAllWithFiveOrMoreMatches(lottoNumbers.toBytes())
+    fun getLottoDraws(lottoNumbers: LottoNumbers): List<LottoDrawResultData> {
+        val lottoDraws = LottoDraws(
+            lottoDrawRepository.findAllWithFiveOrMoreMatches(lottoNumbers.toBytes()).map { it.toLottoDraw() }
         )
-        return lottoResults.toIterable().map { LottoResultData.from(it) }
+        return lottoDraws.matchResult(lottoNumbers)
     }
 }

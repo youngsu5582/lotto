@@ -1,14 +1,13 @@
 package lottoDraw.controller
 
+import lottoDraw.domain.vo.LottoDrawResultData
 import lottoDraw.service.dto.LottoNumberCountData
-import lottoDraw.service.dto.LottoResultData
+import java.time.LocalDate
 
 data class LottoDrawPreviewNumberHttpResponse(
     val lottoNumberCountResponse: List<LottoNumberCountHttpResponse>,
-    val lottoResultResponse: List<LottoResultHttpResponse>
-) {
-
-}
+    val lottoResultResponse: List<LottoDrawResultHttpResponse>
+)
 
 data class LottoNumberCountHttpResponse(
     val number: Byte,
@@ -27,21 +26,41 @@ data class LottoNumberCountHttpResponse(
     }
 }
 
-data class LottoResultHttpResponse(
+data class LottoDrawResultHttpResponse(
     val round: Int,
-    val matchCount: Int,
-    val bonusMatch: Boolean
+    val lottoDrawResponse: LottoDrawHttpResponse,
+    val drawResultResponse: DrawResultHttpResponse
 ) {
     companion object {
         @JvmStatic
-        fun from(data: List<LottoResultData>): List<LottoResultHttpResponse> {
+        fun from(data: List<LottoDrawResultData>): List<LottoDrawResultHttpResponse> {
             return data.map {
-                LottoResultHttpResponse(
-                    round = it.round,
-                    matchCount = it.matchCount,
-                    bonusMatch = it.bonusMatch
-                )
+                with(it) {
+                    LottoDrawResultHttpResponse(
+                        round = round,
+                        lottoDrawResponse = LottoDrawHttpResponse(
+                            date = date,
+                            numbers = numbers.toBytes(),
+                            bonus = bonus.toByte()
+                        ),
+                        drawResultResponse = DrawResultHttpResponse(
+                            matchCount = matchCount,
+                            bonusMatch = bonusMatch
+                        ),
+                    )
+                }
             }
         }
     }
 }
+
+data class LottoDrawHttpResponse(
+    val date: LocalDate,
+    val numbers: List<Byte>,
+    val bonus: Byte,
+)
+
+data class DrawResultHttpResponse(
+    val matchCount: Int,
+    val bonusMatch: Boolean
+)

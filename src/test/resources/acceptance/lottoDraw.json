@@ -9,7 +9,7 @@
       "fifth_num": "20",
       "sixth_num": "21",
       "bonus": "40",
-      "updated_at": "now()"
+      "date": "now()"
     },
     {
       "round": "12",
@@ -20,7 +20,7 @@
       "fifth_num": "20",
       "sixth_num": "23",
       "bonus": "25",
-      "updated_at": "now()"
+      "date": "now()"
     }
   ]
 }
