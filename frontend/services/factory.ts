@@ -3,12 +3,14 @@ import { AuthApiService } from './auth-api';
 import { TicketApiService } from './ticket-api';
 import { PaymentApiService } from './payment-api';
 import { LottoApiService } from './lotto-api';
+import { LottoDrawApiServce } from './lotto-draw-api';
 
 interface Services {
     auth: AuthApiService;
     ticket: TicketApiService;
     payment: PaymentApiService;
     lotto: LottoApiService;
+    lottoDraw: LottoDrawApiServce;
 }
 
 const isMockAuth = process.env.NEXT_PUBLIC_MOCK_AUTH === 'true' || false;
@@ -21,5 +23,6 @@ export function createServices() : Services {
     ticket: new TicketApiService(API_URL),
     payment: new PaymentApiService(API_URL),
     lotto: new LottoApiService(API_URL),
+    lottoDraw : new LottoDrawApiServce(API_URL)
   };
 } 
