@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from 'react';
+import { useState, useEffect } from "react";
 import { useRouter } from 'next/navigation';
 import NumberSelector from '../components/NumberSelector';
 import Cart from '../components/Cart';
@@ -15,9 +15,18 @@ export default function Home() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [tickets, setTickets] = useState<LottoTickets>([]);
   const router = useRouter();
+  const [selectedNumbers, setSelectedNumbers] = useState<number[]>([]);
 
   const handleAddToCart = (ticket: number[]) => {
+    if (tickets.length >= 5) {
+      alert('최대 5개까지만 구매할 수 있습니다.');
+      return;
+    }
     setTickets([...tickets, ticket]);
+  };
+
+  const handleRemoveTicket = (index: number) => {
+    setTickets(tickets.filter((_, i) => i !== index));
   };
 
   const handlePurchase = () => {
@@ -31,6 +40,10 @@ export default function Home() {
 
   const handleAuthStateChange = (loggedIn: boolean) => {
     setIsLoggedIn(loggedIn);
+  };
+
+  const handleRemoveNumber = (index: number) => {
+    setSelectedNumbers(prev => prev.filter((_, i) => i !== index));
   };
 
   return (
@@ -49,6 +62,7 @@ export default function Home() {
           
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
             <div className="lg:col-span-2">
+
               <NumberSelector 
                 onAddToCart={handleAddToCart} 
                 cartCount={tickets.length} 
@@ -56,7 +70,8 @@ export default function Home() {
             </div>
             <div className="lg:sticky lg:top-4">
               <Cart 
-                tickets={tickets} 
+                tickets={tickets}
+                onRemoveTicket={handleRemoveTicket}
                 onPurchase={handlePurchase}
               />
             </div>

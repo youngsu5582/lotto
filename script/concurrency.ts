@@ -59,7 +59,7 @@ export default function () {
         headers: {
           "Content-Type": "application/json",
           Authorization:
-            "Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhOTU5ODFiNS1jMDEyLTRmZTYtOTBhNC1lOTE3YjI5NTU5NDIiLCJpYXQiOjE3NDA5MzEyNDgsImV4cCI6MTc0MDk0NzI0OH0.vs6MDnyOXIR6QPzYqYMMie0Vvi--RkJbxGDUkyHc0eA",
+            "Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJiYWJjZmI0YS1jYjEzLTQwNjgtYjM0OS1kOGQ3OTMxMzI4MDEiLCJpYXQiOjE3NDE1MTI1MTgsImV4cCI6MTc0MTUyODUxOH0.KSra454unqgkZa7qqhgftjS86TGzStPE4fNL14PvFsc",
         },
       },
     ]);

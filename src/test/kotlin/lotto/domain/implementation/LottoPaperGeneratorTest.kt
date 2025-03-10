@@ -6,7 +6,7 @@ import config.LottoRepositoryImpl
 import lotto.domain.entity.IssueStatus
 import lotto.domain.entity.IssuedLotto
 import lotto.domain.entity.Lotto
-import lotto.domain.vo.LottoNumbers
+import lotto.domain.vo.LottoNumbersPack
 import org.assertj.core.api.Assertions.assertThat
 import org.springframework.beans.factory.annotation.Autowired
 import kotlin.test.Test
@@ -27,7 +27,7 @@ class LottoPaperGeneratorTest {
 
         val response =
             generator.generateWithNumbers(
-                LottoNumbers(listOf(listOf(1, 14, 17, 19, 21, 34), listOf(23, 27, 39, 40, 41, 43))),
+                LottoNumbersPack(listOf(listOf(1, 14, 17, 19, 21, 34), listOf(23, 27, 39, 40, 41, 43))),
             )
         assertThat(response.getLottoes()).isEqualTo(
             listOf(

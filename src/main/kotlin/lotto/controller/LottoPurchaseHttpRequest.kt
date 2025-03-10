@@ -2,7 +2,7 @@ package lotto.controller
 
 import com.fasterxml.jackson.annotation.JsonCreator
 import lotto.domain.vo.Currency
-import lotto.domain.vo.LottoNumbers
+import lotto.domain.vo.LottoNumbersPack
 import lotto.domain.vo.LottoPurchaseRequest
 import lotto.domain.vo.PurchaseType
 import java.math.BigDecimal
@@ -25,8 +25,8 @@ data class LottoPurchaseHttpRequest @JsonCreator constructor(
 data class LottoNumberHttpRequest @JsonCreator constructor(
     val numbers: List<List<Int>>
 ) {
-    fun toLottoNumbers(): LottoNumbers {
-        return LottoNumbers(numbers)
+    fun toLottoNumbers(): LottoNumbersPack {
+        return LottoNumbersPack(numbers)
     }
 }
 
