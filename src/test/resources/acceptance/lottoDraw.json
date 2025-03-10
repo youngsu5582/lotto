@@ -1,0 +1,26 @@
+{
+  "lotto_draw": [
+    {
+      "round": "10",
+      "first_num": "10",
+      "second_num": "13",
+      "third_num": "15",
+      "fourth_num": "17",
+      "fifth_num": "20",
+      "sixth_num": "21",
+      "bonus": "40",
+      "updated_at": "now()"
+    },
+    {
+      "round": "12",
+      "first_num": "10",
+      "second_num": "13",
+      "third_num": "15",
+      "fourth_num": "17",
+      "fifth_num": "20",
+      "sixth_num": "23",
+      "bonus": "25",
+      "updated_at": "now()"
+    }
+  ]
+}

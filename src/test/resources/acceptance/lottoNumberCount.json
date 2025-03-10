@@ -1,0 +1,44 @@
+{
+  "lotto_number_count": [
+    {
+      "number": "10",
+      "count": "20",
+      "updated_at": "now()"
+    },
+    {
+      "number": "13",
+      "count": "17",
+      "updated_at": "now()"
+    },
+    {
+      "number": "15",
+      "count": "30",
+      "updated_at": "now()"
+    },
+    {
+      "number": "17",
+      "count": "31",
+      "updated_at": "now()"
+    },
+    {
+      "number": "20",
+      "count": "33",
+      "updated_at": "now()"
+    },
+    {
+      "number": "21",
+      "count": "35",
+      "updated_at": "now()"
+    },
+    {
+      "number": "23",
+      "count": "35",
+      "updated_at": "now()"
+    },
+    {
+      "number": "25",
+      "count": "35",
+      "updated_at": "now()"
+    }
+  ]
+}
