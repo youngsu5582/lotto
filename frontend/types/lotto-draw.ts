@@ -4,13 +4,13 @@ export interface LottoDrawPreviewNumberResponse {
     success: boolean;
     status: number;
     message: string;
-    data: LottoDrawPrivewResponse
+    data: LottoDrawPreviewResponse
 } 
 export interface LottoNumberCountResponse{
     number: number;
     count: number;    
 }
-export interface LottoDrawPrivewResponse{
+export interface LottoDrawPreviewResponse{
     lottoNumberCountResponse: LottoNumberCountResponse[],
     lottoResultResponse: LottoResultResponse[]
 }

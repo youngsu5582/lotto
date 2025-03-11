@@ -21,7 +21,7 @@ export default function Cart({ tickets, onRemoveTicket, onPurchase }: CartProps)
 
   // 모달 상태
   const [statsModalOpen, setStatsModalOpen] = useState(false);
-  const [statsData, setStatsData] = useState<LottoDrawPrivewResponse | null>(null);
+  const [statsData, setStatsData] = useState<LottoDrawPreviewResponse | null>(null);
 
   /** 티켓 전체 번호를 QueryParam으로 보내기 */
   const fetchTicketStats = async (ticket: number[]) => {
