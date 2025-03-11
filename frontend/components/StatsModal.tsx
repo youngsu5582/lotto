@@ -1,13 +1,13 @@
 "use client";
 
-import { LottoDrawPrivewResponse } from '@/types/lotto-draw';
+import { LottoDrawPreviewResponse } from '@/types/lotto-draw';
 import React from 'react';
 import { IoClose } from 'react-icons/io5';
 
 interface StatsModalProps {
   isOpen: boolean;
   onClose: () => void;
-  data?: LottoDrawPrivewResponse;
+  data?: LottoDrawPreviewResponse;
 }
 
 export function StatsModal({ isOpen, onClose, data }: StatsModalProps) {
@@ -54,7 +54,7 @@ export function StatsModal({ isOpen, onClose, data }: StatsModalProps) {
                       {/* 회차 / 날짜 */}
 1                      <div className="flex justify-between items-center mb-2">
                         <span className="font-semibold">{result.round}회차</span>
-                        <span className="text-sm text-neutral-400">{date.toDateString()}</span>
+                        <span className="text-sm text-neutral-400">{new Date(date).toLocaleDateString('ko-KR', { year: 'numeric', month: 'long', day: 'numeric' })}</span>
                       </div>
 
                       {/* 메인 번호 + 보너스 번호 */}

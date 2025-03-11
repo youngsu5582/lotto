@@ -6,7 +6,7 @@ import { LottoTickets } from '../types/lotto';
 import { useLottoRoundInfo } from '../hooks/useLottoRoundInfo';
 import { StatsModal } from './StatsModal';
 import { lottoDrawApi } from "../services";
-import { LottoDrawPrivewResponse } from '@/types/lotto-draw';
+import { LottoDrawPreviewResponse } from '@/types/lotto-draw';
 
 /** 서버 응답 전체 구조 */
 interface CartProps {
@@ -26,7 +26,7 @@ export default function Cart({ tickets, onRemoveTicket, onPurchase }: CartProps)
   /** 티켓 전체 번호를 QueryParam으로 보내기 */
   const fetchTicketStats = async (ticket: number[]) => {
     try {
-      const response = await lottoDrawApi.getLottoDrawPrivew(ticket);
+      const response = await lottoDrawApi.getLottoDrawPreview(ticket);
       setStatsData(response.data);
       setStatsModalOpen(true);   
     } catch (error) {
