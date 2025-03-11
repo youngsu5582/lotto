@@ -1,19 +1,22 @@
 package lotto.domain.vo
 
-import java.math.BigDecimal
-
 data class LottoNumbers(
-    private val lottoNumbers: List<List<Int>>,
+    val value: List<LottoNumber>
 ) {
-    fun hasSize(size: Int): Boolean {
-        return lottoNumbers.size == size
+    init {
+        require(value.size==6){
+            "숫자는 6개여야 합니다."
+        }
     }
+    fun toBytes() = value.map { it.number }
 
-    fun calculatePrice(unitPrice: BigDecimal): BigDecimal {
-        return unitPrice.multiply(lottoNumbers.size.toBigDecimal())
-    }
+    fun check(other: LottoNumbers): Int = other.value.count { this.contains(it) }
+    fun contains(number: LottoNumber) = value.contains(number)
 
-    fun toStringWithComma(): List<String> {
-        return lottoNumbers.stream().map { it.joinToString(separator = ",") }.toList()
+    companion object {
+        fun from(numbers: List<Byte>): LottoNumbers {
+            return LottoNumbers(numbers.sorted().map { LottoNumber(it) })
+        }
     }
 }
+

@@ -17,8 +17,7 @@ sealed class DocsFieldType(val type: JsonFieldType) {
         override val format = "yyyy-MM-dd HH:mm:ss"
     }
 
-    data class ARRAY(val elementType: DocsFieldType) : DocsFieldType(JsonFieldType.ARRAY)
-
+    data class ARRAY(val elementType: DocsFieldType = OBJECT) : DocsFieldType(JsonFieldType.ARRAY)
     data class ENUM<T : Enum<T>>(val enums: Collection<T>) : DocsFieldType(JsonFieldType.STRING) {
         companion object {
             inline fun <reified T : Enum<T>> of(): ENUM<T> {

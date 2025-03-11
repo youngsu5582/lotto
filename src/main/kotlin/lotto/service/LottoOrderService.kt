@@ -4,7 +4,7 @@ import common.business.BusinessService
 import lotto.domain.entity.LottoPublish
 import lotto.domain.implementation.LottoPaperGenerator
 import lotto.domain.implementation.LottoPublisher
-import lotto.domain.vo.LottoNumbers
+import lotto.domain.vo.LottoNumbersPack
 import lotto.service.dto.LottoOrderData
 import order.domain.implementation.OrderProcessor
 import order.domain.vo.OrderData
@@ -21,9 +21,9 @@ class LottoOrderService(
     private val clock: Clock,
 ) {
     fun saveLottoOrder(
-        lottoNumbers: LottoNumbers
+        lottoNumbersPack: LottoNumbersPack
     ): LottoOrderData {
-        val (lottoPublish, amount) = publish(lottoNumbers)
+        val (lottoPublish, amount) = publish(lottoNumbersPack)
         val order = orderProcessor.saveOrder(OrderRequest(amount))
         return LottoOrderData(
             lottoPublishId = lottoPublish.getId(),
@@ -31,9 +31,9 @@ class LottoOrderService(
         )
     }
 
-    private fun publish(lottoNumbers: LottoNumbers): Pair<LottoPublish, BigDecimal> {
+    private fun publish(lottoNumbersPack: LottoNumbersPack): Pair<LottoPublish, BigDecimal> {
         val issuedAt = LocalDateTime.now(clock)
-        val lottoPaper = lottoPaperGenerator.generateWithNumbers(lottoNumbers)
+        val lottoPaper = lottoPaperGenerator.generateWithNumbers(lottoNumbersPack)
         return Pair(lottoPublisher.publish(issuedAt, lottoPaper), lottoPaper.getAmount())
     }
 }

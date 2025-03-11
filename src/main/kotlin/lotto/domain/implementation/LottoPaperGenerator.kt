@@ -7,7 +7,7 @@ import lotto.domain.entity.IssueStatus
 import lotto.domain.entity.IssuedLotto
 import lotto.domain.entity.Lotto
 import lotto.domain.repository.LottoRepository
-import lotto.domain.vo.LottoNumbers
+import lotto.domain.vo.LottoNumbersPack
 import lotto.domain.vo.LottoPaper
 import java.math.BigDecimal
 
@@ -23,15 +23,15 @@ class LottoPaperGenerator(
     @Transaction
     @Read
     fun generateWithNumbers(
-        lottoNumbers: LottoNumbers,
+        lottoNumbersPack: LottoNumbersPack,
     ): LottoPaper {
-        val issuedLottoes = createIssuedLottoes(lottoNumbers, IssueStatus.MANUAL)
-        val amount = calculateAmount(lottoNumbers)
+        val issuedLottoes = createIssuedLottoes(lottoNumbersPack, IssueStatus.MANUAL)
+        val amount = calculateAmount(lottoNumbersPack)
         return LottoPaper(lottoes = issuedLottoes, amount = amount)
     }
 
-    private fun calculateAmount(lottoNumbers: LottoNumbers): BigDecimal {
-        return lottoNumbers.calculatePrice(UNIT)
+    private fun calculateAmount(lottoNumbersPack: LottoNumbersPack): BigDecimal {
+        return lottoNumbersPack.calculatePrice(UNIT)
     }
 
     /**
@@ -54,15 +54,15 @@ class LottoPaperGenerator(
 //    }
 
     private fun createIssuedLottoes(
-        lottoNumbers: LottoNumbers,
+        lottoNumbersPack: LottoNumbersPack,
         issueStatus: IssueStatus,
     ): List<IssuedLotto> {
-        val lottoes = getLottoEntities(lottoNumbers)
-        require(lottoNumbers.hasSize(lottoes.size)) { IllegalStateException("입력한 숫자와 조회한 숫자가 다릅니다.") }
+        val lottoes = getLottoEntities(lottoNumbersPack)
+        require(lottoNumbersPack.hasSize(lottoes.size)) { IllegalStateException("입력한 숫자와 조회한 숫자가 다릅니다.") }
         return lottoes.map { IssuedLotto(issueStatus, it) }.toList()
     }
 
-    private fun getLottoEntities(lottoNumbers: LottoNumbers): List<Lotto> {
-        return lottoRepository.findLottoByNumbersIn(lottoNumbers.toStringWithComma())
+    private fun getLottoEntities(lottoNumbersPack: LottoNumbersPack): List<Lotto> {
+        return lottoRepository.findLottoByNumbersIn(lottoNumbersPack.toStringWithComma())
     }
 }
